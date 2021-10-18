@@ -1,0 +1,192 @@
+Number of cores = 64
+Distrib = Poisson
+MAC = BRS-MAC non-persistent
+Avg injection rate per core = 0.0032 packets/cycle per core
+Threshold fuzzy size for pure BRS = 0.9
+Threshold fuzzy size for pure token = 0.1
+Sigma = 0.6
+Tx time = 4
+H = 0
+Number of packets to tx = 10000
+Max buffer size = 10000000 packets
+Slot size = 2 cycles
+--------------------------------------------------
+0: Inj_pckts(all): 152	 Avg_latency_pckt(stationary): 329.308 cycles.  Theoretical Avg_inj_rate: 0.00294355 pckts/cycle  Real Avg_inj_rate: 0.00304903 pckts/cycle
+1: Inj_pckts(all): 219	 Avg_latency_pckt(stationary): 764.135 cycles.  Theoretical Avg_inj_rate: 0.00473759 pckts/cycle  Real Avg_inj_rate: 0.004393 pckts/cycle
+2: Inj_pckts(all): 157	 Avg_latency_pckt(stationary): 4814.05 cycles.  Theoretical Avg_inj_rate: 0.00324657 pckts/cycle  Real Avg_inj_rate: 0.00314932 pckts/cycle
+3: Inj_pckts(all): 60	 Avg_latency_pckt(stationary): 1920.4 cycles.  Theoretical Avg_inj_rate: 0.00129249 pckts/cycle  Real Avg_inj_rate: 0.00120356 pckts/cycle
+4: Inj_pckts(all): 192	 Avg_latency_pckt(stationary): 24607.8 cycles.  Theoretical Avg_inj_rate: 0.00439269 pckts/cycle  Real Avg_inj_rate: 0.0038514 pckts/cycle
+5: Inj_pckts(all): 185	 Avg_latency_pckt(stationary): 52099.5 cycles.  Theoretical Avg_inj_rate: 0.00381893 pckts/cycle  Real Avg_inj_rate: 0.00371098 pckts/cycle
+6: Inj_pckts(all): 79	 Avg_latency_pckt(stationary): 146.632 cycles.  Theoretical Avg_inj_rate: 0.0017784 pckts/cycle  Real Avg_inj_rate: 0.00158469 pckts/cycle
+7: Inj_pckts(all): 91	 Avg_latency_pckt(stationary): 24050.9 cycles.  Theoretical Avg_inj_rate: 0.00219388 pckts/cycle  Real Avg_inj_rate: 0.0018254 pckts/cycle
+8: Inj_pckts(all): 189	 Avg_latency_pckt(stationary): 50665.3 cycles.  Theoretical Avg_inj_rate: 0.00429541 pckts/cycle  Real Avg_inj_rate: 0.00379122 pckts/cycle
+9: Inj_pckts(all): 57	 Avg_latency_pckt(stationary): 2137.12 cycles.  Theoretical Avg_inj_rate: 0.00140573 pckts/cycle  Real Avg_inj_rate: 0.00114338 pckts/cycle
+10: Inj_pckts(all): 206	 Avg_latency_pckt(stationary): 10979 cycles.  Theoretical Avg_inj_rate: 0.00407291 pckts/cycle  Real Avg_inj_rate: 0.00413223 pckts/cycle
+11: Inj_pckts(all): 218	 Avg_latency_pckt(stationary): 13877.9 cycles.  Theoretical Avg_inj_rate: 0.0045555 pckts/cycle  Real Avg_inj_rate: 0.00437294 pckts/cycle
+12: Inj_pckts(all): 120	 Avg_latency_pckt(stationary): 18675.8 cycles.  Theoretical Avg_inj_rate: 0.00205133 pckts/cycle  Real Avg_inj_rate: 0.00240713 pckts/cycle
+13: Inj_pckts(all): 218	 Avg_latency_pckt(stationary): 4903.87 cycles.  Theoretical Avg_inj_rate: 0.00439269 pckts/cycle  Real Avg_inj_rate: 0.00437294 pckts/cycle
+14: Inj_pckts(all): 166	 Avg_latency_pckt(stationary): 30870.8 cycles.  Theoretical Avg_inj_rate: 0.00381893 pckts/cycle  Real Avg_inj_rate: 0.00332986 pckts/cycle
+15: Inj_pckts(all): 228	 Avg_latency_pckt(stationary): 13051.5 cycles.  Theoretical Avg_inj_rate: 0.0045555 pckts/cycle  Real Avg_inj_rate: 0.00457354 pckts/cycle
+16: Inj_pckts(all): 203	 Avg_latency_pckt(stationary): 1046.93 cycles.  Theoretical Avg_inj_rate: 0.0039494 pckts/cycle  Real Avg_inj_rate: 0.00407205 pckts/cycle
+17: Inj_pckts(all): 226	 Avg_latency_pckt(stationary): 37826.3 cycles.  Theoretical Avg_inj_rate: 0.00471114 pckts/cycle  Real Avg_inj_rate: 0.00453342 pckts/cycle
+18: Inj_pckts(all): 132	 Avg_latency_pckt(stationary): 2715.8 cycles.  Theoretical Avg_inj_rate: 0.00294355 pckts/cycle  Real Avg_inj_rate: 0.00264784 pckts/cycle
+19: Inj_pckts(all): 141	 Avg_latency_pckt(stationary): 1193.32 cycles.  Theoretical Avg_inj_rate: 0.0026391 pckts/cycle  Real Avg_inj_rate: 0.00282837 pckts/cycle
+20: Inj_pckts(all): 184	 Avg_latency_pckt(stationary): 11702.9 cycles.  Theoretical Avg_inj_rate: 0.00429541 pckts/cycle  Real Avg_inj_rate: 0.00369093 pckts/cycle
+21: Inj_pckts(all): 213	 Avg_latency_pckt(stationary): 39319.8 cycles.  Theoretical Avg_inj_rate: 0.00447962 pckts/cycle  Real Avg_inj_rate: 0.00427265 pckts/cycle
+22: Inj_pckts(all): 96	 Avg_latency_pckt(stationary): 2667.21 cycles.  Theoretical Avg_inj_rate: 0.00205133 pckts/cycle  Real Avg_inj_rate: 0.0019257 pckts/cycle
+23: Inj_pckts(all): 205	 Avg_latency_pckt(stationary): 4533.74 cycles.  Theoretical Avg_inj_rate: 0.00418854 pckts/cycle  Real Avg_inj_rate: 0.00411217 pckts/cycle
+24: Inj_pckts(all): 88	 Avg_latency_pckt(stationary): 32377.2 cycles.  Theoretical Avg_inj_rate: 0.00191267 pckts/cycle  Real Avg_inj_rate: 0.00176523 pckts/cycle
+25: Inj_pckts(all): 88	 Avg_latency_pckt(stationary): 2470.78 cycles.  Theoretical Avg_inj_rate: 0.00129249 pckts/cycle  Real Avg_inj_rate: 0.00176523 pckts/cycle
+26: Inj_pckts(all): 175	 Avg_latency_pckt(stationary): 1562.93 cycles.  Theoretical Avg_inj_rate: 0.00354091 pckts/cycle  Real Avg_inj_rate: 0.00351039 pckts/cycle
+27: Inj_pckts(all): 79	 Avg_latency_pckt(stationary): 1175.75 cycles.  Theoretical Avg_inj_rate: 0.00164893 pckts/cycle  Real Avg_inj_rate: 0.00158469 pckts/cycle
+28: Inj_pckts(all): 100	 Avg_latency_pckt(stationary): 347.2 cycles.  Theoretical Avg_inj_rate: 0.00233979 pckts/cycle  Real Avg_inj_rate: 0.00200594 pckts/cycle
+29: Inj_pckts(all): 238	 Avg_latency_pckt(stationary): 3401.64 cycles.  Theoretical Avg_inj_rate: 0.00473759 pckts/cycle  Real Avg_inj_rate: 0.00477413 pckts/cycle
+30: Inj_pckts(all): 148	 Avg_latency_pckt(stationary): 4405.85 cycles.  Theoretical Avg_inj_rate: 0.00279108 pckts/cycle  Real Avg_inj_rate: 0.00296879 pckts/cycle
+31: Inj_pckts(all): 233	 Avg_latency_pckt(stationary): 11331.9 cycles.  Theoretical Avg_inj_rate: 0.00475087 pckts/cycle  Real Avg_inj_rate: 0.00467383 pckts/cycle
+32: Inj_pckts(all): 91	 Avg_latency_pckt(stationary): 42562 cycles.  Theoretical Avg_inj_rate: 0.00164893 pckts/cycle  Real Avg_inj_rate: 0.0018254 pckts/cycle
+33: Inj_pckts(all): 131	 Avg_latency_pckt(stationary): 8118.13 cycles.  Theoretical Avg_inj_rate: 0.00248842 pckts/cycle  Real Avg_inj_rate: 0.00262778 pckts/cycle
+34: Inj_pckts(all): 191	 Avg_latency_pckt(stationary): 232.507 cycles.  Theoretical Avg_inj_rate: 0.00368244 pckts/cycle  Real Avg_inj_rate: 0.00383134 pckts/cycle
+35: Inj_pckts(all): 130	 Avg_latency_pckt(stationary): 200.363 cycles.  Theoretical Avg_inj_rate: 0.00248842 pckts/cycle  Real Avg_inj_rate: 0.00260772 pckts/cycle
+36: Inj_pckts(all): 131	 Avg_latency_pckt(stationary): 24903.4 cycles.  Theoretical Avg_inj_rate: 0.00279108 pckts/cycle  Real Avg_inj_rate: 0.00262778 pckts/cycle
+37: Inj_pckts(all): 171	 Avg_latency_pckt(stationary): 2874.32 cycles.  Theoretical Avg_inj_rate: 0.00324657 pckts/cycle  Real Avg_inj_rate: 0.00343015 pckts/cycle
+38: Inj_pckts(all): 186	 Avg_latency_pckt(stationary): 13891.2 cycles.  Theoretical Avg_inj_rate: 0.00354091 pckts/cycle  Real Avg_inj_rate: 0.00373104 pckts/cycle
+39: Inj_pckts(all): 185	 Avg_latency_pckt(stationary): 2085.7 cycles.  Theoretical Avg_inj_rate: 0.00447962 pckts/cycle  Real Avg_inj_rate: 0.00371098 pckts/cycle
+40: Inj_pckts(all): 237	 Avg_latency_pckt(stationary): 8192.29 cycles.  Theoretical Avg_inj_rate: 0.00461972 pckts/cycle  Real Avg_inj_rate: 0.00475407 pckts/cycle
+41: Inj_pckts(all): 121	 Avg_latency_pckt(stationary): 872.365 cycles.  Theoretical Avg_inj_rate: 0.00233979 pckts/cycle  Real Avg_inj_rate: 0.00242718 pckts/cycle
+42: Inj_pckts(all): 52	 Avg_latency_pckt(stationary): 519.135 cycles.  Theoretical Avg_inj_rate: 0.00140573 pckts/cycle  Real Avg_inj_rate: 0.00104309 pckts/cycle
+43: Inj_pckts(all): 208	 Avg_latency_pckt(stationary): 52038.2 cycles.  Theoretical Avg_inj_rate: 0.0039494 pckts/cycle  Real Avg_inj_rate: 0.00417235 pckts/cycle
+44: Inj_pckts(all): 219	 Avg_latency_pckt(stationary): 13516.8 cycles.  Theoretical Avg_inj_rate: 0.00475087 pckts/cycle  Real Avg_inj_rate: 0.004393 pckts/cycle
+45: Inj_pckts(all): 144	 Avg_latency_pckt(stationary): 677.216 cycles.  Theoretical Avg_inj_rate: 0.0026391 pckts/cycle  Real Avg_inj_rate: 0.00288855 pckts/cycle
+46: Inj_pckts(all): 53	 Avg_latency_pckt(stationary): 195.079 cycles.  Theoretical Avg_inj_rate: 0.00118506 pckts/cycle  Real Avg_inj_rate: 0.00106315 pckts/cycle
+47: Inj_pckts(all): 204	 Avg_latency_pckt(stationary): 11988.6 cycles.  Theoretical Avg_inj_rate: 0.00418854 pckts/cycle  Real Avg_inj_rate: 0.00409211 pckts/cycle
+48: Inj_pckts(all): 181	 Avg_latency_pckt(stationary): 4035.24 cycles.  Theoretical Avg_inj_rate: 0.0033953 pckts/cycle  Real Avg_inj_rate: 0.00363075 pckts/cycle
+49: Inj_pckts(all): 226	 Avg_latency_pckt(stationary): 40590.4 cycles.  Theoretical Avg_inj_rate: 0.00471114 pckts/cycle  Real Avg_inj_rate: 0.00453342 pckts/cycle
+50: Inj_pckts(all): 78	 Avg_latency_pckt(stationary): 9065.41 cycles.  Theoretical Avg_inj_rate: 0.00152461 pckts/cycle  Real Avg_inj_rate: 0.00156463 pckts/cycle
+51: Inj_pckts(all): 151	 Avg_latency_pckt(stationary): 2920.05 cycles.  Theoretical Avg_inj_rate: 0.00309568 pckts/cycle  Real Avg_inj_rate: 0.00302897 pckts/cycle
+52: Inj_pckts(all): 215	 Avg_latency_pckt(stationary): 40232.1 cycles.  Theoretical Avg_inj_rate: 0.00407291 pckts/cycle  Real Avg_inj_rate: 0.00431277 pckts/cycle
+53: Inj_pckts(all): 108	 Avg_latency_pckt(stationary): 13307.6 cycles.  Theoretical Avg_inj_rate: 0.00219388 pckts/cycle  Real Avg_inj_rate: 0.00216641 pckts/cycle
+54: Inj_pckts(all): 193	 Avg_latency_pckt(stationary): 3903.71 cycles.  Theoretical Avg_inj_rate: 0.00368244 pckts/cycle  Real Avg_inj_rate: 0.00387146 pckts/cycle
+55: Inj_pckts(all): 67	 Avg_latency_pckt(stationary): 38308 cycles.  Theoretical Avg_inj_rate: 0.00118506 pckts/cycle  Real Avg_inj_rate: 0.00134398 pckts/cycle
+56: Inj_pckts(all): 145	 Avg_latency_pckt(stationary): 14841.3 cycles.  Theoretical Avg_inj_rate: 0.00309568 pckts/cycle  Real Avg_inj_rate: 0.00290861 pckts/cycle
+57: Inj_pckts(all): 90	 Avg_latency_pckt(stationary): 367.635 cycles.  Theoretical Avg_inj_rate: 0.00191267 pckts/cycle  Real Avg_inj_rate: 0.00180534 pckts/cycle
+58: Inj_pckts(all): 245	 Avg_latency_pckt(stationary): 16292.3 cycles.  Theoretical Avg_inj_rate: 0.00467174 pckts/cycle  Real Avg_inj_rate: 0.00491455 pckts/cycle
+59: Inj_pckts(all): 167	 Avg_latency_pckt(stationary): 107048 cycles.  Theoretical Avg_inj_rate: 0.0033953 pckts/cycle  Real Avg_inj_rate: 0.00334992 pckts/cycle
+60: Inj_pckts(all): 84	 Avg_latency_pckt(stationary): 33465.3 cycles.  Theoretical Avg_inj_rate: 0.0017784 pckts/cycle  Real Avg_inj_rate: 0.00168499 pckts/cycle
+61: Inj_pckts(all): 220	 Avg_latency_pckt(stationary): 28383.8 cycles.  Theoretical Avg_inj_rate: 0.00467174 pckts/cycle  Real Avg_inj_rate: 0.00441306 pckts/cycle
+62: Inj_pckts(all): 68	 Avg_latency_pckt(stationary): 111.612 cycles.  Theoretical Avg_inj_rate: 0.00152461 pckts/cycle  Real Avg_inj_rate: 0.00136404 pckts/cycle
+63: Inj_pckts(all): 222	 Avg_latency_pckt(stationary): 16780.8 cycles.  Theoretical Avg_inj_rate: 0.00461972 pckts/cycle  Real Avg_inj_rate: 0.00445318 pckts/cycle
+--------------------------------------------------
+Saving results in ./results/results_sigmas
+--------------------------------------------------
+Total packets per chip: 10000(injected), 10000 (served)
+Total theoretical avg inj rate per chip: 0.2048 pckts/cycle
+Total real avg inj rate per chip: 0.200594 pckts/cycle
+Total weighted arithmetic latency per packet: 16403.9 cycles/packet
+Total arithmetic mean latency per packet: 15070.2 cycles
+Total geometric mean latency per packet: 5329.33 cycles
+Throughput: 0.538317
+Cycle at which injection finished: 49852
+Total number of collisions: 5888
+Total execution time: 130885 cycles
+==================================================
+Packet latency distribution (per chip), 100 intervals of 5 cycles each:
+0	 - 4.99: 	0	
+5	 - 9.99: 	716	***********************************************************************
+10	 - 14.99: 	333	*********************************
+15	 - 19.99: 	239	***********************
+20	 - 24.99: 	169	****************
+25	 - 29.99: 	152	***************
+30	 - 34.99: 	93	*********
+35	 - 39.99: 	87	********
+40	 - 44.99: 	75	*******
+45	 - 49.99: 	75	*******
+50	 - 54.99: 	57	*****
+55	 - 59.99: 	50	*****
+60	 - 64.99: 	40	****
+65	 - 69.99: 	40	****
+70	 - 74.99: 	44	****
+75	 - 79.99: 	38	***
+80	 - 84.99: 	21	**
+85	 - 89.99: 	21	**
+90	 - 94.99: 	20	**
+95	 - 99.99: 	27	**
+100	 - 104.99: 	27	**
+105	 - 109.99: 	15	*
+110	 - 114.99: 	10	*
+115	 - 119.99: 	17	*
+120	 - 124.99: 	22	**
+125	 - 129.99: 	18	*
+130	 - 134.99: 	19	*
+135	 - 139.99: 	14	*
+140	 - 144.99: 	23	**
+145	 - 149.99: 	23	**
+150	 - 154.99: 	23	**
+155	 - 159.99: 	12	*
+160	 - 164.99: 	12	*
+165	 - 169.99: 	12	*
+170	 - 174.99: 	12	*
+175	 - 179.99: 	6	
+180	 - 184.99: 	12	*
+185	 - 189.99: 	12	*
+190	 - 194.99: 	11	*
+195	 - 199.99: 	13	*
+200	 - 204.99: 	16	*
+205	 - 209.99: 	5	
+210	 - 214.99: 	11	*
+215	 - 219.99: 	9	
+220	 - 224.99: 	11	*
+225	 - 229.99: 	10	*
+230	 - 234.99: 	13	*
+235	 - 239.99: 	8	
+240	 - 244.99: 	7	
+245	 - 249.99: 	13	*
+250	 - 254.99: 	19	*
+255	 - 259.99: 	10	*
+260	 - 264.99: 	8	
+265	 - 269.99: 	10	*
+270	 - 274.99: 	6	
+275	 - 279.99: 	2	
+280	 - 284.99: 	12	*
+285	 - 289.99: 	0	
+290	 - 294.99: 	6	
+295	 - 299.99: 	13	*
+300	 - 304.99: 	5	
+305	 - 309.99: 	4	
+310	 - 314.99: 	4	
+315	 - 319.99: 	3	
+320	 - 324.99: 	9	
+325	 - 329.99: 	11	*
+330	 - 334.99: 	7	
+335	 - 339.99: 	6	
+340	 - 344.99: 	5	
+345	 - 349.99: 	9	
+350	 - 354.99: 	10	*
+355	 - 359.99: 	6	
+360	 - 364.99: 	5	
+365	 - 369.99: 	6	
+370	 - 374.99: 	7	
+375	 - 379.99: 	4	
+380	 - 384.99: 	5	
+385	 - 389.99: 	4	
+390	 - 394.99: 	4	
+395	 - 399.99: 	11	*
+400	 - 404.99: 	10	*
+405	 - 409.99: 	6	
+410	 - 414.99: 	3	
+415	 - 419.99: 	3	
+420	 - 424.99: 	5	
+425	 - 429.99: 	8	
+430	 - 434.99: 	8	
+435	 - 439.99: 	3	
+440	 - 444.99: 	7	
+445	 - 449.99: 	7	
+450	 - 454.99: 	9	
+455	 - 459.99: 	8	
+460	 - 464.99: 	10	*
+465	 - 469.99: 	2	
+470	 - 474.99: 	5	
+475	 - 479.99: 	6	
+480	 - 484.99: 	13	*
+485	 - 489.99: 	9	
+490	 - 494.99: 	9	
+495	 - 127575: 	6945	**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************

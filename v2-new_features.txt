@@ -1,0 +1,8 @@
+TO-DO:
+-implement set_tx_time() to read input
+-implement set_slot_size() to read input parameter for tdma, token, fuzzy
+-change slot_size name everywhere such that is not just for TDMA, but generic slot_size (since all use the same parameter)
+-when the mac protocol is chosen, check that the slot_size parameter has been already input, otherwise throw error. Check it for every mac protocol except BRS
+
+-nodes are gonna be generic, no specific for every type of traffic. They are simply gonna have a buffer, counter of injected packets, counter of served packets, and a local vector of pckt latencies (time between inj and served). If we don't do this, then we need to take into consideration that for example in poisson the average injection rate of the whole chip is the sum of the injection rates averages of all cores (it's a property of poisson distributions)
+-packet injecter, it has X number of packets in total to inject, which has to distribute among all cores, at the rate determined by injection rate and burstiness parameters. The distribution of these packets among all cores follows a gaussian distribution, where the standard deviation is the hotspotness parameter
