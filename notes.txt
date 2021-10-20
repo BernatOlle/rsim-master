@@ -8,7 +8,8 @@
 2. how does the attribution of the channel work
 > it could be assigned to the packet while it is created
 > it is better to attach a random channel at the start, and loop for the selection of a free channel during communication
-> 
+> This could be with de channel_function(), the channel_function look if the variable channel is emty, and if it's emty channel_funtion add a random channelID to the new packet.
+>
 
 
 3. the  different protocols will act differently
