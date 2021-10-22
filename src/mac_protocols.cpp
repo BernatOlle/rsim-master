@@ -65,19 +65,22 @@ void protocol_csma_non_p(int curr_cycle, const std::vector<int>& nodes_ready, st
 
 // Specification of BRS-MAC non-persistent. Returns 0 if nobody transmitted, 1 if collision occurred and 2 if somebody transmitted successfully
 int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip) {
+    for (int channel_id = 0; channel_id < nchannels; channel_id++) {
+
 	// If the medium is idle
-	if (!Global_params::Instance()->is_medium_busy()) {
+        if (!Global_params::Instance()->is_channel_busy(channel_id)) {
 		// For each node with a non-empty buffer, regardless if its 0, 1 or 2+ nodes...
-		for (std::vector<int>::const_iterator curr_node_id = nodes_ready.begin(); curr_node_id != nodes_ready.end(); ++curr_node_id) {
+            for (std::vector<int>::const_iterator curr_node_id = nodes_ready.begin(); curr_node_id != nodes_ready.end(); ++curr_node_id) {
 			Node* p_node = chip.at(*curr_node_id);
 			// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
-			if (Packet_brs_non_p* p_packet = dynamic_cast<Packet_brs_non_p*>(p_node->get_in_buffer_front())) {
+                if (Packet_brs_non_p* p_packet = dynamic_cast<Packet_brs_non_p*>(p_node->get_in_buffer_front())) {
 				// If backoff is still not zero, we decrease it
-				if (p_packet->get_cnt_backoff() > 0) {
+                    Channel::channel_function('brs','packet_creation_idle_medium',p_node,p_packet);// set a channel id to the p_packet
+                    if (p_packet->get_cnt_backoff() > 0) {
 					p_packet->decrease_cnt_backoff();
 				}
 				// If backoff is zero, we transmit first cycle/preamble of packet
-				else {
+                    else {
 					Global_params::Instance()->set_medium_busy();
 					Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node_id);
 					// Notice we don't decrease the cycles_left of the packet, since we have to leave one extra cycle after the header to check for collisions
@@ -106,6 +109,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 				// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
 				if (Packet_brs_non_p* p_packet = dynamic_cast<Packet_brs_non_p*>(p_node->get_in_buffer_front())) {
 					p_packet->update_cnt_backoff();
+					Channel::channel_function('brs','packet_creation_multiple_colliding_nodes',p_node,p_packet);// set a channel id to the p_packet
 			    }
 				// If the cast fails
 				else {
@@ -123,6 +127,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 			Node* p_node = chip.at(Global_params::Instance()->get_unique_ids_concurrent_tx_nodes());
 			// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
 			if (Packet_brs_non_p* p_packet = dynamic_cast<Packet_brs_non_p*>(p_node->get_in_buffer_front())) {
+                  Channel::channel_function('brs','packet_creation_one_node',p_node,p_packet);// set a channel id to the p_packet
 				// We decrease cycles_left for the current packet
 				p_packet->decrease_cycles_left();
 				if (Global_params::Instance()->get_total_served_packets_chip() >= 0.1*Global_params::Instance()->get_npackets() && Global_params::Instance()->get_total_served_packets_chip() < 0.8*Global_params::Instance()->get_npackets()) {
@@ -148,6 +153,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 			abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
 		}
 	}
+    }
 }
 //===============================================================
 

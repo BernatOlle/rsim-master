@@ -2,10 +2,16 @@
 
 Packet_brs_non_p::Packet_brs_non_p(int inj_time, int src_node) : Packet(inj_time, src_node) {
 	cycles_left = Global_params::Instance()->get_tx_time();
+
 	backoff_exp = 0;
 	cnt_backoff = 0;
 	header_sent = false;
 	//update_cnt_backoff();
+	channel="";
+
+}
+int Packet::get_channelID(){
+ //return channel.get_channel_Id;
 }
 
 int Packet_brs_non_p::get_cycles_left() {

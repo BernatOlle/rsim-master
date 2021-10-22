@@ -107,7 +107,7 @@ Global_params::Global_params() {
 		std::cout << "ERROR: Input parameters not found in main folder" << std::endl;
         abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
 	}
-
+    channel_busy=(false);
     medium_busy = false;
     txing_token = false; // we start the simulation always in the second period (pure BRS)
     total_ncycles = 1; // the minimum execution time is 1 cycle, in order to check everything
@@ -150,7 +150,9 @@ std::string Global_params::get_load_trace_path() {
 bool Global_params::is_medium_busy() {
     return medium_busy;
 }
-
+bool Global_params::is_channel_busy(int id){
+    return channel_busy(id);
+}
 void Global_params::set_medium_busy() {
     medium_busy = true;
 }
@@ -200,6 +202,14 @@ int Global_params::get_ncores() {
 
 void Global_params::set_ncores(int ncores) {
     this->ncores = ncores;
+}
+
+int Global_params::get_nchannels() {
+    return nchannels;
+}
+
+void Global_params::set_nchannels(int nchannels) {
+    this->nchannels = nchannels;
 }
 
 void Global_params::set_npackets(int npackets) {

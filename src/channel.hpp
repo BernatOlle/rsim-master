@@ -4,18 +4,19 @@
 #include "headers.hpp"
 #include "global_params.hpp"
 
-class channel : public Packet {
+class Channel : public Packet {
 private:
 	int id;
-	int nchannels;
+	int num;
 public:
-    channel(int inj_time, int src_node);
+    channel(int id);
 	int get_channel_Id();
-	void set_channel_Id();
-	int channel_function(........);
+	void set_channel_Id(int);
+	int get_nchannel();
+	int channel_function(protocol(string),step(string),node(int),packet(class packet);
 };
 
 
-
+node(int
 
 #endif // channel
