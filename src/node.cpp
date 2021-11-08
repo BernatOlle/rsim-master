@@ -1,5 +1,6 @@
 #include "node.hpp"
 #include "utilities.hpp"
+#include <cstdlib>
 #include <algorithm>
 
 Node::Node(int id, float inj_rate) : nid(id), node_inj_rate(inj_rate), total_injected_packets_node(0), total_served_packets_node(0) {
@@ -24,6 +25,21 @@ int Node::get_in_buffer_size() {
 
 float Node::get_node_inj_rate() {
     return node_inj_rate;
+}
+int Node::get_channel_id(){
+    return channelID;
+    }
+void Node::set_channel_id(int channel_id){
+    this.channelID= channel_id;
+}
+void Node::channel_funtion(string protocol, string step ,Packet packet){
+    int x=this.get_channel_id();
+    int rand;
+    if(x==''){
+        rand= rand()%
+        this.set_channel_id(rand);
+    }
+
 }
 
 bool Node::in_buffer_empty() {

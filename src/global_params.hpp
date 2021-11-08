@@ -43,7 +43,7 @@ private:
     int throughput_tx_cycles;
     std::vector<long int> cycles_collisions_chip; // we register the cycle at which each collision occurs
     std::vector<long int> cycles_served_packets_chip; // we register the cycle at which each packet is served
-    std::vector<bool> channel_busy;
+    std::vector<bool> channel_busy(nchannels);
 
     // Only for TDMA fixed and weighted. These are global for all nodes, since it imitates the behavior
     // in real applications, where all nodes have the same TDMA information
@@ -110,6 +110,8 @@ public:
     void increase_total_ncycles();
     bool is_medium_busy(); // Is medium_busy == true?
     bool is_channel_busy(int);
+    void set_channel_busy();
+    void set_channel_idle();
     void set_medium_busy(); // set medium_busy = true
     void set_medium_idle(); // set medium_busy = false
     int get_ids_concurrent_tx_nodes_size(); // Get size of ids_concurrent_tx_nodes (number of nodes simultaneously transmitting)

@@ -275,14 +275,16 @@ int main(int argc, char* argv[]) {
 			Global_params::Instance()->set_cycle_injection_stopped(Global_params::Instance()->get_total_ncycles());
 			flag_stop_injection = true;
 		}
-
+        std::vector<int> id_channel;
 		std::vector<int> nodes_ready; // at every cycle we initialize an empty vector that will store the IDs of the nodes with non-empty buffers
 
 		// iterates through all nodes of the chip to see which ones have a packet to transmit
 		for (std::vector<Node*>::iterator curr_node = chip.begin(); curr_node != chip.end(); ++curr_node) {
 			if (!(*curr_node)->in_buffer_empty()) {
 				// when we find a node with a non-empty buffer, we store its ID
-				nodes_ready.push_back((*curr_node)->get_id());
+				(*curr_node)->channel_funtion();
+				id_channel.push_back((*curr_node)->get_id(),(*curr_node)->get_channel())
+				nodes_ready.push_back(id_channel);
 				if (Global_params::Instance()->is_debugging_on()) {
 					std::cout << "Node " << (*curr_node)->get_id() << " wants to tx (" << (*curr_node)->get_in_buffer_size() << " pending packets)" << std::endl;
 				}

@@ -65,24 +65,27 @@ void protocol_csma_non_p(int curr_cycle, const std::vector<int>& nodes_ready, st
 
 // Specification of BRS-MAC non-persistent. Returns 0 if nobody transmitted, 1 if collision occurred and 2 if somebody transmitted successfully
 int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip) {
-    for (int channel_id = 0; channel_id < nchannels; channel_id++) {
 
-	// If the medium is idle
+    for(std::vector<vector>::const_iterator curr_node = nodes_ready.begin(); curr_node != nodes_ready.end(); ++curr_node){
+        for (int channel_id = 0; channel_id < nchannels; channel_id++) {
+
+
+        if(curr_node[1]==channel_id){
+        // If the medium is idle
         if (!Global_params::Instance()->is_channel_busy(channel_id)) {
 		// For each node with a non-empty buffer, regardless if its 0, 1 or 2+ nodes...
-            for (std::vector<int>::const_iterator curr_node_id = nodes_ready.begin(); curr_node_id != nodes_ready.end(); ++curr_node_id) {
-			Node* p_node = chip.at(*curr_node_id);
+              //put this loop in the beginning
+			Node* p_node = chip.at(*curr_node[0]);
 			// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
                 if (Packet_brs_non_p* p_packet = dynamic_cast<Packet_brs_non_p*>(p_node->get_in_buffer_front())) {
 				// If backoff is still not zero, we decrease it
-                    Channel::channel_function('brs','packet_creation_idle_medium',p_node,p_packet);// set a channel id to the p_packet
                     if (p_packet->get_cnt_backoff() > 0) {
 					p_packet->decrease_cnt_backoff();
 				}
 				// If backoff is zero, we transmit first cycle/preamble of packet
                     else {
-					Global_params::Instance()->set_medium_busy();
-					Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node_id);
+					Global_params::Instance()->set_channel_busy(channel_id);
+					Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node[0]);
 					// Notice we don't decrease the cycles_left of the packet, since we have to leave one extra cycle after the header to check for collisions
 				}
 		    }
@@ -90,7 +93,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 			else {
 				std::cout << "ERROR: Cast from Packet* to Packet_brs_non_p* failed" << std::endl;
 				abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
-			}
+
 		} // End of for-each
 	} // End of if-medium-idle
 	// If the medium is busy do the following:
@@ -101,6 +104,8 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 	// done tx at the end of this cycle. So we empty the vector of transmitting nodes, we set the medium to idle, we take the packet out
 	// of the buffer, we increase counters of total served packets per node and per chip and if it isn't zero we don't have to do nothing because we already decreased cycles_left
 	else {
+
+
 		// If multiple colliding nodes
 		if(Global_params::Instance()->get_ids_concurrent_tx_nodes_size() > 1) {
 			// for each ids_concurrent_tx_nodes, update_cnt_backoff, then empty vector of ids_concurrent_tx_nodes, then set medium to idle
@@ -154,6 +159,8 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 		}
 	}
     }
+}
+}
 }
 //===============================================================
 
@@ -215,6 +222,7 @@ void protocol_tdma(int curr_cycle, const std::vector<int>& nodes_ready, std::vec
     } else {
         Global_params::Instance()->decrease_tdma_current_node_slot_size();
     }
+}
 }
 //===============================================================
 

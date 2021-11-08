@@ -160,6 +160,13 @@ void Global_params::set_medium_busy() {
 void Global_params::set_medium_idle() {
     medium_busy = false;
 }
+void Global_params::set_channel_busy() {
+    medium_busy = true;
+}
+
+void Global_params::set_channel_idle() {
+    medium_busy = false;
+}
 
 // Get size of ids_concurrent_tx_nodes (number of nodes simultaneously transmitting)
 int Global_params::get_ids_concurrent_tx_nodes_size() {

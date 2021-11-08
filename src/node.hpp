@@ -18,6 +18,7 @@
 class Node {
 protected:
 	int nid; // node ID
+	int channelID;
 	float node_inj_rate; // average injection rate for this node
 	std::queue<Packet*> in_buffer; // each node has an input buffer of max_buffer_size for packets
 	int total_injected_packets_node; // counter of how many packets each node has injected so far
@@ -31,6 +32,9 @@ public:
 	std::vector<double> pckt_latencies_node; // TODO: THIS SHOULD BE PRIVATE. here we store the cycles that each packet it takes to be transmitted
 	int get_id(); // get node ID
 	float get_node_inj_rate();
+	int get_channel_id();
+	void set_channel_id(int);
+	void channel_funtion(string,string,Packet);
 	int get_in_buffer_size();
 	bool in_buffer_empty();
 	Packet* get_in_buffer_front();

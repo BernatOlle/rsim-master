@@ -7,7 +7,7 @@ Packet_brs_non_p::Packet_brs_non_p(int inj_time, int src_node) : Packet(inj_time
 	cnt_backoff = 0;
 	header_sent = false;
 	//update_cnt_backoff();
-	channel="";
+
 
 }
 int Packet::get_channelID(){
