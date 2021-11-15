@@ -34,7 +34,7 @@ void Node::set_channel_id(int channel_id){
 }
 
 // function to show the change of vector values and reasons
-void Node::channel_funtion(string protocol,string step, int node, Packet packet){
+void Node::channel_funtion(protocol, step, node, packet){
     int x=this.get_channel_id();
     int rand;
     if(x==''){
