@@ -36,10 +36,10 @@ void Node::set_channel_id(int channel_id){
 // function to show the change of vector values and reasons
 void Node::channel_function(std::string protocol,std::string  step,int node,Packet packet){
     // would the node id every be null ?
-    int x=this.get_channel_id();
-    int rand;
-    if(x.equals(null)){
-        new_x=rand()%
+    int x=Node::get_channel_id();
+    int new_x;
+    if(x==null){
+        new_x=rand()%Global_params::nchannels
         Node::set_channel_id(new_x);
     }
 
