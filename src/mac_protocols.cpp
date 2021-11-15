@@ -85,6 +85,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 				    			// change the boolean linked to the channel id in the vector to true if busy (!!!need to change set_medium_busy!!!)
 							Global_params::Instance()->set_channel_busy(channel_id);
 							Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node);
+							
 							// Notice we don't decrece the cycles_left of the packet, since we have to leave one extra cycle after the header to check for collisions
 						}
 				    }

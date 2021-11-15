@@ -87,6 +87,7 @@ public:
     void increase_throughput_tx_cycles();
     int get_throughput_base_cycles();
     int get_throughput_tx_cycles();
+    void channel_function(protocol(string),step(string),node(int),packet(class packet);
 
 
     // H-related methods are specific to Burst injection distribution

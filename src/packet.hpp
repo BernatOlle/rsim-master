@@ -15,6 +15,7 @@ public:
 	Packet(int inj_time, int src_node);
 	virtual ~Packet() {} // Virtual destructor
 	int get_inj_time();
+	int get_channelID();
 };
 
 
