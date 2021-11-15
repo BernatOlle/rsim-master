@@ -40,7 +40,7 @@ void Node::channel_function(std::string protocol,std::string  step,int node,Pack
     int number_channels = Global_params::get_nchannels();
     int new_x;
     if(x==NULL){
-        new_x=rand()%number_channels
+        new_x=rand()%number_channels;
         Node::set_channel_id(new_x);
     }
 
