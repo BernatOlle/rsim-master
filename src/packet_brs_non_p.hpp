@@ -16,7 +16,6 @@ private:
 	int cnt_backoff;
 	int cycles_left; // This is initially set to tx_time, and decreased at every cycle during successful transmission
 	bool header_sent; // this is to check when the header is sent
-	Channel channel;
 public:
 	Packet_brs_non_p(int inj_time, int src_node);
 	int get_cycles_left();

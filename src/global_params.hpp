@@ -34,7 +34,7 @@ private:
     int total_served_packets_chip; // Counter of total amount of packets served among all the cores so far
     int cycle_injection_stopped; // As soon as we inject the last packet out of npackets, we store the cycle at which the injection finished
     int total_ncycles; // At every iteration we increase this counter, so that we know the total number of cycles executed so far
-    std::vector<bool> channel_busy(nchannels); // This flag will determine if the channel (in a single-channel model) is busy or not
+    std::vector<bool> channel_busy(int nchannels); // This flag will determine if the channel (in a single-channel model) is busy or not
     bool medium_busy; // This flag will determine if the channel (in a single-channel model) is busy or not
     std::vector<int> ids_concurrent_tx_nodes;
     bool debugging;
@@ -87,7 +87,7 @@ public:
     void increase_throughput_tx_cycles();
     int get_throughput_base_cycles();
     int get_throughput_tx_cycles();
-    void channel_function(protocol(string),step(string),node(int),packet(class packet);
+    void channel_function(string,string,int,class packet);
 
 
     // H-related methods are specific to Burst injection distribution
