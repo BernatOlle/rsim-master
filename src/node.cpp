@@ -37,9 +37,10 @@ void Node::set_channel_id(int channel_id){
 void Node::channel_function(std::string protocol,std::string  step,int node,Packet packet){
     // would the node id every be null ?
     int x=Node::get_channel_id();
+    int number_channels = Global_params::get_nchannels();
     int new_x;
-    if(x==null){
-        new_x=rand()%Global_params::nchannels
+    if(x==NULL){
+        new_x=rand()%number_channels
         Node::set_channel_id(new_x);
     }
 
