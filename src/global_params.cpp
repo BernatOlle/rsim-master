@@ -205,18 +205,6 @@ int Global_params::get_unique_ids_concurrent_tx_nodes() {
     }
 }
 
-
-// function to show the change of vector values and reasons
-void Channel::channel_function(string protocol,string step, int node, Packet packet,int channel_id){
-
-    id=packet.get_channelID();
-    if(id==''){
-        id=channel_id;
-        channel_busy[id]=true;
-    }
-    std::cout << "Protocol:" << protocol<< "Step:" << step<<"Node: "<<node<<"\n";
-}
-
 int Global_params::get_ncores() {
     return ncores;
 }

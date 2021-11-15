@@ -32,7 +32,9 @@ int Node::get_channel_id(){
 void Node::set_channel_id(int channel_id){
     this.channelID= channel_id;
 }
-void Node::channel_funtion(string protocol, string step ,Packet packet){
+
+// function to show the change of vector values and reasons
+void Node::channel_funtion(string protocol,string step, int node, Packet packet){
     int x=this.get_channel_id();
     int rand;
     if(x==''){
@@ -40,7 +42,9 @@ void Node::channel_funtion(string protocol, string step ,Packet packet){
         this.set_channel_id(rand);
     }
 
+    std::cout << "Protocol:" << protocol<< "Step:" << step<<"Node: "<<node<<"\n";
 }
+
 
 bool Node::in_buffer_empty() {
     return in_buffer.empty();
