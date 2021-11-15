@@ -65,102 +65,98 @@ void protocol_csma_non_p(int curr_cycle, const std::vector<int>& nodes_ready, st
 
 // Specification of BRS-MAC non-persistent. Returns 0 if nobody transmitted, 1 if collision occurred and 2 if somebody transmitted successfully
 int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip) {
-
-    for(std::vector<vector>::const_iterator curr_node = nodes_ready.begin(); curr_node != nodes_ready.end(); ++curr_node){
+	// recuperating the number of channels and checking couple of [node_id, channel_id]
         for (int channel_id = 0; channel_id < nchannels; channel_id++) {
-
-
-        if(curr_node[1]==channel_id){
-        // If the medium is idle
-        if (!Global_params::Instance()->is_channel_busy(channel_id)) {
-		// For each node with a non-empty buffer, regardless if its 0, 1 or 2+ nodes...
-              //put this loop in the beginning
-			Node* p_node = chip.at(*curr_node[0]);
-			// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
-                if (Packet_brs_non_p* p_packet = dynamic_cast<Packet_brs_non_p*>(p_node->get_in_buffer_front())) {
-				// If backoff is still not zero, we decrease it
-                    if (p_packet->get_cnt_backoff() > 0) {
-					p_packet->decrease_cnt_backoff();
+        	// If the medium is idle
+		if (!Global_params::Instance()->is_channel_busy(channel_id)) {
+			// For each node with a non-empty buffer, regardless if its 0, 1 or 2+ nodes...
+			for(std::vector<vector>::const_iterator curr_node = nodes_ready.begin(); curr_node != nodes_ready.end(); ++curr_node){
+				Node* p_node = chip.at(*curr_node[0]);
+				// checking if the channel linked to the node is present in the list of given channels 
+				if(curr_node[1]==channel_id){
+					// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
+					if (Packet_brs_non_p* p_packet = dynamic_cast<Packet_brs_non_p*>(p_node->get_in_buffer_front())) {
+						// If backoff is still not zero, we decrease it
+				    		if (p_packet->get_cnt_backoff() > 0) {
+							p_packet->decrease_cnt_backoff();
+						}
+						// If backoff is zero, we transmit first cycle/preamble of packet
+				    		else {
+				    			// change the boolean linked to the channel id in the vector to true if busy (!!!need to change set_medium_busy!!!)
+							Global_params::Instance()->set_channel_busy(channel_id);
+							Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node);
+							// Notice we don't decrece the cycles_left of the packet, since we have to leave one extra cycle after the header to check for collisions
+						}
+				    }
+					// If the cast fails
+					else {
+						std::cout << "ERROR: Cast from Packet* to Packet_brs_non_p* failed" << std::endl;
+						abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
+					}
 				}
-				// If backoff is zero, we transmit first cycle/preamble of packet
-                    else {
-					Global_params::Instance()->set_channel_busy(channel_id);
-					Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node[0]);
-					// Notice we don't decrease the cycles_left of the packet, since we have to leave one extra cycle after the header to check for collisions
-				}
-		    }
-			// If the cast fails
-			else {
-				std::cout << "ERROR: Cast from Packet* to Packet_brs_non_p* failed" << std::endl;
-				abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
-
-		} // End of for-each
-	} // End of if-medium-idle
-	// If the medium is busy do the following:
-	// -check if vector of transmitting nodes has size more than 1
-	// -if it's more than 1 it means a collision has been detected and therefore a NACK being sent, and therefore
-	// the colliding nodes will update their cnt_backoff, we will empty the vector of transmitting nodes and set the medium to idle.
-	// -if there was only one transmitting node we decrease the cycles_left and check if cycles_left is zero, if it's zero it means we'll be
-	// done tx at the end of this cycle. So we empty the vector of transmitting nodes, we set the medium to idle, we take the packet out
-	// of the buffer, we increase counters of total served packets per node and per chip and if it isn't zero we don't have to do nothing because we already decreased cycles_left
-	else {
-
-
-		// If multiple colliding nodes
-		if(Global_params::Instance()->get_ids_concurrent_tx_nodes_size() > 1) {
-			// for each ids_concurrent_tx_nodes, update_cnt_backoff, then empty vector of ids_concurrent_tx_nodes, then set medium to idle
-			for (std::vector<int>::const_iterator curr_node_id = Global_params::Instance()->ids_concurrent_tx_nodes_begin(); curr_node_id != Global_params::Instance()->ids_concurrent_tx_nodes_end(); ++curr_node_id) {
-				Node* p_node = chip.at(*curr_node_id);
+			} // End of for-each
+		} // End of if-medium-idle
+		// If the medium is busy do the following:
+		// -check if vector of transmitting nodes has size more than 1
+		// -if it's more than 1 it means a collision has been detected and therefore a NACK being sent, and therefore
+		// the colliding nodes will update their cnt_backoff, we will empty the vector of transmitting nodes and set the medium to idle.
+		// -if there was only one transmitting node we decrease the cycles_left and check if cycles_left is zero, if it's zero it means we'll be
+		// done tx at the end of this cycle. So we empty the vector of transmitting nodes, we set the medium to idle, we take the packet out
+		// of the buffer, we increase counters of total served packets per node and per chip and if it isn't zero we don't have to do nothing because we already decreased cycles_left
+		else {
+			// if multiple colliding nodes - previous function : change to adapt to multichannel 
+			if(Global_params::Instance()->get_ids_concurrent_tx_nodes_size() > 1) {
+				// for each ids_concurrent_tx_nodes, update_cnt_backoff, then empty vector of ids_concurrent_tx_nodes, then set medium to idle
+				for (std::vector<int>::const_iterator curr_node_id = Global_params::Instance()->ids_concurrent_tx_nodes_begin(); curr_node_id != Global_params::Instance()->ids_concurrent_tx_nodes_end(); ++curr_node_id) {
+					Node* p_node = chip.at(*curr_node_id);
+					// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
+					if (Packet_brs_non_p* p_packet = dynamic_cast<Packet_brs_non_p*>(p_node->get_in_buffer_front())) {
+						p_packet->update_cnt_backoff();
+						Channel::channel_function('brs','packet_creation_multiple_colliding_nodes',p_node,p_packet);// set a channel id to the p_packet
+				    }
+					// If the cast fails
+					else {
+						std::cout << "ERROR: Cast from Packet* to Packet_brs_non_p* failed" << std::endl;
+						abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
+					}
+		        Global_params::Instance()->increase_counter_collisions(); // for every colliding node we register the cycle in which the collision occurred
+				} // End of for-each
+				Global_params::Instance()->flush_ids_concurrent_tx_nodes();
+				Global_params::Instance()->set_medium_idle();
+				return 1; // return collision code
+			}
+			// If only one node is transmitting
+			else if(Global_params::Instance()->get_ids_concurrent_tx_nodes_size() == 1) {
+				Node* p_node = chip.at(Global_params::Instance()->get_unique_ids_concurrent_tx_nodes());
 				// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
 				if (Packet_brs_non_p* p_packet = dynamic_cast<Packet_brs_non_p*>(p_node->get_in_buffer_front())) {
-					p_packet->update_cnt_backoff();
-					Channel::channel_function('brs','packet_creation_multiple_colliding_nodes',p_node,p_packet);// set a channel id to the p_packet
-			    }
+		          Channel::channel_function('brs','packet_creation_one_node',p_node,p_packet);// set a channel id to the p_packet
+					// We decrease cycles_left for the current packet
+					p_packet->decrease_cycles_left();
+					if (Global_params::Instance()->get_total_served_packets_chip() >= 0.1*Global_params::Instance()->get_npackets() && Global_params::Instance()->get_total_served_packets_chip() < 0.8*Global_params::Instance()->get_npackets()) {
+						Global_params::Instance()->increase_throughput_tx_cycles();
+					}
+
+					// If at the end of this cycle we have 0 cycles left it means we successfully transmitted the packet. So do the following:
+					// Empty vector of transmitting nodes, set the medium to idle, take the packet out
+					// of the buffer, increase counters of total served packets per node and per chip
+					if (p_packet->get_cycles_left() == 0) {
+						p_node->pop_packet_buffer(curr_cycle);
+						Global_params::Instance()->flush_ids_concurrent_tx_nodes();
+						Global_params::Instance()->set_medium_idle();
+					}			}
 				// If the cast fails
 				else {
 					std::cout << "ERROR: Cast from Packet* to Packet_brs_non_p* failed" << std::endl;
 					abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
 				}
-                Global_params::Instance()->increase_counter_collisions(); // for every colliding node we register the cycle in which the collision occurred
-			} // End of for-each
-			Global_params::Instance()->flush_ids_concurrent_tx_nodes();
-			Global_params::Instance()->set_medium_idle();
-			return 1; // return collision code
-		}
-		// If only one node is transmitting
-		else if(Global_params::Instance()->get_ids_concurrent_tx_nodes_size() == 1) {
-			Node* p_node = chip.at(Global_params::Instance()->get_unique_ids_concurrent_tx_nodes());
-			// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
-			if (Packet_brs_non_p* p_packet = dynamic_cast<Packet_brs_non_p*>(p_node->get_in_buffer_front())) {
-                  Channel::channel_function('brs','packet_creation_one_node',p_node,p_packet);// set a channel id to the p_packet
-				// We decrease cycles_left for the current packet
-				p_packet->decrease_cycles_left();
-				if (Global_params::Instance()->get_total_served_packets_chip() >= 0.1*Global_params::Instance()->get_npackets() && Global_params::Instance()->get_total_served_packets_chip() < 0.8*Global_params::Instance()->get_npackets()) {
-					Global_params::Instance()->increase_throughput_tx_cycles();
-				}
-
-				// If at the end of this cycle we have 0 cycles left it means we successfully transmitted the packet. So do the following:
-				// Empty vector of transmitting nodes, set the medium to idle, take the packet out
-				// of the buffer, increase counters of total served packets per node and per chip
-				if (p_packet->get_cycles_left() == 0) {
-					p_node->pop_packet_buffer(curr_cycle);
-					Global_params::Instance()->flush_ids_concurrent_tx_nodes();
-					Global_params::Instance()->set_medium_idle();
-				}			}
-			// If the cast fails
+			}
 			else {
-				std::cout << "ERROR: Cast from Packet* to Packet_brs_non_p* failed" << std::endl;
+				std::cout << "ERROR: Uncoherence detected. The size of ids_concurrent_tx_nodes is zero but the medium is set as busy" << std::endl;
 				abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
 			}
 		}
-		else {
-			std::cout << "ERROR: Uncoherence detected. The size of ids_concurrent_tx_nodes is zero but the medium is set as busy" << std::endl;
-			abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
-		}
 	}
-    }
-}
-}
 }
 //===============================================================
 

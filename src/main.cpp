@@ -275,9 +275,8 @@ int main(int argc, char* argv[]) {
 			Global_params::Instance()->set_cycle_injection_stopped(Global_params::Instance()->get_total_ncycles());
 			flag_stop_injection = true;
 		}
-        std::vector<int> id_channel;
-		std::vector<int> nodes_ready; // at every cycle we initialize an empty vector that will store the IDs of the nodes with non-empty buffers
-
+        	std::vector<int> id_channel;
+		std::vector<vector> nodes_ready; // at every cycle we initialize an empty vector that will store the IDs of the nodes with non-empty buffers
 		// iterates through all nodes of the chip to see which ones have a packet to transmit
 		for (std::vector<Node*>::iterator curr_node = chip.begin(); curr_node != chip.end(); ++curr_node) {
 			if (!(*curr_node)->in_buffer_empty()) {
@@ -290,7 +289,6 @@ int main(int argc, char* argv[]) {
 				}
 			}
 		}
-
 		// We call the appropriate MAC protocol to deal with the concurrent packets that are ready
 		switch(Global_params::Instance()->get_chosen_mac()) {
 			case Mac_protocols::csma_non_p	: protocol_csma_non_p(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip); break;
