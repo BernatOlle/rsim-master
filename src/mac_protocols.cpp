@@ -113,7 +113,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 					// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
 					if (Packet_brs_non_p* p_packet = dynamic_cast<Packet_brs_non_p*>(p_node->get_in_buffer_front())) {
 						p_packet->update_cnt_backoff();
-						Channel::channel_function('brs','packet_creation_multiple_colliding_nodes',p_node,p_packet);// set a channel id to the p_packet
+						Node::channel_function("brs", "multiple colliding nodes", *curr_node_id, p_packet,nchannels)
 				    }
 					// If the cast fails
 					else {
@@ -131,7 +131,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 				Node* p_node = chip.at(Global_params::Instance()->get_unique_ids_concurrent_tx_nodes());
 				// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
 				if (Packet_brs_non_p* p_packet = dynamic_cast<Packet_brs_non_p*>(p_node->get_in_buffer_front())) {
-		          Channel::channel_function('brs','packet_creation_one_node',p_node,p_packet);// set a channel id to the p_packet
+		          		Node::channel_function("brs", "only 1 node transmitting", 1, p_packet,nchannels)
 					// We decrease cycles_left for the current packet
 					p_packet->decrease_cycles_left();
 					if (Global_params::Instance()->get_total_served_packets_chip() >= 0.1*Global_params::Instance()->get_npackets() && Global_params::Instance()->get_total_served_packets_chip() < 0.8*Global_params::Instance()->get_npackets()) {
@@ -281,6 +281,7 @@ void protocol_fuzzy_token(int curr_cycle, const std::vector<int>& nodes_ready, s
 			if (found_node != nodes_ready.end()) {
 				Global_params::Instance()->set_medium_busy();
 				Global_params::Instance()->push_ids_concurrent_tx_nodes(*found_node);
+		        	Node::channel_function("fuzzy_token", "token holder is in the list of nodes that are ready to send", *found_node->get_id(), p_packet,nchannels)
 				Node* p_node = chip.at(*found_node);
 				// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
 				if (Packet_brs_non_p* p_packet = dynamic_cast<Packet_brs_non_p*>(p_node->get_in_buffer_front())) {
@@ -475,6 +476,7 @@ void protocol_fuzzy_token(int curr_cycle, const std::vector<int>& nodes_ready, s
 							// we transmit first cycle/preamble of packet
 							Global_params::Instance()->set_medium_busy();
 							Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node_id);
+		        				Node::channel_function("fuzzy_token", "Nodes inside fuzzy area transmit with uniform probability", *curr_node_id->get_id(), p_packet,nchannels)
 							if (Global_params::Instance()->is_debugging_on()) {
 								std::cout << "Node " << p_node->get_id() << " txed header" << std::endl;
 							}
@@ -518,6 +520,10 @@ void protocol_fuzzy_token(int curr_cycle, const std::vector<int>& nodes_ready, s
 					if (Packet_brs_non_p* p_packet = dynamic_cast<Packet_brs_non_p*>(p_node->get_in_buffer_front())) {
 						collided_nodes += ( separator + std::to_string(p_node->get_id()) );
 						separator = ", "; // separator for the second and following iterations
+						// add for loop to go through the list of ids, and transmit each on a new channel available
+						for (elm in collided_nodes){
+							Node::channel_function("fuzzy_token", "nodes that collided", elm, p_packet, nchannels)
+						}
 				    }
 					// If the cast fails
 					else {
@@ -561,7 +567,7 @@ void protocol_fuzzy_token(int curr_cycle, const std::vector<int>& nodes_ready, s
 					// If this happens in the cycle right after header (where we check for collisions), we will be decreasing the cycle corresponding to the header
 					// And if it happens in any cycle after that intermediate, we will be decreasing the cycles corresponding to the payload
 					p_packet->decrease_cycles_left();
-
+					Node::channel_function("fuzzy_token", "1 node transmitting", *p_node->get_id(), p_packet, nchannels)
 					// if the header isn't marked as sent yet, it means this is the cycle where we checked for collisions
 					if (!p_packet->is_header_sent()) {
 						p_packet->set_header_sent(); // mark header as sent
@@ -680,6 +686,7 @@ void protocol_token(int curr_cycle, const std::vector<int>& nodes_ready, std::ve
 		if (found_node != nodes_ready.end()) {
 			Global_params::Instance()->set_medium_busy();
 			Global_params::Instance()->push_ids_concurrent_tx_nodes(*found_node);
+		        Node::channel_function("token", "token holder in the list of nodes that are ready to send", *found_node->get_id(), p_packet,nchannels)
 			Node* p_node = chip.at(*found_node);
 			// We cast the Packet* into a Packet_tdma* so that we can access its own methods
 			if (Packet_tdma* p_packet = dynamic_cast<Packet_tdma*>(p_node->get_in_buffer_front())) {
