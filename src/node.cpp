@@ -34,11 +34,10 @@ void Node::set_channel_id(int channel_id){
 }
 
 // function to show the change of vector values and reasons
-void Node::channel_function(std::string protocol, std::string  step, int node, Packet packet){
+void Node::channel_function(std::string protocol, std::string  step, int node, Packet packet, int number_channels){
     // would the node id every be null ?
     int x=Node::get_channel_id();
     // below code only works when instantiated nchannels, must insert a condition to do this only if it has been assigned _ how ??
-    int number_channels = Global_params::get_nchannels();
     int new_x;
     if(x==NULL){
         new_x=rand()%number_channels;

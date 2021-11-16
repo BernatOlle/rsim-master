@@ -4,7 +4,7 @@
 #include "utilities.hpp"
 
 // Specification of CSMA non-persistant
-void protocol_csma_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip) {
+void protocol_csma_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip, int nchannels) {
 // 	// if more than one node has packets to transmit in the current cycle
 // 	if (nodes_ready.size() > 1) {
 // 		std::vector<int> nodes_zero_backoff; // at every cycle we initialize an empty vector that will store the IDs of the nodes with backoff at zero
@@ -64,7 +64,7 @@ void protocol_csma_non_p(int curr_cycle, const std::vector<int>& nodes_ready, st
 //===============================================================
 
 // Specification of BRS-MAC non-persistent. Returns 0 if nobody transmitted, 1 if collision occurred and 2 if somebody transmitted successfully
-int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip) {
+int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip, int nchannels) {
 	// recuperating the number of channels and checking couple of [node_id, channel_id]
         for (int channel_id = 0; channel_id < nchannels; channel_id++) {
         	// If the medium is idle
@@ -85,7 +85,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 				    			// change the boolean linked to the channel id in the vector to true if busy (!!!need to change set_medium_busy!!!)
 							Global_params::Instance()->set_channel_busy(channel_id);
 							Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node);
-							Node::channel_function("brs", "when channel_id equals channel iteration", *curr_node[0], p_packet)
+							Node::channel_function("brs", "when channel_id equals channel iteration", *curr_node[0], p_packet,nchannels)
 							// Notice we don't decrece the cycles_left of the packet, since we have to leave one extra cycle after the header to check for collisions
 						}
 				    }
@@ -163,7 +163,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 
 // Specification of TDMA for both fixed and weighted schemes
 // We assume no collisions, so we don't take care of unexpected collisions
-void protocol_tdma(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip, std::vector<float>& hotspotness_weights) {
+void protocol_tdma(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip, std::vector<float>& hotspotness_weights, int nchannels) {
 	if (Global_params::Instance()->is_debugging_on()) {
 		std::cout << "TDMA: Node " << Global_params::Instance()->get_tdma_current_node() << ". Cycles left: " << Global_params::Instance()->get_tdma_current_node_slot_size() << std::endl;
 	}
@@ -224,7 +224,7 @@ void protocol_tdma(int curr_cycle, const std::vector<int>& nodes_ready, std::vec
 //===============================================================
 
 // Specification of Fuzzy token
-void protocol_fuzzy_token(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip, std::vector<float>& hotspotness_weights) {
+void protocol_fuzzy_token(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip, std::vector<float>& hotspotness_weights, int nchannels) {
 	std::vector<int> fuzzy_nodes_ready;
 	int ncores = Global_params::Instance()->get_ncores();
 
@@ -631,7 +631,7 @@ void protocol_fuzzy_token(int curr_cycle, const std::vector<int>& nodes_ready, s
 
 // Specification of Token
 // We assume no collisions, so we don't take care of unexpected collisions
-void protocol_token(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip, std::vector<float>& hotspotness_weights) {
+void protocol_token(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip, std::vector<float>& hotspotness_weights, int nchannels) {
 	if (Global_params::Instance()->is_debugging_on()) {
 		std::cout << "Token: Node " << Global_params::Instance()->get_token_current_node() << std::endl;
 	}
