@@ -174,17 +174,23 @@ void Global_params::set_channel_idle(int id) {
 int Global_params::get_ids_concurrent_tx_nodes_size() {
     return ids_concurrent_tx_nodes.size();
 }
-
+int Global_params::get_channel_concurrent_tx_nodes_size() {
+    return channel_concurrent_tx_nodes.size();
+}
 // Push new node_id into ids_concurrent_tx_nodes (new node starts transmitting)
-void Global_params::push_ids_concurrent_tx_nodes(int nid) {
+void Global_params::push_ids_concurrent_tx_nodes(vector nid) {
     ids_concurrent_tx_nodes.push_back(nid);
 }
-
+void Global_params::push_channel_concurrent_tx_nodes(int nid) {
+    channel_concurrent_tx_nodes.push_back(nid);
+}
 // Delete all elements in ids_concurrent_tx_nodes (no node will be transmitting)
 void Global_params::flush_ids_concurrent_tx_nodes() {
     ids_concurrent_tx_nodes.erase(ids_concurrent_tx_nodes.begin(), ids_concurrent_tx_nodes.end());
 }
-
+void Global_params::flush_channel_concurrent_tx_nodes() {
+    channel_concurrent_tx_nodes.erase(channel_concurrent_tx_nodes.begin(), channel_concurrent_tx_nodes.end());
+}
 // Provides begin iterator for ids_concurrent_tx_nodes
 std::vector<int>::const_iterator Global_params::ids_concurrent_tx_nodes_begin() {
     return ids_concurrent_tx_nodes.begin();
