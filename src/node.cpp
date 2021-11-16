@@ -43,9 +43,9 @@ void Node::channel_function(std::string protocol, std::string  step, int node, P
     if(x==NULL){
         new_x=rand()%number_channels;
         Node::set_channel_id(new_x);
-    	std::cout << "Protocol:" << protocol<< "Step:" << step<<"Node: "<<node"ChannelID:"<<new_x<<"\n";
+    	std::cout << "Protocol:" << protocol<< "Step:" << step<<"Node: "<<node<<"ChannelID:"<<new_x<<"\n";
     }
-    std::cout << "Protocol:" << protocol<< "Step:" << step<<"Node: "<<node"ChannelID:"<<x<<"\n";
+    std::cout << "Protocol:" << protocol<< "Step:" << step<<"Node: "<<node<<"ChannelID:"<<x<<"\n";
 }
 
 
