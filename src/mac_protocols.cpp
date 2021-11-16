@@ -65,6 +65,7 @@ void protocol_csma_non_p(int curr_cycle, const std::vector<int>& nodes_ready, st
 
 // Specification of BRS-MAC non-persistent. Returns 0 if nobody transmitted, 1 if collision occurred and 2 if somebody transmitted successfully
 int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip, int nchannels) {
+	std::vector<vector>::const_iterator curr_node;
 	// recuperating the number of channels and checking couple of [node_id, channel_id]
         for (int channel_id = 0; channel_id < nchannels; channel_id++) {
         	// If the medium is idle
