@@ -244,7 +244,6 @@ void protocol_tdma(int curr_cycle, const std::vector<int>& nodes_ready, std::vec
         Global_params::Instance()->decrease_tdma_current_node_slot_size();
     }
 }
-}
 //===============================================================
 
 // Specification of Fuzzy token
