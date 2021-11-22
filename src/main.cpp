@@ -51,6 +51,9 @@ int main(int argc, char* argv[]) {
 		else if (parameter_name.compare("npackets") == 0) {
 			Global_params::Instance()->set_npackets(stoi(parameter_value));
 		}
+		else if (parameter_name.compare("nchannnels") == 0) {
+			Global_params::Instance()->set_nchannels(stoi(parameter_value));
+		}
 		else if (parameter_name.compare("tx_time") == 0) {
 			Global_params::Instance()->set_tx_time(stof(parameter_value));
 		}
@@ -91,26 +94,26 @@ int main(int argc, char* argv[]) {
 			Global_params::Instance()->set_load_trace_path(parameter_value);
 		}
 		else if (parameter_name.compare("mac_protocol") == 0) {
-			if (parameter_value.compare("csma_non_p") == 0) {
+			/*if (parameter_value.compare("csma_non_p") == 0) {
 	    		Global_params::Instance()->set_chosen_mac(Mac_protocols::csma_non_p);
-	    	}
-			else if (parameter_value.compare("brs_non_p") == 0) {
+	    	}*/
+			/*else */if (parameter_value.compare("brs_non_p") == 0) {
 	    		Global_params::Instance()->set_chosen_mac(Mac_protocols::brs_non_p);
 	    	}
-			else if (parameter_value.compare("tdma_fixed") == 0) {
+			/*else if (parameter_value.compare("tdma_fixed") == 0) {
 	    		Global_params::Instance()->set_chosen_mac(Mac_protocols::tdma_fixed);
 				if (Global_params::Instance()->get_tdma_slot_size() == 0) {
 					std::cout << "ERROR: slot_size parameter missing in tdma section" << std::endl;
 					abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
 				}
-	    	}
-			else if (parameter_value.compare("tdma_weighted") == 0) {
+	    	}*/
+			/*else if (parameter_value.compare("tdma_weighted") == 0) {
 	    		Global_params::Instance()->set_chosen_mac(Mac_protocols::tdma_weighted);
 				if (Global_params::Instance()->get_tdma_slot_size() == 0) {
 					std::cout << "ERROR: slot_size parameter missing in tdma section" << std::endl;
 					abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
 				}
-	    	}
+	    	}*/
 			else if (parameter_value.compare("fuzzy_token") == 0) {
 	    		Global_params::Instance()->set_chosen_mac(Mac_protocols::fuzzy_token);
 				Global_params::Instance()->set_fuzzy_size(); // we set the fuzzy size equal to number of cores
@@ -123,9 +126,8 @@ int main(int argc, char* argv[]) {
 		}
 	}
 	
-	// get all the channels
+	// get all the channels??
 	nchannels = Global_params::get_nchannels();
-
 
 	// TODO: Ensure that all values were read either from parameter file or std input
 
@@ -294,11 +296,11 @@ int main(int argc, char* argv[]) {
 		}
 		// We call the appropriate MAC protocol to deal with the concurrent packets that are ready
 		switch(Global_params::Instance()->get_chosen_mac()) {
-			case Mac_protocols::csma_non_p	: protocol_csma_non_p(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip, int nchannels); break;
+//			case Mac_protocols::csma_non_p	: protocol_csma_non_p(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip, int nchannels); break;
 			case Mac_protocols::brs_non_p	: protocol_brs_non_p(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip, nchannels); break;
-			case Mac_protocols::tdma_fixed	: protocol_tdma(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip, hotspotness_weights, nchannels); break;
+//			case Mac_protocols::tdma_fixed	: protocol_tdma(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip, hotspotness_weights, nchannels); break;
 			case Mac_protocols::token		: protocol_token(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip, hotspotness_weights, nchannels); break;
-			case Mac_protocols::tdma_weighted	: protocol_tdma(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip, hotspotness_weights, nchannels); break;
+//			case Mac_protocols::tdma_weighted	: protocol_tdma(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip, hotspotness_weights, nchannels); break;
 			case Mac_protocols::fuzzy_token	: protocol_fuzzy_token(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip, hotspotness_weights, nchannels); break;
 
 		}
