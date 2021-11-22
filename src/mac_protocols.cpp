@@ -65,6 +65,76 @@ void protocol_csma_non_p(int curr_cycle, const std::vector<int>& nodes_ready, st
 }*/
 //===============================================================
 
+/*// Specification of TDMA for both fixed and weighted schemes
+// We assume no collisions, so we don't take care of unexpected collisions
+void protocol_tdma(int curr_cycle, const std::vector<int> &nodes_ready, std::vector<Node *> &chip,
+                   std::vector<float> &hotspotness_weights, int nchannels) {
+    if (Global_params::Instance()->is_debugging_on()) {
+        std::cout << "TDMA: Node " << Global_params::Instance()->get_tdma_current_node() << ". Cycles left: "
+                  << Global_params::Instance()->get_tdma_current_node_slot_size() << std::endl;
+    }
+
+    // If there's a node with a non-empty buffer, whose id matches the tdma_current_node
+    std::vector<int>::const_iterator found_node = std::find(nodes_ready.begin(), nodes_ready.end(),
+                                                            Global_params::Instance()->get_tdma_current_node());
+    if (found_node != nodes_ready.end()) {
+        Node *p_node = chip.at(*found_node);
+        // We cast the Packet* into a Packet_tdma* so that we can access its own methods
+        if (Packet_tdma *p_packet = dynamic_cast<Packet_tdma *>(p_node->get_in_buffer_front())) {
+            // We decrease cycles_left for the current packet
+            p_packet->decrease_cycles_left();
+            if (Global_params::Instance()->get_total_served_packets_chip() >=
+                0.1 * Global_params::Instance()->get_npackets() &&
+                Global_params::Instance()->get_total_served_packets_chip() <
+                0.8 * Global_params::Instance()->get_npackets()) {
+                Global_params::Instance()->increase_throughput_tx_cycles();
+            }
+
+            if (Global_params::Instance()->is_debugging_on()) {
+                std::cout << "Node " << p_node->get_id() << " txed for a cycle. Cycles left of current packet: "
+                          << p_packet->get_cycles_left() << std::endl;
+            }
+
+            // If at the end of this cycle we have 0 cycles left it means we successfully transmitted the packet. So do the following:
+            // Take the packet out of the buffer, increase counters of total served packets per node and per chip
+            if (p_packet->get_cycles_left() == 0) {
+                p_node->pop_packet_buffer(curr_cycle);
+                if (Global_params::Instance()->is_debugging_on()) {
+                    std::cout << "Packet by " << p_node->get_id() << " has been successfully tx" << std::endl;
+                }
+            }
+        }
+            // If the cast fails
+        else {
+            std::cout << "ERROR: Cast from Packet* to Packet_tdma* failed" << std::endl;
+            abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
+        }
+    }
+
+    // now we update the TDMA status for next cycle
+    // if the number of cycles left to be used in current slot is 1 it means that
+    // we have to switch to next node and reset the slot size corresponding to that node
+    if (Global_params::Instance()->get_tdma_current_node_slot_size() == 1) {
+        // first we move to the next slot by setting the current_node to the next one
+        Global_params::Instance()->update_tdma_current_node();
+
+        // and now we set the slot size that corresponds to the next node (in fixed TDMA this is fixed)
+        if (Global_params::Instance()->get_chosen_mac() == Mac_protocols::tdma_fixed) {
+            Global_params::Instance()->set_tdma_current_node_slot_size(Global_params::Instance()->get_tdma_slot_size());
+        } else if (Global_params::Instance()->get_chosen_mac() == Mac_protocols::tdma_weighted) {
+            Global_params::Instance()->set_tdma_current_node_slot_size(Global_params::Instance()->get_tdma_slot_size() *
+                                                                       int(ceil(hotspotness_weights.at(
+                                                                               Global_params::Instance()->get_tdma_current_node()))));
+        } else {
+            std::cout << "ERROR: No matching protocol for set_tdma_current_node_slot_size" << std::endl;
+            abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
+        }
+    } else {
+        Global_params::Instance()->decrease_tdma_current_node_slot_size();
+    }
+}*/
+//===============================================================
+
 // Specification of BRS-MAC non-persistent. Returns 0 if nobody transmitted, 1 if collision occurred and 2 if somebody transmitted successfully
 int protocol_brs_non_p(int curr_cycle, const std::vector<int> &nodes_ready, std::vector<Node *> &chip, int nchannels) {
     // recuperating the number of channels and checking couple of [node_id, channel_id]
@@ -194,24 +264,25 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int> &nodes_ready, std:
 }
 //===============================================================
 
-/*// Specification of TDMA for both fixed and weighted schemes
+// Specification of Token
 // We assume no collisions, so we don't take care of unexpected collisions
-void protocol_tdma(int curr_cycle, const std::vector<int> &nodes_ready, std::vector<Node *> &chip,
-                   std::vector<float> &hotspotness_weights, int nchannels) {
+void protocol_token(int curr_cycle, const std::vector<int> &nodes_ready, std::vector<Node *> &chip,
+                    std::vector<float> &hotspotness_weights, int nchannels) {
     if (Global_params::Instance()->is_debugging_on()) {
-        std::cout << "TDMA: Node " << Global_params::Instance()->get_tdma_current_node() << ". Cycles left: "
-                  << Global_params::Instance()->get_tdma_current_node_slot_size() << std::endl;
+        std::cout << "Token: Node " << Global_params::Instance()->get_token_current_node() << std::endl;
     }
 
-    // If there's a node with a non-empty buffer, whose id matches the tdma_current_node
-    std::vector<int>::const_iterator found_node = std::find(nodes_ready.begin(), nodes_ready.end(),
-                                                            Global_params::Instance()->get_tdma_current_node());
-    if (found_node != nodes_ready.end()) {
-        Node *p_node = chip.at(*found_node);
+    // We check if we're already in the middle of a transmission, if so we decrease cycles_left and check if transmission is finished
+    if (Global_params::Instance()->is_medium_busy()) {
+        Node *p_node = chip.at(Global_params::Instance()->get_unique_ids_concurrent_tx_nodes());
         // We cast the Packet* into a Packet_tdma* so that we can access its own methods
         if (Packet_tdma *p_packet = dynamic_cast<Packet_tdma *>(p_node->get_in_buffer_front())) {
             // We decrease cycles_left for the current packet
             p_packet->decrease_cycles_left();
+            if (Global_params::Instance()->is_debugging_on()) {
+                std::cout << "Node " << p_node->get_id() << " txed for a cycle. Cycles left of current packet: "
+                          << p_packet->get_cycles_left() << std::endl;
+            }
             if (Global_params::Instance()->get_total_served_packets_chip() >=
                 0.1 * Global_params::Instance()->get_npackets() &&
                 Global_params::Instance()->get_total_served_packets_chip() <
@@ -219,17 +290,22 @@ void protocol_tdma(int curr_cycle, const std::vector<int> &nodes_ready, std::vec
                 Global_params::Instance()->increase_throughput_tx_cycles();
             }
 
-            if (Global_params::Instance()->is_debugging_on()) {
-                std::cout << "Node " << p_node->get_id() << " txed for a cycle. Cycles left of current packet: "
-                          << p_packet->get_cycles_left() << std::endl;
-            }
-
             // If at the end of this cycle we have 0 cycles left it means we successfully transmitted the packet. So do the following:
-            // Take the packet out of the buffer, increase counters of total served packets per node and per chip
+            // Empty vector of transmitting nodes (only one, the token holder), set the medium to idle, take the packet out
+            // of the buffer, update the token ID (pass the token)
             if (p_packet->get_cycles_left() == 0) {
-                p_node->pop_packet_buffer(curr_cycle);
+                int lat = curr_cycle - p_node->get_in_buffer_front()->get_inj_time() + 1;
+                p_node->pop_packet_buffer(
+                        curr_cycle); // this pops the packet out and also updates statistics (total served packets per node and per chip)
                 if (Global_params::Instance()->is_debugging_on()) {
-                    std::cout << "Packet by " << p_node->get_id() << " has been successfully tx" << std::endl;
+                    std::cout << "Packet by " << p_node->get_id() << " has been successfully tx (latency " << lat << ")"
+                              << std::endl;
+                }
+                Global_params::Instance()->flush_ids_concurrent_tx_nodes();
+                Global_params::Instance()->set_medium_idle();
+                Global_params::Instance()->update_token_current_node();
+                if (Global_params::Instance()->is_debugging_on()) {
+                    std::cout << "TOKEN PASSED" << std::endl;
                 }
             }
         }
@@ -239,29 +315,80 @@ void protocol_tdma(int curr_cycle, const std::vector<int> &nodes_ready, std::vec
             abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
         }
     }
+        // Otherwise (medium is idle), we check if the token holder has packets to tx
+    else {
+        std::vector<int>::const_iterator found_node = std::find(nodes_ready.begin(), nodes_ready.end(),
+                                                                Global_params::Instance()->get_token_current_node());
+        // if we find the token holder in the list of nodes that are ready to send (token holder has a packet to send), the token holder starts tx
+        if (found_node != nodes_ready.end()) {
+            Global_params::Instance()->set_medium_busy();
+            Global_params::Instance()->push_ids_concurrent_tx_nodes(*found_node);
+            Node::channel_function("token", "token holder in the list of nodes that are ready to send",
+                                   *found_node->get_id(), p_packet, nchannels)
+            Node *p_node = chip.at(*found_node);
+            // We cast the Packet* into a Packet_tdma* so that we can access its own methods
+            if (Packet_tdma *p_packet = dynamic_cast<Packet_tdma *>(p_node->get_in_buffer_front())) {
+                // We decrease cycles_left for the current packet
+                p_packet->decrease_cycles_left();
+                if (Global_params::Instance()->is_debugging_on()) {
+                    std::cout << "Node " << p_node->get_id() << " txed for a cycle. Cycles left of current packet: "
+                              << p_packet->get_cycles_left() << std::endl;
+                }
+                if (Global_params::Instance()->get_total_served_packets_chip() >=
+                    0.1 * Global_params::Instance()->get_npackets() &&
+                    Global_params::Instance()->get_total_served_packets_chip() <
+                    0.8 * Global_params::Instance()->get_npackets()) {
+                    Global_params::Instance()->increase_throughput_tx_cycles();
+                }
 
-    // now we update the TDMA status for next cycle
-    // if the number of cycles left to be used in current slot is 1 it means that
-    // we have to switch to next node and reset the slot size corresponding to that node
-    if (Global_params::Instance()->get_tdma_current_node_slot_size() == 1) {
-        // first we move to the next slot by setting the current_node to the next one
-        Global_params::Instance()->update_tdma_current_node();
-
-        // and now we set the slot size that corresponds to the next node (in fixed TDMA this is fixed)
-        if (Global_params::Instance()->get_chosen_mac() == Mac_protocols::tdma_fixed) {
-            Global_params::Instance()->set_tdma_current_node_slot_size(Global_params::Instance()->get_tdma_slot_size());
-        } else if (Global_params::Instance()->get_chosen_mac() == Mac_protocols::tdma_weighted) {
-            Global_params::Instance()->set_tdma_current_node_slot_size(Global_params::Instance()->get_tdma_slot_size() *
-                                                                       int(ceil(hotspotness_weights.at(
-                                                                               Global_params::Instance()->get_tdma_current_node()))));
-        } else {
-            std::cout << "ERROR: No matching protocol for set_tdma_current_node_slot_size" << std::endl;
-            abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
+                // If at the end of this cycle we have 0 cycles left it means we successfully transmitted the packet. So do the following:
+                // Empty vector of transmitting nodes, set the medium to idle, take the packet out of the buffer,
+                // increase counters of total served packets per node and per chip, pass the token and start next epoch
+                if (p_packet->get_cycles_left() == 0) {
+                    int lat = curr_cycle - p_node->get_in_buffer_front()->get_inj_time() + 1;
+                    p_node->pop_packet_buffer(
+                            curr_cycle); // this pops the packet out and also updates statistics (total served packets per node and per chip)
+                    if (Global_params::Instance()->is_debugging_on()) {
+                        std::cout << "Packet by " << p_node->get_id() << " has been successfully tx (latency " << lat
+                                  << ")" << std::endl;
+                    }
+                    if (Global_params::Instance()->get_ids_concurrent_tx_nodes_size() == 1) {
+                        if (Global_params::Instance()->get_unique_ids_concurrent_tx_nodes() == *found_node) {
+                            Global_params::Instance()->flush_ids_concurrent_tx_nodes();
+                            Global_params::Instance()->set_medium_idle();
+                            Global_params::Instance()->update_token_current_node();
+                            if (Global_params::Instance()->is_debugging_on()) {
+                                std::cout << "TOKEN PASSED" << std::endl;
+                            }
+                        } else {
+                            std::cout
+                                    << "!!!!!!!!!!! ERROR: get_unique_ids_concurrent_tx_nodes is different than token holder"
+                                    << std::endl;
+                            abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
+                        }
+                    } else {
+                        std::cout
+                                << "!!!!!!!!!!! ERROR: get_ids_concurrent_tx_nodes_size is different than 1, this doesn't make sense"
+                                << std::endl;
+                        abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
+                    }
+                }
+            }
+                // If the cast fails
+            else {
+                std::cout << "ERROR: Cast from Packet* to Packet_tdma* failed" << std::endl;
+            }
         }
-    } else {
-        Global_params::Instance()->decrease_tdma_current_node_slot_size();
+            //otherwise if token holder has nothing to tx, we pass the token right away
+        else {
+            Global_params::Instance()->update_token_current_node();
+            if (Global_params::Instance()->is_debugging_on()) {
+                std::cout << "Token holder has nothing to tx" << std::endl;
+                std::cout << "TOKEN PASSED" << std::endl;
+            }
+        }
     }
-}*/
+}
 //===============================================================
 
 // Specification of Fuzzy token
@@ -712,133 +839,6 @@ void protocol_fuzzy_token(int curr_cycle, const std::vector<int> &nodes_ready, s
                         << "ERROR: Uncoherence detected. The size of ids_concurrent_tx_nodes is zero but the medium is set as busy"
                         << std::endl;
                 abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
-            }
-        }
-    }
-}
-//===============================================================
-
-// Specification of Token
-// We assume no collisions, so we don't take care of unexpected collisions
-void protocol_token(int curr_cycle, const std::vector<int> &nodes_ready, std::vector<Node *> &chip,
-                    std::vector<float> &hotspotness_weights, int nchannels) {
-    if (Global_params::Instance()->is_debugging_on()) {
-        std::cout << "Token: Node " << Global_params::Instance()->get_token_current_node() << std::endl;
-    }
-
-    // We check if we're already in the middle of a transmission, if so we decrease cycles_left and check if transmission is finished
-    if (Global_params::Instance()->is_medium_busy()) {
-        Node *p_node = chip.at(Global_params::Instance()->get_unique_ids_concurrent_tx_nodes());
-        // We cast the Packet* into a Packet_tdma* so that we can access its own methods
-        if (Packet_tdma *p_packet = dynamic_cast<Packet_tdma *>(p_node->get_in_buffer_front())) {
-            // We decrease cycles_left for the current packet
-            p_packet->decrease_cycles_left();
-            if (Global_params::Instance()->is_debugging_on()) {
-                std::cout << "Node " << p_node->get_id() << " txed for a cycle. Cycles left of current packet: "
-                          << p_packet->get_cycles_left() << std::endl;
-            }
-            if (Global_params::Instance()->get_total_served_packets_chip() >=
-                0.1 * Global_params::Instance()->get_npackets() &&
-                Global_params::Instance()->get_total_served_packets_chip() <
-                0.8 * Global_params::Instance()->get_npackets()) {
-                Global_params::Instance()->increase_throughput_tx_cycles();
-            }
-
-            // If at the end of this cycle we have 0 cycles left it means we successfully transmitted the packet. So do the following:
-            // Empty vector of transmitting nodes (only one, the token holder), set the medium to idle, take the packet out
-            // of the buffer, update the token ID (pass the token)
-            if (p_packet->get_cycles_left() == 0) {
-                int lat = curr_cycle - p_node->get_in_buffer_front()->get_inj_time() + 1;
-                p_node->pop_packet_buffer(
-                        curr_cycle); // this pops the packet out and also updates statistics (total served packets per node and per chip)
-                if (Global_params::Instance()->is_debugging_on()) {
-                    std::cout << "Packet by " << p_node->get_id() << " has been successfully tx (latency " << lat << ")"
-                              << std::endl;
-                }
-                Global_params::Instance()->flush_ids_concurrent_tx_nodes();
-                Global_params::Instance()->set_medium_idle();
-                Global_params::Instance()->update_token_current_node();
-                if (Global_params::Instance()->is_debugging_on()) {
-                    std::cout << "TOKEN PASSED" << std::endl;
-                }
-            }
-        }
-            // If the cast fails
-        else {
-            std::cout << "ERROR: Cast from Packet* to Packet_tdma* failed" << std::endl;
-            abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
-        }
-    }
-        // Otherwise (medium is idle), we check if the token holder has packets to tx
-    else {
-        std::vector<int>::const_iterator found_node = std::find(nodes_ready.begin(), nodes_ready.end(),
-                                                                Global_params::Instance()->get_token_current_node());
-        // if we find the token holder in the list of nodes that are ready to send (token holder has a packet to send), the token holder starts tx
-        if (found_node != nodes_ready.end()) {
-            Global_params::Instance()->set_medium_busy();
-            Global_params::Instance()->push_ids_concurrent_tx_nodes(*found_node);
-            Node::channel_function("token", "token holder in the list of nodes that are ready to send",
-                                   *found_node->get_id(), p_packet, nchannels)
-            Node *p_node = chip.at(*found_node);
-            // We cast the Packet* into a Packet_tdma* so that we can access its own methods
-            if (Packet_tdma *p_packet = dynamic_cast<Packet_tdma *>(p_node->get_in_buffer_front())) {
-                // We decrease cycles_left for the current packet
-                p_packet->decrease_cycles_left();
-                if (Global_params::Instance()->is_debugging_on()) {
-                    std::cout << "Node " << p_node->get_id() << " txed for a cycle. Cycles left of current packet: "
-                              << p_packet->get_cycles_left() << std::endl;
-                }
-                if (Global_params::Instance()->get_total_served_packets_chip() >=
-                    0.1 * Global_params::Instance()->get_npackets() &&
-                    Global_params::Instance()->get_total_served_packets_chip() <
-                    0.8 * Global_params::Instance()->get_npackets()) {
-                    Global_params::Instance()->increase_throughput_tx_cycles();
-                }
-
-                // If at the end of this cycle we have 0 cycles left it means we successfully transmitted the packet. So do the following:
-                // Empty vector of transmitting nodes, set the medium to idle, take the packet out of the buffer,
-                // increase counters of total served packets per node and per chip, pass the token and start next epoch
-                if (p_packet->get_cycles_left() == 0) {
-                    int lat = curr_cycle - p_node->get_in_buffer_front()->get_inj_time() + 1;
-                    p_node->pop_packet_buffer(
-                            curr_cycle); // this pops the packet out and also updates statistics (total served packets per node and per chip)
-                    if (Global_params::Instance()->is_debugging_on()) {
-                        std::cout << "Packet by " << p_node->get_id() << " has been successfully tx (latency " << lat
-                                  << ")" << std::endl;
-                    }
-                    if (Global_params::Instance()->get_ids_concurrent_tx_nodes_size() == 1) {
-                        if (Global_params::Instance()->get_unique_ids_concurrent_tx_nodes() == *found_node) {
-                            Global_params::Instance()->flush_ids_concurrent_tx_nodes();
-                            Global_params::Instance()->set_medium_idle();
-                            Global_params::Instance()->update_token_current_node();
-                            if (Global_params::Instance()->is_debugging_on()) {
-                                std::cout << "TOKEN PASSED" << std::endl;
-                            }
-                        } else {
-                            std::cout
-                                    << "!!!!!!!!!!! ERROR: get_unique_ids_concurrent_tx_nodes is different than token holder"
-                                    << std::endl;
-                            abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
-                        }
-                    } else {
-                        std::cout
-                                << "!!!!!!!!!!! ERROR: get_ids_concurrent_tx_nodes_size is different than 1, this doesn't make sense"
-                                << std::endl;
-                        abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
-                    }
-                }
-            }
-                // If the cast fails
-            else {
-                std::cout << "ERROR: Cast from Packet* to Packet_tdma* failed" << std::endl;
-            }
-        }
-            //otherwise if token holder has nothing to tx, we pass the token right away
-        else {
-            Global_params::Instance()->update_token_current_node();
-            if (Global_params::Instance()->is_debugging_on()) {
-                std::cout << "Token holder has nothing to tx" << std::endl;
-                std::cout << "TOKEN PASSED" << std::endl;
             }
         }
     }
