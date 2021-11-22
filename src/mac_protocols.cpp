@@ -142,8 +142,8 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int> &nodes_ready, std:
 		// If the medium is idle
 		if (!Global_params::Instance()->is_channel_busy(channel_id)) {
 			// For each node with a non-empty buffer, regardless if its 0, 1 or 2+ nodes...
-			for (std::vectorstd:: < std::vector < int >> ::const_iterator curr_node = nodes_ready.begin(); curr_node !=
-																										   nodes_ready.end();
+			for (std::vector < std::vector < int >> ::const_iterator curr_node = nodes_ready.begin(); curr_node !=
+																									  nodes_ready.end();
 			++curr_node){
 				Node *p_node = chip.at(*curr_node[0]);
 				// checking if the channel linked to the node is present in the list of given channels
@@ -649,7 +649,7 @@ void protocol_fuzzy_token(int curr_cycle, const std::vector<int> &nodes_ready, s
 			else {
 				// For each node in fuzzy-area with a non-empty buffer
 				for (std::vector<int>::const_iterator curr_node_id = fuzzy_nodes_ready.begin();
-					curr_node_id != fuzzy_nodes_ready.end(); ++curr_node_id) {
+					 curr_node_id != fuzzy_nodes_ready.end(); ++curr_node_id) {
 					Node *p_node = chip.at(*curr_node_id);
 
 					// TODO: !!!!!!!!!!!!!
