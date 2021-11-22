@@ -191,6 +191,13 @@ void Global_params::flush_ids_concurrent_tx_nodes() {
 void Global_params::flush_channel_concurrent_tx_nodes() {
     channel_concurrent_tx_nodes.erase(channel_concurrent_tx_nodes.begin(), channel_concurrent_tx_nodes.end());
 }
+// Delete all nodes that finished transmitting for the given channel
+void delete_ids_concurrent_tx_nodes(int cid, vector *curr_node){
+	if (*curr_node[1] == cid){
+		// delete
+		ids_concurrent_tx_nodes.erase(*curr_node)
+	}
+}
 // Provides begin iterator for ids_concurrent_tx_nodes
 std::vector<int>::const_iterator Global_params::ids_concurrent_tx_nodes_begin() {
     return ids_concurrent_tx_nodes.begin();

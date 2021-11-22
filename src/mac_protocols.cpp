@@ -107,15 +107,23 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 		// done tx at the end of this cycle. So we empty the vector of transmitting nodes, we set the medium to idle, we take the packet out
 		// of the buffer, we increase counters of total served packets per node and per chip and if it isn't zero we don't have to do nothing because we already decreased cycles_left
 		else {
-                for(i=1;i<get_ids_concurrent_tx_nodes_size();i++){
-                    vector<int> node_tx = ids_concurrent_tx_nodes[i];
+		       // catch all ids
+		       // check which ids have the same channel id
+		       // add all nodes with same channel ids into channel_concurrent_tx_nodes
+		       for(i=1;i<get_ids_concurrent_tx_nodes_size();i++){
+		           // here we have all the nodes that want to transmit
+		           vector<int> node_tx = ids_concurrent_tx_nodes[i];
 
-                    if(node_tx[1] == channel_id){
-                        Global_params::Instance()->push_channel_concurrent_tx_nodes(node_tx[0]);
+			    // push the nodes with all the same channel id
+		            if(node_tx[1] == channel_id){
+		                Global_params::Instance()->push_channel_concurrent_tx_nodes(node_tx[0]);
 
-                    }
+		            }
+		            
+		           // for every channel_id, if the node already transmitted, we delete it from the vector
+		           Global_params::Instance()->delete_ids_concurrent_tx_nodes(channel_id, node_tx);
 
-                }
+		        }
 			// if multiple colliding nodes - previous function : change to adapt to multichannel
 			if(Global_params::Instance()->get_channel_concurrent_tx_nodes_size() > 1 ) {
 				// for each ids_concurrent_tx_nodes, update_cnt_backoff, then empty vector of ids_concurrent_tx_nodes, then set medium to idle
@@ -134,7 +142,9 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 		        Global_params::Instance()->increase_counter_collisions(); // for every colliding node we register the cycle in which the collision occurred
 				} // End of for-each
 				Global_params::Instance()->flush_channel_concurrent_tx_nodes();
-				Global_params::Instance()->flush_ids_concurrent_tx_nodes(); // we have to change this to delete the ones that have only the same channel id
+				
+				// no more need because we delete it before
+				//Global_params::Instance()->flush_ids_concurrent_tx_nodes(); // we have to change this to delete the ones that have only the same channel id
 				Global_params::Instance()->set_medium_idle();
 				return 1; // return collision code
 			}
@@ -155,7 +165,8 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 					// of the buffer, increase counters of total served packets per node and per chip
 					if (p_packet->get_cycles_left() == 0) {
 						p_node->pop_packet_buffer(curr_cycle);
-						Global_params::Instance()->flush_ids_concurrent_tx_nodes(); //we have to change this to delete the ones that have only the same channel id
+						// no more need because we delete it before
+						//Global_params::Instance()->flush_ids_concurrent_tx_nodes(); //we have to change this to delete the ones that have only the same channel id
 						Global_params::Instance()->flush_channel_concurrent_tx_nodes();
 						Global_params::Instance()->set_medium_idle();
 					}			}

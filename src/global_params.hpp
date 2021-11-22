@@ -116,8 +116,12 @@ public:
     void set_medium_busy(); // set medium_busy = true
     void set_medium_idle(); // set medium_busy = false
     int get_ids_concurrent_tx_nodes_size(); // Get size of ids_concurrent_tx_nodes (number of nodes simultaneously transmitting)
+    int get_channel_concurrent_tx_nodes_size(); // Get size of channel_concurrent_tx_nodes (number of channels concerned by the simultaneous transmittion)
     void push_ids_concurrent_tx_nodes(int nid); // Push new node_id into ids_concurrent_tx_nodes (new node starts transmitting)
+    void push_channel_concurrent_tx_nodes(int cid); // Push channel_id into ids_concurrent_tx_nodes
     void flush_ids_concurrent_tx_nodes(); // Delete all elements in ids_concurrent_tx_nodes (no node will be transmitting)
+    void flush_channel_concurrent_tx_nodes(); // Delete all elements in channel_concurrent_tx_nodes (no channel will be used for transmission)
+    void delete_ids_concurrent_tx_nodes(int cid); // Delete all nodes that finished transmitting for the given channel
     int get_unique_ids_concurrent_tx_nodes(); // If we have ensured that there's only 1 tx node, we return its id
     std::vector<int>::const_iterator ids_concurrent_tx_nodes_begin();
     std::vector<int>::const_iterator ids_concurrent_tx_nodes_end();
