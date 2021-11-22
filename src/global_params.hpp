@@ -36,7 +36,7 @@ private:
     int total_ncycles; // At every iteration we increase this counter, so that we know the total number of cycles executed so far
     std::vector<bool> channel_busy(int nchannels); // This flag will determine if the channel (in a single-channel model) is busy or not
     bool medium_busy; // This flag will determine if the channel (in a single-channel model) is busy or not
-    std::vector<std::vector> ids_concurrent_tx_nodes;
+    std::vector<std::vector<int>> ids_concurrent_tx_nodes;
     std::vector<int> channel_concurrent_tx_nodes;
     bool debugging;
     bool save_trace;
