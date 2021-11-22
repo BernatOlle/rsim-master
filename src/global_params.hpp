@@ -117,7 +117,7 @@ public:
     void set_medium_idle(); // set medium_busy = false
     int get_ids_concurrent_tx_nodes_size(); // Get size of ids_concurrent_tx_nodes (number of nodes simultaneously transmitting)
     int get_channel_concurrent_tx_nodes_size(); // Get size of channel_concurrent_tx_nodes (number of channels concerned by the simultaneous transmittion)
-    void push_ids_concurrent_tx_nodes(std::vector<int> nid); // Push new node_id into ids_concurrent_tx_nodes (new node starts transmitting)
+    void push_ids_concurrent_tx_nodes(std::vector<int>** nid); // Push new node_id into ids_concurrent_tx_nodes (new node starts transmitting)
     void push_channel_concurrent_tx_nodes(int cid); // Push channel_id into ids_concurrent_tx_nodes
     void flush_ids_concurrent_tx_nodes(); // Delete all elements in ids_concurrent_tx_nodes (no node will be transmitting)
     void flush_channel_concurrent_tx_nodes(); // Delete all elements in channel_concurrent_tx_nodes (no channel will be used for transmission)
