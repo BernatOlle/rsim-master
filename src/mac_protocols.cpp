@@ -709,7 +709,9 @@ void protocol_fuzzy_token(int curr_cycle, const std::vector<int> &nodes_ready, s
 			if (Global_params::Instance()->get_ids_concurrent_tx_nodes_size() > 1) {
 
 				// save the IDs of all collided nodes
-				std::list<string> collided_nodes;
+//				std::list<string> collided_nodes;
+				std::string collided_nodes = "";
+				std::string separator = ""; // separator for the first iteration of the for-each
 				for (std::vector<int>::const_iterator curr_node_id = Global_params::Instance()->ids_concurrent_tx_nodes_begin();
 					curr_node_id != Global_params::Instance()->ids_concurrent_tx_nodes_end(); ++curr_node_id) {
 					Node *p_node = chip.at(*curr_node_id);
