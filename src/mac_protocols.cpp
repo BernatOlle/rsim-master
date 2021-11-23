@@ -147,7 +147,7 @@ protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<int>> &nodes_r
 			// nodes_ready will contain a couple [node_id, channel_id]
 			std::vector<std::vector<int>>::const_iterator curr_couple;
 			std::vector<int>::const_iterator curr_node;
-			std::vector<Node*> = p_nodes;
+			std::vector<Node*> p_nodes;
 			for (curr_couple = nodes_ready.begin(); curr_couple != nodes_ready.end(); ++curr_couple) {
 				for (curr_node = curr_couple->begin(); curr_node != curr_couple->end(); curr_node++) {
 					// initialising a vector of Nodes which will be fed to the protocol buffer
