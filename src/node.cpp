@@ -42,19 +42,19 @@ void Node::channel_function(std::string protocol, std::string step, Node* node, 
 	int x = Node::get_channel_id();
 	if (reason == 0) {
 		if (protocol == "none") {
-			std::cout << "Information:" << step << "Node: " << node.get_id() << "ChannelID:" << x << "\n";
+			std::cout << "Information:" << step << "Node: " << node->get_id() << "ChannelID:" << x << "\n";
 		}
-		std::cout << "Protocol:" << protocol << "Information:" << step << "Node: " << node.get_id() << "ChannelID:" << x << "\n";
+		std::cout << "Protocol:" << protocol << "Information:" << step << "Node: " << node->get_id() << "ChannelID:" << x << "\n";
 	}
 	if (reason == 1) {
 		int new_x;
 		if (x == 0) {
 			new_x = rand() % number_channels + 1;
 			Node::set_channel_id(new_x);
-			std::cout << "Protocol:" << protocol << "Step:" << step << "Node: " << node.get_id() << "ChannelID:" << new_x
+			std::cout << "Protocol:" << protocol << "Step:" << step << "Node: " << node->get_id() << "ChannelID:" << new_x
 					  << "\n";
 		}
-		std::cout << "Protocol:" << protocol << "Step:" << step << "Node: " << node.get_id() << "ChannelID:" << x << "\n";
+		std::cout << "Protocol:" << protocol << "Step:" << step << "Node: " << node->get_id() << "ChannelID:" << x << "\n";
 	}
 }
 
