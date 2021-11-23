@@ -142,7 +142,8 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int> &nodes_ready, std:
 		// If the medium is idle
 		if (!Global_params::Instance()->is_channel_busy(channel_id)) {
 			// For each node with a non-empty buffer, regardless if its 0, 1 or 2+ nodes...
-			for (std::vector<int>::const_iterator** curr_node = nodes_ready.begin(); curr_node != nodes_ready.end();
+			// nodes_ready will contain a couple [node_id, id_channel]
+			for (std::vector<int>::const_iterator curr_node = nodes_ready.begin(); curr_node != nodes_ready.end();
 			++curr_node){
 				Node *p_node = chip.at(&curr_node[0]);
 				// checking if the channel linked to the node is present in the list of given channels
@@ -160,7 +161,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int> &nodes_ready, std:
 							Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node);
 							Node::channel_function("brs", "when channel_id equals channel iteration", *curr_node[0],
 												   p_packet, nchannels)
-							// Notice we don't decrece the cycles_left of the packet, since we have to leave one extra cycle after the header to check for collisions
+							// Notice we don't decrease the cycles_left of the packet, since we have to leave one extra cycle after the header to check for collisions
 						}
 					}
 						// If the cast fails

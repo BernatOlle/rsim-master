@@ -37,12 +37,12 @@ void Node::set_channel_id(int channel_id){
 void Node::channel_function(std::string protocol, std::string  step, int node, Packet packet, int number_channels){
     // would the node id every be null ?
     int x=Node::get_channel_id();
-    // below code only works when instantiated nchannels, must insert a condition to do this only if it has been assigned _ how ??
     int new_x;
-    if(x==NULL){
+    if(x==0){
         new_x=rand()%number_channels;
         Node::set_channel_id(new_x);
-    	std::cout << "Protocol:" << protocol<< "Step:" << step<<"Node: "<<node<<"ChannelID:"<<new_x<<"\n";
+		// TODO : must check if assigned channel isn't already assigned - how ??
+		std::cout << "Protocol:" << protocol<< "Step:" << step<<"Node: "<<node<<"ChannelID:"<<new_x<<"\n";
     }
     std::cout << "Protocol:" << protocol<< "Step:" << step<<"Node: "<<node<<"ChannelID:"<<x<<"\n";
 }

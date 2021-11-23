@@ -280,15 +280,20 @@ int main(int argc, char* argv[]) {
 			Global_params::Instance()->set_cycle_injection_stopped(Global_params::Instance()->get_total_ncycles());
 			flag_stop_injection = true;
 		}
-        	std::vector<int> id_channel;
-		std::vector<vector> nodes_ready; // at every cycle we initialize an empty vector that will store the IDs of the nodes with non-empty buffers
+		// initialise channel id to enter the channel_function for definite assignation
+		int id_channel = 0;
+		// nodes_ready will now be a vector of vectors because we push the couple node_id and channel_id
+		std::vector<std::vector<Vertex*>> nodes_ready; // at every cycle we initialize an empty vector that will store the couple : [node_ID, channel_id] of the nodes with non-empty buffers
 		// iterates through all nodes of the chip to see which ones have a packet to transmit
 		for (std::vector<Node*>::iterator curr_node = chip.begin(); curr_node != chip.end(); ++curr_node) {
+			// for the situation of a node that wants to transmit
 			if (!(*curr_node)->in_buffer_empty()) {
-				// when we find a node with a non-empty buffer, we store its ID
-				(*curr_node)->channel_funtion();
-				id_channel.push_back((*curr_node)->get_id(),(*curr_node)->get_channel())
-				nodes_ready.push_back(id_channel);
+				// when we find a node with a non-empty buffer, we store its ID and the channel ID linked to it
+				// TODO : the channel_function can't be called here ???? we assign a random channel number ????
+				//(*curr_node)->channel_funtion();
+				nodes_ready.push_pack(std::vector<Vertex*>());
+				// initialise the vector with a couple of current node_id and empty channel_id
+				nodes_ready.back().push_back(new Vertex[(*curr_node)->get_id(),id_channel]);
 				if (Global_params::Instance()->is_debugging_on()) {
 					std::cout << "Node " << (*curr_node)->get_id() << " wants to tx (" << (*curr_node)->get_in_buffer_size() << " pending packets)" << std::endl;
 				}
