@@ -156,8 +156,8 @@ protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<int>> &nodes_r
 				// checking if the channel linked to the node is present in the list of given channels
 				if (curr_node[1] == channel_id) {
 					// iteration on every packet corresponding to the transmitting node
-//					Node* p_node;
-//					for (p_node = p_nodes.begin(); p_node != p_nodes.end(); ++p_node) {
+					Node* p_node;
+					for (p_node = p_nodes.begin(); p_node != p_nodes.end(); ++p_node) {
 						// TODO : find solution to iterate through vector to cast each "pointer"
 						// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
 						if (Packet_brs_non_p *p_packet = dynamic_cast<Packet_brs_non_p *>(p_nodes->get_in_buffer_front())) {
@@ -169,15 +169,14 @@ protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<int>> &nodes_r
 							else {
 								// change the boolean linked to the channel id in the vector to true if busy (!!!need to change set_medium_busy!!!)
 								Global_params::Instance()->set_channel_busy(channel_id);
-//							Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node); // TODO (23/11/2021) : DELETE OLD
-								Global_params::Instance()->push_ids_and_channels_concurrent_tx_nodes(*curr_node);
+								Global_params::Instance()->push_ids_and_channels_concurrent_tx_nodes(curr_node);
 								Node::channel_function("brs", "the back-off is zero, the first cycle is transmitted",
 													   *curr_node[0], p_packet, nchannels,
 													   0) // TODO (23/11/2021) : CHECK TYPE
 								// Notice we don't decrease the cycles_left of the packet, since we have to leave one extra cycle after the header to check for collisions
 							}
 						}
-//					}
+					}
 					// If the cast fails
 					else {
 						std::cout << "ERROR: Cast from Packet* to Packet_brs_non_p* failed" << std::endl;
