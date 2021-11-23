@@ -169,7 +169,7 @@ protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<int>> &nodes_r
 							else {
 								// change the boolean linked to the channel id in the vector to true if busy (!!!need to change set_medium_busy!!!)
 								Global_params::Instance()->set_channel_busy(channel_id);
-								Global_params::Instance()->push_ids_and_channels_concurrent_tx_nodes(curr_node);
+								Global_params::Instance()->push_ids_and_channels_concurrent_tx_nodes(curr_couple);
 								Node::channel_function("brs", "the back-off is zero, the first cycle is transmitted",
 													   *curr_node[0], p_packet, nchannels,
 													   0) // TODO (23/11/2021) : CHECK TYPE
