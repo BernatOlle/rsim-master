@@ -147,8 +147,8 @@ protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<int>> &nodes_r
 			// nodes_ready will contain a couple [node_id, channel_id]
 			std::vector < std::vector < int >> ::const_iterator curr_couple;
 			std::vector<int>::const_iterator curr_node;
+			std::vector < Node * > p_nodes;
 			for (curr_couple = nodes_ready.begin(); curr_couple != nodes_ready.end(); ++curr_couple) {
-				std::vector < Node * > p_nodes;
 				for (curr_node = curr_couple->begin(); curr_node != curr_couple->end(); curr_node++) {
 					// initialising a vector of Nodes which will be fed to the protocol buffer
 					p_nodes.push_back(chip.at(*curr_node));
@@ -156,10 +156,11 @@ protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<int>> &nodes_r
 				// checking if the channel linked to the node is present in the list of given channels
 				if (curr_node[1] == channel_id) {
 					// iteration on every packet corresponding to the transmitting node
-					Node* p_node;
-					for (p_node = p_nodes.begin(); p_node != p_nodes.end(); ++p_node) {
+//					Node* p_node;
+//					for (p_node = p_nodes.begin(); p_node != p_nodes.end(); ++p_node) {
+						// TODO : find solution to iterate through vector to cast each "pointer"
 						// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
-						if (Packet_brs_non_p *p_packet = dynamic_cast<Packet_brs_non_p *>(p_node->get_in_buffer_front())) {
+						if (Packet_brs_non_p *p_packet = dynamic_cast<Packet_brs_non_p *>(p_nodes->get_in_buffer_front())) {
 							// If backoff is still not zero, we decrease it
 							if (p_packet->get_cnt_backoff() > 0) {
 								p_packet->decrease_cnt_backoff();
@@ -176,7 +177,7 @@ protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<int>> &nodes_r
 								// Notice we don't decrease the cycles_left of the packet, since we have to leave one extra cycle after the header to check for collisions
 							}
 						}
-					}
+//					}
 					// If the cast fails
 					else {
 						std::cout << "ERROR: Cast from Packet* to Packet_brs_non_p* failed" << std::endl;
