@@ -280,10 +280,12 @@ int main(int argc, char* argv[]) {
 			Global_params::Instance()->set_cycle_injection_stopped(Global_params::Instance()->get_total_ncycles());
 			flag_stop_injection = true;
 		}
-		// initialise channel id to enter the channel_function for definite assignation
-		int id_channel = 0;
+
 		// nodes_ready will now be a vector of vectors because we push the couple node_id and channel_id
 		std::vector<std::vector<Vertex*>> nodes_ready; // at every cycle we initialize an empty vector that will store the couple : [node_ID, channel_id] of the nodes with non-empty buffers
+		// initialise channel id to enter the channel_function for definite assignation
+		int id_channel = 0;
+
 		// iterates through all nodes of the chip to see which ones have a packet to transmit
 		for (std::vector<Node*>::iterator curr_node = chip.begin(); curr_node != chip.end(); ++curr_node) {
 			// for the situation of a node that wants to transmit
