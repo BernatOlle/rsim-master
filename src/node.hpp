@@ -34,7 +34,7 @@ public:
 	float get_node_inj_rate();
 	int get_channel_id();
 	void set_channel_id(int);
-    	void channel_function(std::string protocol,std::string  step,int node,Packet packet, int nchannels);
+    	void channel_function(std::string protocol,std::string  step,Node node,Packet packet, int nchannels, int reason);
 	int get_in_buffer_size();
 	bool in_buffer_empty();
 	Packet* get_in_buffer_front();
