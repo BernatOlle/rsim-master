@@ -137,7 +137,7 @@ void protocol_tdma(int curr_cycle, const std::vector<int> &nodes_ready, std::vec
 
 // Specification of BRS-MAC non-persistent. Returns 0 if nobody transmitted, 1 if collision occurred and 2 if somebody transmitted successfully
 int
-protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<Vertex *>> &nodes_ready, std::vector<Node *> &chip,
+protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<int>> &nodes_ready, std::vector<Node *> &chip,
 				   int nchannels) {
 	// recuperating the number of channels and checking couple of [node_id, channel_id]
 	for (int channel_id = 0; channel_id < nchannels; channel_id++) {
@@ -267,7 +267,7 @@ protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<Vertex *>> &no
 
 // Specification of Token
 /*// We assume no collisions, so we don't take care of unexpected collisions
-void protocol_token(int curr_cycle, const std::vector<std::vector<Vertex*>> &nodes_ready, std::vector<Node *> &chip,
+void protocol_token(int curr_cycle, const std::vector<std::vector<int>> &nodes_ready, std::vector<Node *> &chip,
 					std::vector<float> &hotspotness_weights, int nchannels) {
 	if (Global_params::Instance()->is_debugging_on()) {
 		std::cout << "Token: Node " << Global_params::Instance()->get_token_current_node() << std::endl;
@@ -394,7 +394,7 @@ void protocol_token(int curr_cycle, const std::vector<std::vector<Vertex*>> &nod
 //===============================================================
 
 // Specification of Fuzzy token
-/*void protocol_fuzzy_token(int curr_cycle, const std::vector<std::vector<Vertex*>> &nodes_ready, std::vector<Node *> &chip,
+/*void protocol_fuzzy_token(int curr_cycle, const std::vector<std::vector<int>> &nodes_ready, std::vector<Node *> &chip,
 						  std::vector<float> &hotspotness_weights, int nchannels) {
 	std::vector<int> fuzzy_nodes_ready;
 	int ncores = Global_params::Instance()->get_ncores();

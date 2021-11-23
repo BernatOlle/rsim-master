@@ -1,6 +1,7 @@
 #include "node.hpp"
 #include "utilities.hpp"
 #include <cstdlib>
+#include <vector>
 #include <algorithm>
 
 Node::Node(int id, float inj_rate) : nid(id), node_inj_rate(inj_rate), total_injected_packets_node(0),

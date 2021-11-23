@@ -7,6 +7,7 @@
 #include "utilities.hpp"
 #include "mac_protocols.hpp"
 #include "global_params.hpp"
+#include <vector>
 
 /*-------------------------------------------------------
 
@@ -282,7 +283,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// nodes_ready will now be a vector of vectors because we push the couple node_id and channel_id
-		std::vector<std::vector<Vertex*>> nodes_ready; // at every cycle we initialize an empty vector that will store the couple : [node_ID, channel_id] of the nodes with non-empty buffers
+		std::vector<std::vector<int>> nodes_ready; // at every cycle we initialize an empty vector that will store the couple : [node_ID, channel_id] of the nodes with non-empty buffers
 
 		// iterates through all nodes of the chip to see which ones have a packet to transmit
 		for (std::vector<Node*>::iterator curr_node = chip.begin(); curr_node != chip.end(); ++curr_node) {

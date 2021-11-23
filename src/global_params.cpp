@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include "ini_parser.hpp"
 #include "utilities.hpp"
+#include <vector>
 
 // Global static pointer used to ensure a single instance of the class.
 Global_params* Global_params::s_instance = NULL;
@@ -194,7 +195,7 @@ void Global_params::flush_ids_concurrent_tx_nodes() {
     ids_concurrent_tx_nodes.erase(ids_concurrent_tx_nodes.begin(), ids_concurrent_tx_nodes.end());
 }
 // Delete all elements in ids_and_channels_concurrent_tx_nodes (no node will be transmitting)
-void Global_params::flush_ids_concurrent_tx_nodes() {
+void Global_params::flush_ids_and_channels_concurrent_tx_nodes() {
 	ids_and_channels_concurrent_tx_nodes.erase(ids_and_channels_concurrent_tx_nodes.begin(), ids_and_channels_concurrent_tx_nodes.end());
 }
 void Global_params::flush_channel_concurrent_tx_nodes() {
