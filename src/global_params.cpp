@@ -181,12 +181,21 @@ int Global_params::get_channel_concurrent_tx_nodes_size() {
 void Global_params::push_ids_concurrent_tx_nodes(vector nid) {
     ids_concurrent_tx_nodes.push_back(nid);
 }
+// Push new node_id and channel_id into ids_and_channels_concurrent_tx_nodes (new node starts transmitting)
+void Global_params::push_ids_and_channels_concurrent_tx_nodes(std::vector<int> ncid) {
+	ids_and_channels_concurrent_tx_nodes.push_pack(std::vector<Vertex*>());
+	ids_and_channels_concurrent_tx_nodes.back().push_back(new Vertex[ncid]);
+}
 void Global_params::push_channel_concurrent_tx_nodes(int nid) {
     channel_concurrent_tx_nodes.push_back(nid);
 }
 // Delete all elements in ids_concurrent_tx_nodes (no node will be transmitting)
 void Global_params::flush_ids_concurrent_tx_nodes() {
     ids_concurrent_tx_nodes.erase(ids_concurrent_tx_nodes.begin(), ids_concurrent_tx_nodes.end());
+}
+// Delete all elements in ids_and_channels_concurrent_tx_nodes (no node will be transmitting)
+void Global_params::flush_ids_concurrent_tx_nodes() {
+	ids_and_channels_concurrent_tx_nodes.erase(ids_and_channels_concurrent_tx_nodes.begin(), ids_and_channels_concurrent_tx_nodes.end());
 }
 void Global_params::flush_channel_concurrent_tx_nodes() {
     channel_concurrent_tx_nodes.erase(channel_concurrent_tx_nodes.begin(), channel_concurrent_tx_nodes.end());
