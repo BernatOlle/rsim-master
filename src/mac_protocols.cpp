@@ -136,7 +136,7 @@ void protocol_tdma(int curr_cycle, const std::vector<int> &nodes_ready, std::vec
 //===============================================================
 
 // Specification of BRS-MAC non-persistent. Returns 0 if nobody transmitted, 1 if collision occurred and 2 if somebody transmitted successfully
-int protocol_brs_non_p(int curr_cycle, const std::vector<int> &nodes_ready, std::vector<Node *> &chip, int nchannels) {
+int protocol_brs_non_p(int curr_cycle, const std::vector<std::vector<Vertex*>> &nodes_ready, std::vector<Node *> &chip, int nchannels) {
 	// recuperating the number of channels and checking couple of [node_id, channel_id]
 	for (int channel_id = 0; channel_id < nchannels; channel_id++) {
 		// If the medium is idle
@@ -145,7 +145,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int> &nodes_ready, std:
 			// nodes_ready will contain a couple [node_id, id_channel]
 			for (std::vector<int>::const_iterator curr_node = nodes_ready.begin(); curr_node != nodes_ready.end();
 			++curr_node){
-				// initialising a vector of Nodes which <ill be fed to the protocol buffer
+				// initialising a vector of Nodes which will be fed to the protocol buffer
 				Node* p_node = chip.at(curr_node[0]); // TODO (23/11/2021) : CHECK TYPE
 				// checking if the channel linked to the node is present in the list of given channels
 				if (curr_node[1] == channel_id) {
@@ -160,6 +160,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int> &nodes_ready, std:
 							// change the boolean linked to the channel id in the vector to true if busy (!!!need to change set_medium_busy!!!)
 							Global_params::Instance()->set_channel_busy(channel_id);
 							Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node); // TODO (23/11/2021) : CHECK TYPE
+							Global_params::Instance()->push_ids_and_channels_concurrent_tx_nodes();
 							Node::channel_function("brs", "the back-off is zero, the first cycle is transmitted",
 												   *curr_node[0], p_packet, nchannels, 0) // TODO (23/11/2021) : CHECK TYPE
 							// Notice we don't decrease the cycles_left of the packet, since we have to leave one extra cycle after the header to check for collisions
@@ -263,7 +264,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int> &nodes_ready, std:
 
 // Specification of Token
 // We assume no collisions, so we don't take care of unexpected collisions
-void protocol_token(int curr_cycle, const std::vector<int> &nodes_ready, std::vector<Node *> &chip,
+void protocol_token(int curr_cycle, const std::vector<std::vector<Vertex*>> &nodes_ready, std::vector<Node *> &chip,
 					std::vector<float> &hotspotness_weights, int nchannels) {
 	if (Global_params::Instance()->is_debugging_on()) {
 		std::cout << "Token: Node " << Global_params::Instance()->get_token_current_node() << std::endl;
@@ -390,7 +391,7 @@ void protocol_token(int curr_cycle, const std::vector<int> &nodes_ready, std::ve
 //===============================================================
 
 // Specification of Fuzzy token
-void protocol_fuzzy_token(int curr_cycle, const std::vector<int> &nodes_ready, std::vector<Node *> &chip,
+void protocol_fuzzy_token(int curr_cycle, const std::vector<std::vector<Vertex*>> &nodes_ready, std::vector<Node *> &chip,
 						  std::vector<float> &hotspotness_weights, int nchannels) {
 	std::vector<int> fuzzy_nodes_ready;
 	int ncores = Global_params::Instance()->get_ncores();
