@@ -181,7 +181,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int> &nodes_ready, std:
 			// done tx at the end of this cycle. So we empty the vector of transmitting nodes, we set the medium to idle, we take the packet out
 			// of the buffer, we increase counters of total served packets per node and per chip and if it isn't zero we don't have to do nothing because we already decreased cycles_left
 		else {
-			std::vecto<std::string> ids_concurrent_tx_nodes = Global_params::Instance()->get_unique_ids_concurrent_tx_nodes();
+			std::vector<std::string> ids_concurrent_tx_nodes = Global_params::Instance()->get_unique_ids_concurrent_tx_nodes();
 			// catch all ids
 			// check which ids have the same channel id
 			// add all nodes with same channel ids into channel_concurrent_tx_nodes
