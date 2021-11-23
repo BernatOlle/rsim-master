@@ -37,7 +37,7 @@ void Node::set_channel_id(int channel_id) {
 }
 
 // function to show the change of vector values and reasons
-void Node::channel_function(std::string protocol, std::string step, Node node, Packet packet, int number_channels,
+void Node::channel_function(std::string protocol, std::string step, Node* node, Packet packet, int number_channels,
 							int reason) {
 	int x = Node::get_channel_id();
 	if (reason == 0) {
