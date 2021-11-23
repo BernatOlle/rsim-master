@@ -136,7 +136,9 @@ void protocol_tdma(int curr_cycle, const std::vector<int> &nodes_ready, std::vec
 //===============================================================
 
 // Specification of BRS-MAC non-persistent. Returns 0 if nobody transmitted, 1 if collision occurred and 2 if somebody transmitted successfully
-int protocol_brs_non_p(int curr_cycle, const std::vector<std::vector<Vertex*>> &nodes_ready, std::vector<Node *> &chip, int nchannels) {
+int
+protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<Vertex *>> &nodes_ready, std::vector<Node *> &chip,
+				   int nchannels) {
 	// recuperating the number of channels and checking couple of [node_id, channel_id]
 	for (int channel_id = 0; channel_id < nchannels; channel_id++) {
 		// If the medium is idle
@@ -144,9 +146,9 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<std::vector<Vertex*>> &
 			// For each node with a non-empty buffer, regardless if its 0, 1 or 2+ nodes...
 			// nodes_ready will contain a couple [node_id, id_channel]
 			for (std::vector<int>::const_iterator curr_node = nodes_ready.begin(); curr_node != nodes_ready.end();
-			++curr_node){
+				 ++curr_node) {
 				// initialising a vector of Nodes which will be fed to the protocol buffer
-				Node* p_node = chip.at(curr_node[0]); // TODO (23/11/2021) : CHECK TYPE
+				Node *p_node = chip.at(curr_node[0]); // TODO (23/11/2021) : CHECK TYPE
 				// checking if the channel linked to the node is present in the list of given channels
 				if (curr_node[1] == channel_id) {
 					// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
@@ -162,7 +164,8 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<std::vector<Vertex*>> &
 //							Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node); // TODO (23/11/2021) : DELETE OLD
 							Global_params::Instance()->push_ids_and_channels_concurrent_tx_nodes(*curr_node);
 							Node::channel_function("brs", "the back-off is zero, the first cycle is transmitted",
-												   *curr_node[0], p_packet, nchannels, 0) // TODO (23/11/2021) : CHECK TYPE
+												   *curr_node[0], p_packet, nchannels,
+												   0) // TODO (23/11/2021) : CHECK TYPE
 							// Notice we don't decrease the cycles_left of the packet, since we have to leave one extra cycle after the header to check for collisions
 						}
 					}
@@ -182,7 +185,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<std::vector<Vertex*>> &
 			// done tx at the end of this cycle. So we empty the vector of transmitting nodes, we set the medium to idle, we take the packet out
 			// of the buffer, we increase counters of total served packets per node and per chip and if it isn't zero we don't have to do nothing because we already decreased cycles_left
 		else {
-			std::vector<std::string> ids_concurrent_tx_nodes = Global_params::Instance()->get_unique_ids_concurrent_tx_nodes();
+			std::vector <std::string> ids_concurrent_tx_nodes = Global_params::Instance()->get_unique_ids_concurrent_tx_nodes();
 			// catch all ids
 			for (int i = 1; i < Global_params::Instance()->get_ids_concurrent_tx_nodes_size(); i++) {
 				// here we have all the nodes that want to transmit
@@ -263,8 +266,8 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<std::vector<Vertex*>> &
 //===============================================================
 
 // Specification of Token
-// We assume no collisions, so we don't take care of unexpected collisions
-/*void protocol_token(int curr_cycle, const std::vector<std::vector<Vertex*>> &nodes_ready, std::vector<Node *> &chip,
+/*// We assume no collisions, so we don't take care of unexpected collisions
+void protocol_token(int curr_cycle, const std::vector<std::vector<Vertex*>> &nodes_ready, std::vector<Node *> &chip,
 					std::vector<float> &hotspotness_weights, int nchannels) {
 	if (Global_params::Instance()->is_debugging_on()) {
 		std::cout << "Token: Node " << Global_params::Instance()->get_token_current_node() << std::endl;
