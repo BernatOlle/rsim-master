@@ -183,21 +183,16 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int> &nodes_ready, std:
 		else {
 			std::vector<std::string> ids_concurrent_tx_nodes = Global_params::Instance()->get_unique_ids_concurrent_tx_nodes();
 			// catch all ids
-			// check which ids have the same channel id
-			// add all nodes with same channel ids into channel_concurrent_tx_nodes
 			for (int i = 1; i < Global_params::Instance()->get_ids_concurrent_tx_nodes_size(); i++) {
 				// here we have all the nodes that want to transmit
 				std::vector<int> node_tx = ids_concurrent_tx_nodes[i]; // TODO (23/11/2021) : find a solution to access each node of said vector
-
-				// push the nodes with all the same channel id
+				// check which ids have the same channel id
 				if (node_tx[1] == channel_id) {
+					// add all nodes with same channel ids into channel_concurrent_tx_nodes
 					Global_params::Instance()->push_channel_concurrent_tx_nodes(node_tx[0]);
-
 				}
-
 				// for every channel_id, if the node already transmitted, we delete it from the vector
 				Global_params::Instance()->delete_ids_concurrent_tx_nodes(channel_id, node_tx);
-
 			}
 			// if multiple colliding nodes - previous function : change to adapt to multichannel
 			if (Global_params::Instance()->get_channel_concurrent_tx_nodes_size() > 1) {
