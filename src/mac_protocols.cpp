@@ -150,7 +150,7 @@ protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<int>> &nodes_r
 			for (curr_couple = nodes_ready.begin(); curr_couple != nodes_ready.end(); ++curr_couple) {
 				for (curr_node = curr_couple->begin(); curr_node != curr_couple->end(); curr_node++) {
 					// initialising a vector of Nodes which will be fed to the protocol buffer
-					std::vector <Node> *p_nodes = chip.at(curr_node)
+					std::vector <Node> *p_nodes = chip.at(*curr_node);
 				}
 				// checking if the channel linked to the node is present in the list of given channels
 				if (curr_node[1] == channel_id) {
