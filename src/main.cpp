@@ -284,7 +284,7 @@ int main(int argc, char* argv[]) {
 		// nodes_ready will now be a vector of vectors because we push the couple node_id and channel_id
 		std::vector<std::vector<Vertex*>> nodes_ready; // at every cycle we initialize an empty vector that will store the couple : [node_ID, channel_id] of the nodes with non-empty buffers
 		// initialise channel id to enter the channel_function for definite assignation
-		int id_channel = 0;
+		int id_channel = rand()%number_channels;
 
 		// iterates through all nodes of the chip to see which ones have a packet to transmit
 		for (std::vector<Node*>::iterator curr_node = chip.begin(); curr_node != chip.end(); ++curr_node) {
@@ -292,7 +292,7 @@ int main(int argc, char* argv[]) {
 			if (!(*curr_node)->in_buffer_empty()) {
 				// when we find a node with a non-empty buffer, we store its ID and the channel ID linked to it
 				// TODO : the channel_function can't be called here ???? we assign a random channel number ????
-				//(*curr_node)->channel_funtion();
+				Node::channel_funtion("none", "initialisation of channel link to node", *curr_node, nchannels, nodes_ready);
 				nodes_ready.push_pack(std::vector<Vertex*>());
 				// initialise the vector with a couple of current node_id and empty channel_id
 				nodes_ready.back().push_back(new Vertex[(*curr_node)->get_id(),id_channel]);

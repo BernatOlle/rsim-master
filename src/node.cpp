@@ -34,7 +34,7 @@ void Node::set_channel_id(int channel_id){
 }
 
 // function to show the change of vector values and reasons
-void Node::channel_function(std::string protocol, std::string  step, int node, Packet packet, int number_channels){
+void Node::channel_function(std::string protocol, std::string  step, Node node, Packet packet, int number_channels, std::vector<std::vector<Vertex*>> couple){
     // would the node id every be null ?
     int x=Node::get_channel_id();
     int new_x;
@@ -45,6 +45,9 @@ void Node::channel_function(std::string protocol, std::string  step, int node, P
 		std::cout << "Protocol:" << protocol<< "Step:" << step<<"Node: "<<node<<"ChannelID:"<<new_x<<"\n";
     }
     std::cout << "Protocol:" << protocol<< "Step:" << step<<"Node: "<<node<<"ChannelID:"<<x<<"\n";
+	if (couple[0]){
+		we just give information
+	}
 }
 
 

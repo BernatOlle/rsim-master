@@ -146,7 +146,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int> &nodes_ready, std:
 			for (std::vector<int>::const_iterator curr_node = nodes_ready.begin(); curr_node != nodes_ready.end();
 			++curr_node){
 				// initialising a vector of Nodes which <ill be fed to the protocol buffer
-				Node* p_node = chip.at((std::vector<Node*>) &curr_node[0]); // TODO (23/11/2021) : CHECK TYPE
+				Node* p_node = chip.at((std::vector<Node*>) curr_node[0]); // TODO (23/11/2021) : CHECK TYPE
 				// checking if the channel linked to the node is present in the list of given channels
 				if (curr_node[1] == channel_id) {
 					// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
@@ -320,7 +320,7 @@ void protocol_token(int curr_cycle, const std::vector<int> &nodes_ready, std::ve
 		// if we find the token holder in the list of nodes that are ready to send (token holder has a packet to send), the token holder starts tx
 		if (found_node != nodes_ready.end()) {
 			Global_params::Instance()->set_medium_busy();
-			Global_params::Instance()->push_ids_concurrent_tx_nodes(*found_node);
+			Global_params::Instance()->push_ids_concurrent_tx_nodes(*found_node); // TODO (23/11/2021) : CHECK TYPE
 //			Node::channel_function("token", "token holder in the list of nodes that are ready to send",
 //								   *found_node->get_id(), p_packet, nchannels)
 			Node *p_node = chip.at(*found_node);
@@ -455,7 +455,7 @@ void protocol_fuzzy_token(int curr_cycle, const std::vector<int> &nodes_ready, s
 			// if we find the token holder in the list of nodes that are ready to send, the token holder starts tx
 			if (found_node != nodes_ready.end()) {
 				Global_params::Instance()->set_medium_busy();
-				Global_params::Instance()->push_ids_concurrent_tx_nodes(*found_node);
+				Global_params::Instance()->push_ids_concurrent_tx_nodes(*found_node); // TODO (23/11/2021) : CHECK TYPE
 //				Node::channel_function("fuzzy_token", "token holder is in the list of nodes that are ready to send",
 //									   *found_node->get_id(), p_packet, nchannels);
 				Node *p_node = chip.at(*found_node);
@@ -670,7 +670,7 @@ void protocol_fuzzy_token(int curr_cycle, const std::vector<int> &nodes_ready, s
 						if (Packet_brs_non_p *p_packet = dynamic_cast<Packet_brs_non_p *>(p_node->get_in_buffer_front())) {
 							// we transmit first cycle/preamble of packet
 							Global_params::Instance()->set_medium_busy();
-							Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node_id);
+							Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node_id); // TODO (23/11/2021) : CHECK TYPE
 //							Node::channel_function("fuzzy_token",
 //												   "Nodes inside fuzzy area transmit with uniform probability",
 //												   *curr_node_id->get_id(), p_packet, nchannels)
