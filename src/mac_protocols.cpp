@@ -146,7 +146,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int> &nodes_ready, std:
 			for (std::vector<int>::const_iterator curr_node = nodes_ready.begin(); curr_node != nodes_ready.end();
 			++curr_node){
 				// initialising a vector of Nodes which <ill be fed to the protocol buffer
-				Node* p_node = chip.at((std::vector<Node*>) curr_node[0]); // TODO (23/11/2021) : CHECK TYPE
+				Node* p_node = chip.at(curr_node[0]); // TODO (23/11/2021) : CHECK TYPE
 				// checking if the channel linked to the node is present in the list of given channels
 				if (curr_node[1] == channel_id) {
 					// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
@@ -160,8 +160,8 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int> &nodes_ready, std:
 							// change the boolean linked to the channel id in the vector to true if busy (!!!need to change set_medium_busy!!!)
 							Global_params::Instance()->set_channel_busy(channel_id);
 							Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node); // TODO (23/11/2021) : CHECK TYPE
-							Node::channel_function("brs", "when channel_id equals channel iteration", *curr_node[0], // TODO (23/11/2021) : CHECK TYPE
-												   p_packet, nchannels)
+							Node::channel_function("brs", "the back-off is zero, the first cycle is transmitted",
+												   *curr_node[0], p_packet, nchannels, 0) // TODO (23/11/2021) : CHECK TYPE
 							// Notice we don't decrease the cycles_left of the packet, since we have to leave one extra cycle after the header to check for collisions
 						}
 					}
@@ -224,7 +224,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int> &nodes_ready, std:
 				Node *p_node = chip.at(Global_params::Instance()->get_unique_ids_concurrent_tx_nodes());
 				// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
 				if (Packet_brs_non_p *p_packet = dynamic_cast<Packet_brs_non_p *>(p_node->get_in_buffer_front())) {
-					Node::channel_function("brs", "only 1 node transmitting", 1, p_packet, nchannels)
+					Node::channel_function("brs", "only 1 node transmitting", *p_node->get_id(), p_packet, nchannels, 0)
 					// We decrease cycles_left for the current packet
 					p_packet->decrease_cycles_left();
 					if (Global_params::Instance()->get_total_served_packets_chip() >=
