@@ -156,7 +156,7 @@ protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<int>> &nodes_r
 				// checking if the channel linked to the node is present in the list of given channels
 				if (curr_node[1] == channel_id) {
 					// iteration on every packet corresponding to the transmitting node
-					for (Node *p_node = p_nodes.begin(); p_node != p_nodes.end(): ++p_node) {
+					for (Node *p_node = p_nodes.begin(); p_node != p_nodes.end(); ++p_node) {
 						// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
 						if (Packet_brs_non_p *p_packet = dynamic_cast<Packet_brs_non_p *>(p_node->get_in_buffer_front())) {
 							// If backoff is still not zero, we decrease it
