@@ -144,15 +144,18 @@ protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<int>> &nodes_r
 		// If the medium is idle
 		if (!Global_params::Instance()->is_channel_busy(channel_id)) {
 			// For each node with a non-empty buffer, regardless if its 0, 1 or 2+ nodes...
-			// nodes_ready will contain a couple [node_id, id_channel]
-			for (std::vector<int>::const_iterator curr_node = nodes_ready.begin(); curr_node != nodes_ready.end();
-				 ++curr_node) {
-				// initialising a vector of Nodes which will be fed to the protocol buffer
-				Node *p_node = chip.at(curr_node[0]); // TODO (23/11/2021) : CHECK TYPE
+			// nodes_ready will contain a couple [node_id, channel_id]
+			std::vector < std::vector < int >> ::const_iterator curr_couple
+			std::vector<int>::const_iterator curr_nod
+			for (curr_couple = nodes_ready.begin(); curr_couple !=nodes_ready.end(); ++curr_couple) {
+				for (curr_node = curr_couple->begin(); curr_node != curr_couple->end(); curr_node++) {
+					// initialising a vector of Nodes which will be fed to the protocol buffer
+					std::vector<Node> *p_nodes = chip.at(curr_node)
+				}
 				// checking if the channel linked to the node is present in the list of given channels
 				if (curr_node[1] == channel_id) {
 					// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
-					if (Packet_brs_non_p *p_packet = dynamic_cast<Packet_brs_non_p *>(p_node->get_in_buffer_front())) {
+					if (Packet_brs_non_p *p_packet = dynamic_cast<Packet_brs_non_p *>(p_nodes->get_in_buffer_front())) {
 						// If backoff is still not zero, we decrease it
 						if (p_packet->get_cnt_backoff() > 0) {
 							p_packet->decrease_cnt_backoff();
