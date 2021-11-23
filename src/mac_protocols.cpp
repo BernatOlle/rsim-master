@@ -146,7 +146,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int> &nodes_ready, std:
 			for (std::vector<int>::const_iterator curr_node = nodes_ready.begin(); curr_node != nodes_ready.end();
 			++curr_node){
 				// initialising a vector of Nodes which <ill be fed to the protocol buffer
-				Node* p_node = chip.at((Node*) &curr_node[0]);
+				Node* p_node = chip.at((std::vector<Node*>) &curr_node[0]);
 				// checking if the channel linked to the node is present in the list of given channels
 				if (curr_node[1] == channel_id) {
 					// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
