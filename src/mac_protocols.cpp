@@ -145,35 +145,38 @@ protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<int>> &nodes_r
 		if (!Global_params::Instance()->is_channel_busy(channel_id)) {
 			// For each node with a non-empty buffer, regardless if its 0, 1 or 2+ nodes...
 			// nodes_ready will contain a couple [node_id, channel_id]
-			std::vector<std::vector<int>>::const_iterator curr_couple;
+			std::vector < std::vector < int >> ::const_iterator curr_couple;
 			std::vector<int>::const_iterator curr_node;
-			std::vector<Node*> p_nodes;
 			for (curr_couple = nodes_ready.begin(); curr_couple != nodes_ready.end(); ++curr_couple) {
+				std::vector < Node * > p_nodes;
 				for (curr_node = curr_couple->begin(); curr_node != curr_couple->end(); curr_node++) {
 					// initialising a vector of Nodes which will be fed to the protocol buffer
 					p_nodes.push_back(chip.at(*curr_node));
 				}
 				// checking if the channel linked to the node is present in the list of given channels
 				if (curr_node[1] == channel_id) {
-					// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
-					if (Packet_brs_non_p *p_packet = dynamic_cast<Packet_brs_non_p *>(p_nodes->get_in_buffer_front())) {
-						// If backoff is still not zero, we decrease it
-						if (p_packet->get_cnt_backoff() > 0) {
-							p_packet->decrease_cnt_backoff();
-						}
-							// If backoff is zero, we transmit first cycle/preamble of packet
-						else {
-							// change the boolean linked to the channel id in the vector to true if busy (!!!need to change set_medium_busy!!!)
-							Global_params::Instance()->set_channel_busy(channel_id);
+					// iteration on every packet corresponding to the transmitting node
+					for (Node *p_node = p_nodes.begin(); p_node != p_nodes.end(): ++p_node) {
+						// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
+						if (Packet_brs_non_p *p_packet = dynamic_cast<Packet_brs_non_p *>(p_node->get_in_buffer_front())) {
+							// If backoff is still not zero, we decrease it
+							if (p_packet->get_cnt_backoff() > 0) {
+								p_packet->decrease_cnt_backoff();
+							}
+								// If backoff is zero, we transmit first cycle/preamble of packet
+							else {
+								// change the boolean linked to the channel id in the vector to true if busy (!!!need to change set_medium_busy!!!)
+								Global_params::Instance()->set_channel_busy(channel_id);
 //							Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node); // TODO (23/11/2021) : DELETE OLD
-							Global_params::Instance()->push_ids_and_channels_concurrent_tx_nodes(*curr_node);
-							Node::channel_function("brs", "the back-off is zero, the first cycle is transmitted",
-												   *curr_node[0], p_packet, nchannels,
-												   0) // TODO (23/11/2021) : CHECK TYPE
-							// Notice we don't decrease the cycles_left of the packet, since we have to leave one extra cycle after the header to check for collisions
+								Global_params::Instance()->push_ids_and_channels_concurrent_tx_nodes(*curr_node);
+								Node::channel_function("brs", "the back-off is zero, the first cycle is transmitted",
+													   *curr_node[0], p_packet, nchannels,
+													   0) // TODO (23/11/2021) : CHECK TYPE
+								// Notice we don't decrease the cycles_left of the packet, since we have to leave one extra cycle after the header to check for collisions
+							}
 						}
 					}
-						// If the cast fails
+					// If the cast fails
 					else {
 						std::cout << "ERROR: Cast from Packet* to Packet_brs_non_p* failed" << std::endl;
 						abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
