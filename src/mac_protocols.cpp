@@ -159,8 +159,8 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int> &nodes_ready, std:
 						else {
 							// change the boolean linked to the channel id in the vector to true if busy (!!!need to change set_medium_busy!!!)
 							Global_params::Instance()->set_channel_busy(channel_id);
-							Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node);
-							Node::channel_function("brs", "when channel_id equals channel iteration", *curr_node[0],
+							Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node); // TODO (23/11/2021) : CHECK TYPE
+							Node::channel_function("brs", "when channel_id equals channel iteration", *curr_node[0], // TODO (23/11/2021) : CHECK TYPE
 												   p_packet, nchannels)
 							// Notice we don't decrease the cycles_left of the packet, since we have to leave one extra cycle after the header to check for collisions
 						}
@@ -181,12 +181,13 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int> &nodes_ready, std:
 			// done tx at the end of this cycle. So we empty the vector of transmitting nodes, we set the medium to idle, we take the packet out
 			// of the buffer, we increase counters of total served packets per node and per chip and if it isn't zero we don't have to do nothing because we already decreased cycles_left
 		else {
+			std::vecto<std::string> ids_concurrent_tx_nodes = Global_params::Instance()->get_unique_ids_concurrent_tx_nodes();
 			// catch all ids
 			// check which ids have the same channel id
 			// add all nodes with same channel ids into channel_concurrent_tx_nodes
-			for (i = 1; i < Global_params::Instance()->get_ids_concurrent_tx_nodes_size(); i++) {
+			for (int i = 1; i < Global_params::Instance()->get_ids_concurrent_tx_nodes_size(); i++) {
 				// here we have all the nodes that want to transmit
-				std::vector<int> node_tx = ids_concurrent_tx_nodes[i];
+				std::vector<int> node_tx = ids_concurrent_tx_nodes[i]; // TODO (23/11/2021) : find a solution to access each node of said vector
 
 				// push the nodes with all the same channel id
 				if (node_tx[1] == channel_id) {
@@ -284,6 +285,7 @@ void protocol_token(int curr_cycle, const std::vector<int> &nodes_ready, std::ve
 				std::cout << "Node " << p_node->get_id() << " txed for a cycle. Cycles left of current packet: "
 						  << p_packet->get_cycles_left() << std::endl;
 			}
+			// if the amount of packets haven't been able to be transmitted, increase the throughput
 			if (Global_params::Instance()->get_total_served_packets_chip() >=
 				0.1 * Global_params::Instance()->get_npackets() &&
 				Global_params::Instance()->get_total_served_packets_chip() <
@@ -316,7 +318,7 @@ void protocol_token(int curr_cycle, const std::vector<int> &nodes_ready, std::ve
 			abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
 		}
 	}
-		// Otherwise (medium is idle), we check if the token holder has packets to tx
+	// Otherwise (medium is idle), we check if the token holder has packets to tx
 	else {
 		std::vector<int>::const_iterator found_node = std::find(nodes_ready.begin(), nodes_ready.end(),
 																Global_params::Instance()->get_token_current_node());
@@ -380,7 +382,7 @@ void protocol_token(int curr_cycle, const std::vector<int> &nodes_ready, std::ve
 				std::cout << "ERROR: Cast from Packet* to Packet_tdma* failed" << std::endl;
 			}
 		}
-			//otherwise if token holder has nothing to tx, we pass the token right away
+		//otherwise if token holder has nothing to tx, we pass the token right away
 		else {
 			Global_params::Instance()->update_token_current_node();
 			if (Global_params::Instance()->is_debugging_on()) {
