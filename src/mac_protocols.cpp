@@ -709,13 +709,15 @@ void protocol_fuzzy_token(int curr_cycle, const std::vector<int> &nodes_ready, s
 			if (Global_params::Instance()->get_ids_concurrent_tx_nodes_size() > 1) {
 
 				// save the IDs of all collided nodes
-//				std::list<string> collided_nodes;
+				std::list<string> collided_nodes;
 				for (std::vector<int>::const_iterator curr_node_id = Global_params::Instance()->ids_concurrent_tx_nodes_begin();
 					curr_node_id != Global_params::Instance()->ids_concurrent_tx_nodes_end(); ++curr_node_id) {
 					Node *p_node = chip.at(*curr_node_id);
 					// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
 					if (Packet_brs_non_p *p_packet = dynamic_cast<Packet_brs_non_p *>(p_node->get_in_buffer_front())) {
-						collided_nodes.push_back(std::to_string(p_node->get_id()));
+						collided_nodes += ( separator + std::to_string(p_node->get_id()) );
+						separator = ", "; // separator for the second and following iterations
+//						collided_nodes.push_back(std::to_string(p_node->get_id()));
 						// for loop to go through the list of ids, and transmit each on a new channel available
 						/*for (elm in collided_nodes) {
 							Node::channel_function("fuzzy_token", "nodes that collided", elm, p_packet, nchannels)
