@@ -264,7 +264,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<std::vector<Vertex*>> &
 
 // Specification of Token
 // We assume no collisions, so we don't take care of unexpected collisions
-void protocol_token(int curr_cycle, const std::vector<std::vector<Vertex*>> &nodes_ready, std::vector<Node *> &chip,
+/*void protocol_token(int curr_cycle, const std::vector<std::vector<Vertex*>> &nodes_ready, std::vector<Node *> &chip,
 					std::vector<float> &hotspotness_weights, int nchannels) {
 	if (Global_params::Instance()->is_debugging_on()) {
 		std::cout << "Token: Node " << Global_params::Instance()->get_token_current_node() << std::endl;
@@ -387,11 +387,11 @@ void protocol_token(int curr_cycle, const std::vector<std::vector<Vertex*>> &nod
 			}
 		}
 	}
-}
+}*/
 //===============================================================
 
 // Specification of Fuzzy token
-void protocol_fuzzy_token(int curr_cycle, const std::vector<std::vector<Vertex*>> &nodes_ready, std::vector<Node *> &chip,
+/*void protocol_fuzzy_token(int curr_cycle, const std::vector<std::vector<Vertex*>> &nodes_ready, std::vector<Node *> &chip,
 						  std::vector<float> &hotspotness_weights, int nchannels) {
 	std::vector<int> fuzzy_nodes_ready;
 	int ncores = Global_params::Instance()->get_ncores();
@@ -722,9 +722,9 @@ void protocol_fuzzy_token(int curr_cycle, const std::vector<std::vector<Vertex*>
 						separator = ", "; // separator for the second and following iterations
 //						collided_nodes.push_back(std::to_string(p_node->get_id()));
 						// for loop to go through the list of ids, and transmit each on a new channel available
-						/*for (elm in collided_nodes) {
+						*//*for (elm in collided_nodes) {
 							Node::channel_function("fuzzy_token", "nodes that collided", elm, p_packet, nchannels)
-						}*/
+						}*//*
 					}
 						// If the cast fails
 					else {
@@ -843,5 +843,5 @@ void protocol_fuzzy_token(int curr_cycle, const std::vector<std::vector<Vertex*>
 			}
 		}
 	}
-}
+}*/
 //===============================================================
