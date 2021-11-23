@@ -203,7 +203,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int> &nodes_ready, std:
 					// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
 					if (Packet_brs_non_p *p_packet = dynamic_cast<Packet_brs_non_p *>(p_node->get_in_buffer_front())) {
 						p_packet->update_cnt_backoff();
-						Node::channel_function("brs", "multiple colliding nodes", *curr_node_id, p_packet, nchannels)
+						Node::channel_function("brs", "multiple colliding nodes", *curr_node_id, p_packet, nchannels, 1)
 					}
 						// If the cast fails
 					else {

@@ -42,8 +42,7 @@ void Node::channel_function(std::string protocol, std::string step, Node node, P
 	int x = Node::get_channel_id();
 	if (reason == 0) {
 		if (protocol == "none") {
-			std::cout << "Information on the current situation, no changes, for the step:" << step << "Node: "
-			<< node << "ChannelID:" << x << "\n";
+			std::cout << "Information:" << step << "Node: " << node << "ChannelID:" << x << "\n";
 		}
 		std::cout << "Protocol:" << protocol << "Information:" << step << "Node: " << node << "ChannelID:" << x << "\n";
 	}
