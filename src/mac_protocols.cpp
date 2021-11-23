@@ -146,7 +146,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int> &nodes_ready, std:
 			for (std::vector<int>::const_iterator curr_node = nodes_ready.begin(); curr_node != nodes_ready.end();
 			++curr_node){
 				// initialising a vector of Nodes which <ill be fed to the protocol buffer
-				Node* p_node = chip.at((std::vector<Node*>) &curr_node[0]);
+				Node* p_node = chip.at((std::vector<Node*>) &curr_node[0]); // TODO (23/11/2021) : CHECK TYPE
 				// checking if the channel linked to the node is present in the list of given channels
 				if (curr_node[1] == channel_id) {
 					// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
@@ -184,9 +184,9 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int> &nodes_ready, std:
 			// catch all ids
 			// check which ids have the same channel id
 			// add all nodes with same channel ids into channel_concurrent_tx_nodes
-			for (i = 1; i < get_ids_concurrent_tx_nodes_size(); i++) {
+			for (i = 1; i < Global_params::Instance()->get_ids_concurrent_tx_nodes_size(); i++) {
 				// here we have all the nodes that want to transmit
-				vector<int> node_tx = ids_concurrent_tx_nodes[i];
+				std::vector<int> node_tx = ids_concurrent_tx_nodes[i];
 
 				// push the nodes with all the same channel id
 				if (node_tx[1] == channel_id) {
