@@ -38,26 +38,27 @@ void Node::set_channel_id(int channel_id) {
 }
 
 // function to show the change of vector values and reasons
-void Node::channel_function(std::string protocol, std::string step, Node *node, Packet packet, int number_channels,
-							int reason) {
-	int x = Node::get_channel_id();
+void Node::channel_function(std::string protocol, std::string step, int number_channels, int reason) {
+	// TODO can we recuperate the node as so ?
+	int nodeId = Node::get_id();
+	int channelId = Node::get_channel_id();
 	if (reason == 0) {
 		if (protocol == "none") {
-			std::cout << "Information:" << step << "Node: " << node->get_id() << "ChannelID:" << x << "\n";
+			std::cout << "Information:" << step << "NodeID: " << nodeId << "ChannelID:" << channelId << "\n";
 		}
-		std::cout << "Protocol:" << protocol << "Information:" << step << "Node: " << node->get_id() << "ChannelID:"
-				  << x << "\n";
+		std::cout << "Protocol:" << protocol << "Information:" << step << "NodeID: " << nodeId << "ChannelID:"
+				  << channelId << "\n";
 	}
 	if (reason == 1) {
 		int new_x;
-		if (x == 0) {
-			new_x = rand() % number_channels + 1;
-			Node::set_channel_id(new_x);
-			std::cout << "Protocol:" << protocol << "Step:" << step << "Node: " << node->get_id() << "ChannelID:"
-					  << new_x
+		if (channelId == 0) {
+			new_channelId = rand() % number_channels + 1;
+			Node::set_channel_id(new_channelId);
+			std::cout << "Protocol:" << protocol << "Step:" << step << "Node: " << nodeId << "ChannelID:"
+					  << new_channelId
 					  << "\n";
 		}
-		std::cout << "Protocol:" << protocol << "Step:" << step << "Node: " << node->get_id() << "ChannelID:" << x
+		std::cout << "Protocol:" << protocol << "Step:" << step << "Node: " << nodeId << "ChannelID:" << channelId
 				  << "\n";
 	}
 }
