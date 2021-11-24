@@ -172,7 +172,7 @@ protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<int>> &nodes_r
 								Global_params::Instance()->push_ids_and_channels_concurrent_tx_nodes(*curr_couple);
 //								Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node[0]);
 //								Global_params::Instance()->push_channel_concurrent_tx_nodes(*curr_node[1]);
-								Node::channel_function("brs", "the back-off is zero, the first cycle is transmitted", nchannels, 0) // TODO (23/11/2021) : CHECK TYPE
+								curr_node[0].channel_function("brs", "the back-off is zero, the first cycle is transmitted", nchannels, 0) // TODO (23/11/2021) : CHECK TYPE
 								// Notice we don't decrease the cycles_left of the packet, since we have to leave one extra cycle after the header to check for collisions
 							}
 						}
