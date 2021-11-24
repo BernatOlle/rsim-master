@@ -50,7 +50,7 @@ void Node::channel_function(std::string protocol, std::string step, int number_c
 				  << channelId << "\n";
 	}
 	if (reason == 1) {
-		int new_x;
+		int new_channelId;
 		if (channelId == 0) {
 			new_channelId = rand() % number_channels + 1;
 			Node::set_channel_id(new_channelId);
