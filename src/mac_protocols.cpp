@@ -4,7 +4,7 @@
 #include <memory>
 #include <algorithm>
 #include "utilities.hpp"
-
+//hola
 /*// Specification of CSMA non-persistant
 void protocol_csma_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip, int nchannels) {
  	// if more than one node has packets to transmit in the current cycle
