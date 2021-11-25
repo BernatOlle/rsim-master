@@ -160,7 +160,7 @@ protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<int>> &nodes_r
 //					for (p_node = p_nodes.begin(); p_node != p_nodes.end(); ++p_node) {
 						// TODO : find solution to iterate through vector to cast each "pointer"
 						// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
-						if (Packet_brs_non_p *p_packet = dynamic_cast<Packet_brs_non_p *>(p_nodes->get_in_buffer_front())) {
+						if (Packet_brs_non_p *p_packet = dynamic_cast<Packet_brs_non_p *>(p_nodes->get_in_buffer_front())) {  // ERROR bases operand of '->' has not pointer type 'std::vector<Node*>'
 							// If backoff is still not zero, we decrease it
 							if (p_packet->get_cnt_backoff() > 0) {
 								p_packet->decrease_cnt_backoff();
@@ -172,8 +172,8 @@ protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<int>> &nodes_r
 								Global_params::Instance()->push_ids_and_channels_concurrent_tx_nodes(*curr_couple);
 //								Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node[0]);
 //								Global_params::Instance()->push_channel_concurrent_tx_nodes(*curr_node[1]);
-								curr_node[0].channel_function("brs", "the back-off is zero, the first cycle is transmitted", nchannels, 0); // TODO (23/11/2021) : CHECK TYPE
-								// Notice we don't decrease the cycles_left of the packet, since we have to leave one extra cycle after the header to check for collisions
+								curr_node[0].channel_function("brs", "the back-off is zero, the first cycle is transmitted", nchannels, 0); // TODO (23/11/2021) : CHECK TYPE ##ERROR request for member 'channel_funtion' in 'curr_node.__gnu_cxx'
+ 								// Notice we don't decrease the cycles_left of the packet, since we have to leave one extra cycle after the header to check for collisions
 							}
 						}
 //					}
