@@ -128,7 +128,7 @@ int main(int argc, char* argv[]) {
 	}
 	
 	// get all the channels??
-	nchannels = Global_params::get_nchannels();
+	int nchannels = Global_params::Instance()->get_nchannels();
 
 	// TODO: Ensure that all values were read either from parameter file or std input
 
