@@ -172,7 +172,7 @@ protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<int>> &nodes_r
 								Global_params::Instance()->push_ids_and_channels_concurrent_tx_nodes(*curr_couple);
 //								Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node[0]);
 //								Global_params::Instance()->push_channel_concurrent_tx_nodes(*curr_node[1]);
-								curr_node[0].channel_function("brs", "the back-off is zero, the first cycle is transmitted", nchannels, 0) // TODO (23/11/2021) : CHECK TYPE
+								curr_node[0].channel_function("brs", "the back-off is zero, the first cycle is transmitted", nchannels, 0); // TODO (23/11/2021) : CHECK TYPE
 								// Notice we don't decrease the cycles_left of the packet, since we have to leave one extra cycle after the header to check for collisions
 							}
 						}
@@ -215,7 +215,7 @@ protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<int>> &nodes_r
 					// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
 					if (Packet_brs_non_p *p_packet = dynamic_cast<Packet_brs_non_p *>(p_node->get_in_buffer_front())) {
 						p_packet->update_cnt_backoff();
-						Node::channel_function("brs", "multiple colliding nodes", nchannels, 1)
+						Node::channel_function("brs", "multiple colliding nodes", nchannels, 1);
 					}
 						// If the cast fails
 					else {
@@ -236,7 +236,7 @@ protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<int>> &nodes_r
 				Node *p_node = chip.at(Global_params::Instance()->get_unique_ids_concurrent_tx_nodes());
 				// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
 				if (Packet_brs_non_p *p_packet = dynamic_cast<Packet_brs_non_p *>(p_node->get_in_buffer_front())) {
-					Node::channel_function("brs", "only 1 node transmitting", nchannels, 0)
+					Node::channel_function("brs", "only 1 node transmitting", nchannels, 0);
 					// We decrease cycles_left for the current packet
 					p_packet->decrease_cycles_left();
 					if (Global_params::Instance()->get_total_served_packets_chip() >=
