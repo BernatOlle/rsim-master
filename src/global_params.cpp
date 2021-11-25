@@ -179,15 +179,15 @@ int Global_params::get_channel_concurrent_tx_nodes_size() {
     return channel_concurrent_tx_nodes.size();
 }
 // Push new node_id into ids_concurrent_tx_nodes (new node starts transmitting)
-void Global_params::push_ids_concurrent_tx_nodes(int nid) {
+void Global_params::push_ids_concurrent_tx_nodes(std::vector<int> nid) {
     ids_concurrent_tx_nodes.push_back(nid);
 }
 // Push new node_id and channel_id into ids_and_channels_concurrent_tx_nodes (new node starts transmitting)
-void Global_params::push_ids_and_channels_concurrent_tx_nodes(vector ncid) {
-	ids_and_channels_concurrent_tx_nodes.push_pack(ncid);
+void Global_params::push_ids_and_channels_concurrent_tx_nodes(std::vector<int> ncid) {
+	ids_and_channels_concurrent_tx_nodes.push_back(ncid);
 }
 void Global_params::push_channel_concurrent_tx_nodes(int cid) {
-    channel_concurrent_tx_nodes.push_back(nid);
+    channel_concurrent_tx_nodes.push_back(cid);
 }
 // Delete all elements in ids_concurrent_tx_nodes (no node will be transmitting)
 void Global_params::flush_ids_concurrent_tx_nodes() {
@@ -201,19 +201,19 @@ void Global_params::flush_channel_concurrent_tx_nodes() {
     channel_concurrent_tx_nodes.erase(channel_concurrent_tx_nodes.begin(), channel_concurrent_tx_nodes.end());
 }
 // Delete all nodes that finished transmitting for the given channel
-void delete_ids_concurrent_tx_nodes(int cid, vector *curr_node){
+void Global_params::delete_ids_concurrent_tx_nodes(int cid, std::vector<int>*curr_node){
 	if (*curr_node[1] == cid){
 		// delete
-		ids_concurrent_tx_nodes.erase(*curr_node)
+		ids_concurrent_tx_nodes.erase(*curr_node);
 	}
 }
 // Provides begin iterator for ids_concurrent_tx_nodes
-std::vector<int>::const_iterator Global_params::ids_concurrent_tx_nodes_begin() {
+std::vector<int>const_iterator  Global_params::ids_concurrent_tx_nodes_begin() {
     return ids_concurrent_tx_nodes.begin();
 }
 
 // Provides end iterator for ids_concurrent_tx_nodes
-std::vector<int>::const_iterator Global_params::ids_concurrent_tx_nodes_end() {
+std::vector<int>const_iterator Global_params::ids_concurrent_tx_nodes_end() {
     return ids_concurrent_tx_nodes.end();
 }
 
