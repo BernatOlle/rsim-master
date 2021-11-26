@@ -171,7 +171,7 @@ protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<int>> &nodes_r
 							else {
 								// change the boolean linked to the channel id in the vector to true if busy (!!!need to change set_medium_busy!!!)
 								Global_params::Instance()->set_channel_busy(channel_id);
-								Global_params::Instance()->push_ids_and_channels_concurrent_tx_nodes(*curr_couple);
+								Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node);
 //								Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node[0]);
 //								Global_params::Instance()->push_channel_concurrent_tx_nodes(*curr_node[1]);
 								curr_node[0].channel_function("brs", "the back-off is zero, the first cycle is transmitted", nchannels, 0); // TODO (23/11/2021) : CHECK TYPE ##ERROR request for member 'channel_funtion' in 'curr_node.__gnu_cxx'
@@ -195,11 +195,11 @@ protocol_brs_non_p(int curr_cycle, const std::vector <std::vector<int>> &nodes_r
 			// done tx at the end of this cycle. So we empty the vector of transmitting nodes, we set the medium to idle, we take the packet out
 			// of the buffer, we increase counters of total served packets per node and per chip and if it isn't zero we don't have to do nothing because we already decreased cycles_left
 		else {
-			std::vector <std::string> ids_concurrent_tx_nodes = Global_params::Instance()->get_unique_ids_concurrent_tx_nodes();
+			//std::vector <int> ids_concurrent_tx_nodes = Global_params::Instance()->get_unique_ids_concurrent_tx_nodes();
 			// catch all ids
 			for (int i = 1; i < Global_params::Instance()->get_ids_concurrent_tx_nodes_size(); i++) {
 				// here we have all the nodes that want to transmit
-				std::vector<int> node_tx = ids_concurrent_tx_nodes[i]; // TODO (23/11/2021) : find a solution to access each node of said vector
+				std::vector<int> node_tx = Global_params::Instance()->get_id_concurrent_tx_nodes(i); // TODO (23/11/2021) : find a solution to access each node of said vector
 				// check which ids have the same channel id
 				if (node_tx[1] == channel_id) {
 					// add all nodes with same channel ids into channel_concurrent_tx_nodes

@@ -171,6 +171,9 @@ void Global_params::set_channel_idle(int id) {
     medium_busy = false;
 }
 
+std::vector<int> Global_params::get_id_concurrent_tx_nodes(int i) {
+    return ids_concurrent_tx_nodes[i];
+}
 // Get size of ids_concurrent_tx_nodes (number of nodes simultaneously transmitting)
 int Global_params::get_ids_concurrent_tx_nodes_size() {
     return ids_concurrent_tx_nodes.size();
@@ -183,8 +186,11 @@ void Global_params::push_ids_concurrent_tx_nodes(std::vector<int> nid) {
     ids_concurrent_tx_nodes.push_back(nid);
 }
 // Push new node_id and channel_id into ids_and_channels_concurrent_tx_nodes (new node starts transmitting)
-void Global_params::push_ids_and_channels_concurrent_tx_nodes(std::vector<int> ncid) {
-	ids_and_channels_concurrent_tx_nodes.push_back(ncid);
+void Global_params::push_ids_and_channels_concurrent_tx_nodes(std::vector<int> *ncid) {
+	ids_and_channels_concurrent_tx_nodes.push_back(*ncid);
+}
+int Global_params::get_ids_and_channels_concurrent_tx_nodes_size() {
+    return ids_concurrent_tx_nodes.size();
 }
 void Global_params::push_channel_concurrent_tx_nodes(int cid) {
     channel_concurrent_tx_nodes.push_back(cid);
@@ -201,10 +207,10 @@ void Global_params::flush_channel_concurrent_tx_nodes() {
     channel_concurrent_tx_nodes.erase(channel_concurrent_tx_nodes.begin(), channel_concurrent_tx_nodes.end());
 }
 // Delete all nodes that finished transmitting for the given channel
-void Global_params::delete_ids_concurrent_tx_nodes(int cid, std::vector<int>*curr_node){
-	if (*curr_node[1] == cid){
+void Global_params::delete_ids_concurrent_tx_nodes(int cid, std::vector<int>curr_node){
+	if (curr_node[1] == cid){
 		// delete
-		ids_concurrent_tx_nodes.erase(*curr_node);
+		ids_concurrent_tx_nodes.erase(curr_node);
 	}
 }
 // Provides begin iterator for ids_concurrent_tx_nodes
