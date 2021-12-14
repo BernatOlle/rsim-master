@@ -7,7 +7,6 @@
 #include "utilities.hpp"
 #include "mac_protocols.hpp"
 #include "global_params.hpp"
-#include <vector>
 
 /*-------------------------------------------------------
 
@@ -35,6 +34,7 @@ A running script can be found in rsim/run_sims.sh
 
 int main(int argc, char* argv[]) {
 	// if the user introduces parameters from shell, we overwrite those from INI file
+
 	for (int i=1; i < argc; i++) { // for each of the input arguments
 		std::vector<std::string> in_parameter = split(argv[i], '=');
 		std::string parameter_name = in_parameter.at(0);
@@ -52,8 +52,8 @@ int main(int argc, char* argv[]) {
 		else if (parameter_name.compare("npackets") == 0) {
 			Global_params::Instance()->set_npackets(stoi(parameter_value));
 		}
-		else if (parameter_name.compare("nchannnels") == 0) {
-			Global_params::Instance()->set_nchannels(stoi(parameter_value));
+		else if (parameter_name.compare("nchannels") == 0) {
+			Global_params::Instance()->set_nchannels(4);
 		}
 		else if (parameter_name.compare("tx_time") == 0) {
 			Global_params::Instance()->set_tx_time(stof(parameter_value));
@@ -95,26 +95,26 @@ int main(int argc, char* argv[]) {
 			Global_params::Instance()->set_load_trace_path(parameter_value);
 		}
 		else if (parameter_name.compare("mac_protocol") == 0) {
-			/*if (parameter_value.compare("csma_non_p") == 0) {
+			if (parameter_value.compare("csma_non_p") == 0) {
 	    		Global_params::Instance()->set_chosen_mac(Mac_protocols::csma_non_p);
-	    	}*/
-			/*else */if (parameter_value.compare("brs_non_p") == 0) {
+	    	}
+			else if (parameter_value.compare("brs_non_p") == 0) {
 	    		Global_params::Instance()->set_chosen_mac(Mac_protocols::brs_non_p);
 	    	}
-			/*else if (parameter_value.compare("tdma_fixed") == 0) {
+			else if (parameter_value.compare("tdma_fixed") == 0) {
 	    		Global_params::Instance()->set_chosen_mac(Mac_protocols::tdma_fixed);
 				if (Global_params::Instance()->get_tdma_slot_size() == 0) {
 					std::cout << "ERROR: slot_size parameter missing in tdma section" << std::endl;
 					abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
 				}
-	    	}*/
-			/*else if (parameter_value.compare("tdma_weighted") == 0) {
+	    	}
+			else if (parameter_value.compare("tdma_weighted") == 0) {
 	    		Global_params::Instance()->set_chosen_mac(Mac_protocols::tdma_weighted);
 				if (Global_params::Instance()->get_tdma_slot_size() == 0) {
 					std::cout << "ERROR: slot_size parameter missing in tdma section" << std::endl;
 					abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
 				}
-	    	}*/
+	    	}
 			else if (parameter_value.compare("fuzzy_token") == 0) {
 	    		Global_params::Instance()->set_chosen_mac(Mac_protocols::fuzzy_token);
 				Global_params::Instance()->set_fuzzy_size(); // we set the fuzzy size equal to number of cores
@@ -126,20 +126,19 @@ int main(int argc, char* argv[]) {
 	    	}
 		}
 	}
-	
-	// get all the channels??
-	int nchannels = Global_params::Instance()->get_nchannels();
 
+	Global_params::Instance()->set_nchannels(4);
 	// TODO: Ensure that all values were read either from parameter file or std input
 
 	// Print all the parameters, to ensure we read them properly from the INI file or the standard input
-	print_input_parameters();
+	print_input_parameters();// where????
 
 	// Initialize the random generator used by rand()
 	srand (time(NULL));
 
 	// Declare a vector with all the nodes
 	std::vector<Node*> chip;
+	std::vector<Channel*> chan;
 
 	// Set a vector of injection rates, according to a normal distribution with mean=1 and std_dev=sigma
 	// TODO: MAKE SURE THIS IS DONE PROPERLY, I'M NOT SURE I DID IT CORRECTLY ANYMORE
@@ -253,6 +252,10 @@ int main(int argc, char* argv[]) {
 		// once we have finished reading all the injected packets from the trace, we save the total number of packets injected
 		Global_params::Instance()->set_npackets(npackets);
 	}
+		
+		for(int cid=0;cid<Global_params::Instance()->get_ncores();i++){
+				chan.push_back(new Channel(cid));
+		}
 
 	// Every iteration of this do-while represent a cycle of the execution, analyzing what happens at each of them
 	do {
@@ -282,32 +285,32 @@ int main(int argc, char* argv[]) {
 			flag_stop_injection = true;
 		}
 
-		// nodes_ready will now be a vector of vectors because we push the couple node_id and channel_id
-		std::vector<std::vector<int>> nodes_ready; // at every cycle we initialize an empty vector that will store the couple : [node_ID, channel_id] of the nodes with non-empty buffers
+		std::vector<int> nodes_ready; // at every cycle we initialize an empty vector that will store the IDs of the nodes with non-empty buffers
+		int number_channels = Global_params::Instance()->get_nchannels();
+		std::cout << "k="<<number_channels << std::endl;
 
 		// iterates through all nodes of the chip to see which ones have a packet to transmit
 		for (std::vector<Node*>::iterator curr_node = chip.begin(); curr_node != chip.end(); ++curr_node) {
-			// for the situation of a node that wants to transmit
-			if (!(*curr_node)->in_buffer_empty()) { // when we find a node with a non-empty buffer, we store its ID and the channel ID linked to it
-				// initialise channel id to enter the channel_function for definite assignation
-				Node::set_channel_id(0);
-				Node::channel_funtion("none", "initialisation of channel link to node", *curr_node, nchannels, 1);
-				nodes_ready.push_pack(std::vector<Vertex*>());
-				// enter the couple of current node_id and empty channel_id
-				nodes_ready.back().push_back(new Vertex[(*curr_node)->get_id(),(*curr_node)->get_channel_id()]);
+			if (!(*curr_node)->in_buffer_empty()) {
+				// when we find a node with a non-empty buffer, we store its ID
+				(*curr_node)->channel_function("none", "initialisation of channel link to node", number_channels, 1);
+				nodes_ready.push_back((*curr_node)->get_id());
+				std::cout << "++++++++++++++++++++++++++++++++++++++++++++++++"<<std::endl;
 				if (Global_params::Instance()->is_debugging_on()) {
+
 					std::cout << "Node " << (*curr_node)->get_id() << " wants to tx (" << (*curr_node)->get_in_buffer_size() << " pending packets)" << std::endl;
 				}
 			}
 		}
+
 		// We call the appropriate MAC protocol to deal with the concurrent packets that are ready
 		switch(Global_params::Instance()->get_chosen_mac()) {
-//			case Mac_protocols::csma_non_p	: protocol_csma_non_p(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip, int nchannels); break;
-			case Mac_protocols::brs_non_p	: protocol_brs_non_p(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip, nchannels); break;
-//			case Mac_protocols::tdma_fixed	: protocol_tdma(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip, hotspotness_weights, nchannels); break;
-			case Mac_protocols::token		: protocol_token(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip, hotspotness_weights, nchannels); break;
-//			case Mac_protocols::tdma_weighted	: protocol_tdma(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip, hotspotness_weights, nchannels); break;
-			case Mac_protocols::fuzzy_token	: protocol_fuzzy_token(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip, hotspotness_weights, nchannels); break;
+			case Mac_protocols::csma_non_p	: protocol_csma_non_p(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan,number_channels); break;
+			case Mac_protocols::brs_non_p	: protocol_brs_non_p(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan,number_channels); break;
+			case Mac_protocols::tdma_fixed	: protocol_tdma(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels); break;
+			case Mac_protocols::token		: protocol_token(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels); break;
+			case Mac_protocols::tdma_weighted	: protocol_tdma(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels); break;
+			case Mac_protocols::fuzzy_token	: protocol_fuzzy_token(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels); break;
 
 		}
 

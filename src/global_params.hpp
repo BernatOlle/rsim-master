@@ -22,7 +22,7 @@ private:
     Global_params& operator=(Global_params const&){}; // assignment operator is private
     static Global_params* s_instance;
     int ncores; // number of cores/nodes in total
-    int nchannels; // number of channels in total
+    int nchannels;
     int npackets; // number of packets that the application wants to transmit
     double inj_rate; // desired avg injection rate per node, when averaged among all nodes
     float H; // Hurst exponent, only for Burst injection distribution
@@ -34,10 +34,9 @@ private:
     int total_served_packets_chip; // Counter of total amount of packets served among all the cores so far
     int cycle_injection_stopped; // As soon as we inject the last packet out of npackets, we store the cycle at which the injection finished
     int total_ncycles; // At every iteration we increase this counter, so that we know the total number of cycles executed so far
-    std::vector<bool> channel_busy(int nchannels); // This flag will determine if the channel (in a single-channel model) is busy or not
     bool medium_busy; // This flag will determine if the channel (in a single-channel model) is busy or not
-    std::vector<std::vector<int>> ids_concurrent_tx_nodes;
-	std::vector<std::vector<int>> ids_and_channels_concurrent_tx_nodes;
+    bool channel_busy[4];
+    std::vector<int> ids_concurrent_tx_nodes;
     std::vector<int> channel_concurrent_tx_nodes;
     bool debugging;
     bool save_trace;
@@ -74,9 +73,9 @@ public:
     static Global_params* Instance();
     int get_ncores();
     void set_ncores(int);
-    void set_npackets(int);
     int get_nchannels();
     void set_nchannels(int);
+    void set_npackets(int);
     int get_npackets();
     double get_inj_rate();
     float get_sigma();
@@ -89,7 +88,6 @@ public:
     void increase_throughput_tx_cycles();
     int get_throughput_base_cycles();
     int get_throughput_tx_cycles();
-
 
     // H-related methods are specific to Burst injection distribution
     double get_H();
@@ -110,28 +108,25 @@ public:
     void increase_total_served_packets_chip();
     void set_cycle_injection_stopped(int);
     void increase_total_ncycles();
-    bool is_medium_busy(); // Is medium_busy == true?
+    bool is_medium_busy(); // Is medium_busy == true?    
+    void set_medium_busy(); // set medium_busy = true
+    void set_medium_idle(); // set medium_busy = false
     bool is_channel_busy(int);
     void set_channel_busy(int);
     void set_channel_idle(int);
-    void set_medium_busy(); // set medium_busy = true
-    void set_medium_idle(); // set medium_busy = false
-    std::vector<int> get_id_concurrent_tx_nodes(int);
+    int get_ids_concurrent_tx_nodes(int);
     int get_ids_concurrent_tx_nodes_size(); // Get size of ids_concurrent_tx_nodes (number of nodes simultaneously transmitting)
-    int get_ids_and_channels_concurrent_tx_nodes_size(); // Get size of ids_and_channels_concurrent_tx_nodes (number of nodes simultaneously transmitting)
-    int get_channel_concurrent_tx_nodes_size(); // Get size of channel_concurrent_tx_nodes (number of channels concerned by the simultaneous transmition)
-    void push_ids_concurrent_tx_nodes(std::vector<int>); // Push new node_id into ids_concurrent_tx_nodes (new node starts transmitting)
-    void push_ids_and_channels_concurrent_tx_nodes(std::vector<int> *ncid); // Push new node_id and channel_id into ids_and_channels_concurrent_tx_nodes (new node starts transmitting)
-    void push_channel_concurrent_tx_nodes(int cid); // Push channel_id into ids_concurrent_tx_nodes
+    void push_ids_concurrent_tx_nodes(int); // Push new node_id into ids_concurrent_tx_nodes (new node starts transmitting)
+    void flush_ids_one_concurrent_tx_nodes(int); // Delete all elements in ids_concurrent_tx_nodes (no node will be transmitting)
     void flush_ids_concurrent_tx_nodes(); // Delete all elements in ids_concurrent_tx_nodes (no node will be transmitting)
-    void flush_ids_and_channels_concurrent_tx_nodes(); // Delete all elements in ids_and_channels_concurrent_tx_nodes (no node will be transmitting)
-    void flush_channel_concurrent_tx_nodes(); // Delete all elements in channel_concurrent_tx_nodes (no channel will be used for transmission)
-    void delete_ids_concurrent_tx_nodes(int cid, std::vector<int> curr_node); // Delete all nodes that finished transmitting for the given channel
     int get_unique_ids_concurrent_tx_nodes(); // If we have ensured that there's only 1 tx node, we return its id
+    int get_channel_concurrent_tx_nodes_size();
+    void push_channel_concurrent_tx_nodes(int);
+    void flush_channel_concurrent_tx_nodes();
+    std::vector<int>::const_iterator channel_concurrent_tx_nodes_begin();
+    std::vector<int>::const_iterator channel_concurrent_tx_nodes_end();
     std::vector<int>::const_iterator ids_concurrent_tx_nodes_begin();
     std::vector<int>::const_iterator ids_concurrent_tx_nodes_end();
-    std::vector<int>::const_iterator ids_and_channels_concurrent_tx_nodes_begin();
-    std::vector<int>::const_iterator ids_and_channels_concurrent_tx_nodes_end();
     bool is_debugging_on(); // check value of debugging
     void set_debugging_on(); // sets debugging=true
     bool is_save_trace_on(); // check value of save_trace

@@ -2,7 +2,7 @@
 
 mac_protocols=(
 brs_non_p
-#tdma_fixed
+tdma_fixed
 #tdma_weighted
 token
 fuzzy_token
@@ -84,10 +84,6 @@ ncores_values=(
 # 1024
 )
 
-nchannels=(
-4
-)
-
 
 LOG_DIR=./output/log.txt
 RESULTS_DIR=./results/data_throughput/
@@ -98,24 +94,21 @@ rm $RESULTS_DIR2 -r
 rm $LOG_DIR
 touch $LOG_DIR
 
-for channel in "${nchannels[@]}"
+for sigma in "${sigma_values[@]}"
 do
-  for sigma in "${sigma_values[@]}"
-  do
-    for h in "${h_values[@]}"
-    do
-      for mac_protocol in "${mac_protocols[@]}"
-      do
-        echo $mac_protocol
-        for inj_rate in "${inj_rate_values[@]}"
-        do
-          for i in {1..15}
-          do
-            echo $i
-            ./Project H=$h ncores=64 inj_rate=$inj_rate mac_protocol=$mac_protocol sigma=$sigma channel=$channel >> $LOG_DIR
-          done
-        done
-      done
-    done
-  done
+	for h in "${h_values[@]}"
+	do
+		for mac_protocol in "${mac_protocols[@]}"
+		do
+			echo $mac_protocol
+			for inj_rate in "${inj_rate_values[@]}"
+			do
+				for i in {1..15}
+				do
+					echo $i
+					./Project H=$h ncores=64 inj_rate=$inj_rate mac_protocol=$mac_protocol sigma=$sigma >> $LOG_DIR
+				done
+			done
+		done
+	done
 done

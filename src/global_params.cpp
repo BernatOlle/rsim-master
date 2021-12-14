@@ -2,7 +2,6 @@
 #include <stddef.h>
 #include "ini_parser.hpp"
 #include "utilities.hpp"
-#include <vector>
 
 // Global static pointer used to ensure a single instance of the class.
 Global_params* Global_params::s_instance = NULL;
@@ -23,20 +22,20 @@ Global_params::Global_params() {
     // TODO: WE CAN'T HARD-CODE URL OF PARAMETERS.INI, WE NEED TO GET IT FROM USER ARGUMENT AT CALL TIME. AND PRINT ERROR OTHERWISE.
     config cfg("parameters.ini");
     if (cfg.get_section("input") != NULL) {
-    	if (cfg.get_value("input", "inj_distribution").compare("poisson") == 0) {
-    	       chosen_distrib = Inj_distribs::poisson;
-    	}
+        if (cfg.get_value("input", "inj_distribution").compare("poisson") == 0) {
+               chosen_distrib = Inj_distribs::poisson;
+        }
         else if (cfg.get_value("input", "inj_distribution").compare("burst") == 0) {
-    		chosen_distrib = Inj_distribs::burst;
-    		if (cfg.get_section("burst") != NULL) {
-    			H = stof(cfg.get_value("burst", "H"));
-    		} else {
-    			std::cout << "ERROR: Burst parameters not found" << std::endl;
+            chosen_distrib = Inj_distribs::burst;
+            if (cfg.get_section("burst") != NULL) {
+                H = stof(cfg.get_value("burst", "H"));
+            } else {
+                std::cout << "ERROR: Burst parameters not found" << std::endl;
                 abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
-    		}
-    	}
+            }
+        }
         else if (cfg.get_value("input", "inj_distribution").compare("trace") == 0) {
-    		chosen_distrib = Inj_distribs::trace;
+            chosen_distrib = Inj_distribs::trace;
             if (cfg.get_section("trace") != NULL) {
                 if (cfg.get_value("trace", "load_trace_path").compare("") != 0) {
                     load_trace_path = cfg.get_value("trace", "load_trace_path");
@@ -44,18 +43,18 @@ Global_params::Global_params() {
                 if (cfg.get_value("trace", "save_trace_path").compare("") != 0) {
                     save_trace_path = cfg.get_value("trace", "save_trace_path");
                 }
-    		}
-    	}
+            }
+        }
         else {
-    		std::cout << "ERROR: No distribution type was found" << std::endl;
+            std::cout << "ERROR: No distribution type was found" << std::endl;
             abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
-    	}
+        }
 
-    	inj_rate = stof(cfg.get_value("input", "inj_rate"));
+        inj_rate = stof(cfg.get_value("input", "inj_rate"));
         sigma = stof(cfg.get_value("input", "sigma"));
-    	ncores = stoi(cfg.get_value("input", "ncores"));
+        ncores = stoi(cfg.get_value("input", "ncores"));
         // TODO: what happens if user doesn't enter npackets? it should give error for poisson and burst but be fine for trace
-    	npackets = stoi(cfg.get_value("input", "npackets"));
+        npackets = stoi(cfg.get_value("input", "npackets"));
         if (cfg.get_value("tdma", "slot_size").compare("") != 0) {
             tdma_current_node = 0; // the first slot is assigned to node 0
             tdma_slot_size = stoi(cfg.get_value("tdma", "slot_size"));
@@ -69,12 +68,12 @@ Global_params::Global_params() {
             thr_pure_brs = stof(cfg.get_value("fuzzy_token", "thr_pure_brs"));
         }
 
-    	if (cfg.get_value("input", "mac_protocol").compare("csma_non_p") == 0) {
-    		chosen_mac = Mac_protocols::csma_non_p;
-    	} else if (cfg.get_value("input", "mac_protocol").compare("brs_non_p") == 0) {
-    		chosen_mac = Mac_protocols::brs_non_p;
+        if (cfg.get_value("input", "mac_protocol").compare("csma_non_p") == 0) {
+            chosen_mac = Mac_protocols::csma_non_p;
+        } else if (cfg.get_value("input", "mac_protocol").compare("brs_non_p") == 0) {
+            chosen_mac = Mac_protocols::brs_non_p;
         } else if (cfg.get_value("input", "mac_protocol").compare("fuzzy_token") == 0) {
-    		chosen_mac = Mac_protocols::fuzzy_token;
+            chosen_mac = Mac_protocols::fuzzy_token;
             if (cfg.get_value("fuzzy_token", "thr_pure_token").compare("") == 0) {
                 std::cout << "ERROR: thr_pure_token parameter missing in fuzzy_token section" << std::endl;
                 abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
@@ -84,33 +83,31 @@ Global_params::Global_params() {
                 abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
             }
         } else if (cfg.get_value("input", "mac_protocol").compare("token") == 0) {
-    		chosen_mac = Mac_protocols::token;
-    	} else if (cfg.get_value("input", "mac_protocol").compare("tdma_fixed") == 0) {
-    		chosen_mac = Mac_protocols::tdma_fixed;
+            chosen_mac = Mac_protocols::token;
+        } else if (cfg.get_value("input", "mac_protocol").compare("tdma_fixed") == 0) {
+            chosen_mac = Mac_protocols::tdma_fixed;
             if (cfg.get_value("tdma", "slot_size").compare("") == 0) {
                 std::cout << "ERROR: slot_size parameter missing in tdma_fixed section" << std::endl;
                 abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
             }
-    	} else if (cfg.get_value("input", "mac_protocol").compare("tdma_weighted") == 0) {
-    		chosen_mac = Mac_protocols::tdma_weighted;
+        } else if (cfg.get_value("input", "mac_protocol").compare("tdma_weighted") == 0) {
+            chosen_mac = Mac_protocols::tdma_weighted;
             if (cfg.get_value("tdma", "slot_size").compare("") == 0) {
                 std::cout << "ERROR: slot_size parameter missing in tdma section" << std::endl;
                 abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
             }
 
-    	} else {
-    		std::cout << "ERROR: No MAC protocol type was found" << std::endl;
+        } else {
+            std::cout << "ERROR: No MAC protocol type was found" << std::endl;
             abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
-    	}
-    	max_buffer_size = stoi(cfg.get_value("input", "max_buffer_size"));
-    	tx_time = stoi(cfg.get_value("input", "tx_time"));
-	} else {
-		std::cout << "ERROR: Input parameters not found in main folder" << std::endl;
+        }
+        max_buffer_size = stoi(cfg.get_value("input", "max_buffer_size"));
+        tx_time = stoi(cfg.get_value("input", "tx_time"));
+    } else {
+        std::cout << "ERROR: Input parameters not found in main folder" << std::endl;
         abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
-	}
-    for (int i=0; i<=nchannels; i++){
-    	channel_busy[i] = false;
     }
+
     medium_busy = false;
     txing_token = false; // we start the simulation always in the second period (pure BRS)
     total_ncycles = 1; // the minimum execution time is 1 cycle, in order to check everything
@@ -153,9 +150,7 @@ std::string Global_params::get_load_trace_path() {
 bool Global_params::is_medium_busy() {
     return medium_busy;
 }
-bool Global_params::is_channel_busy(int id){
-    return channel_busy(id);
-}
+
 void Global_params::set_medium_busy() {
     medium_busy = true;
 }
@@ -163,74 +158,84 @@ void Global_params::set_medium_busy() {
 void Global_params::set_medium_idle() {
     medium_busy = false;
 }
+
+bool Global_params::is_channel_busy(int id) {
+    return channel_busy[id];
+}
+
 void Global_params::set_channel_busy(int id) {
     channel_busy[id] = true;
 }
 
 void Global_params::set_channel_idle(int id) {
-    medium_busy = false;
+    channel_busy[id] = false;
 }
 
-std::vector<int> Global_params::get_id_concurrent_tx_nodes(int i) {
-    return ids_concurrent_tx_nodes[i];
+int Global_params::get_ids_concurrent_tx_nodes(int id) {
+    return ids_concurrent_tx_nodes[id];
 }
+
+
 // Get size of ids_concurrent_tx_nodes (number of nodes simultaneously transmitting)
 int Global_params::get_ids_concurrent_tx_nodes_size() {
     return ids_concurrent_tx_nodes.size();
 }
-int Global_params::get_channel_concurrent_tx_nodes_size() {
-    return channel_concurrent_tx_nodes.size();
-}
+
 // Push new node_id into ids_concurrent_tx_nodes (new node starts transmitting)
-void Global_params::push_ids_concurrent_tx_nodes(std::vector<int> nid) {
+void Global_params::push_ids_concurrent_tx_nodes(int nid) {
     ids_concurrent_tx_nodes.push_back(nid);
 }
-// Push new node_id and channel_id into ids_and_channels_concurrent_tx_nodes (new node starts transmitting)
-void Global_params::push_ids_and_channels_concurrent_tx_nodes(std::vector<int> *ncid) {
-	ids_and_channels_concurrent_tx_nodes.push_back(*ncid);
-}
-int Global_params::get_ids_and_channels_concurrent_tx_nodes_size() {
-    return ids_concurrent_tx_nodes.size();
-}
-void Global_params::push_channel_concurrent_tx_nodes(int cid) {
-    channel_concurrent_tx_nodes.push_back(cid);
-}
+
 // Delete all elements in ids_concurrent_tx_nodes (no node will be transmitting)
 void Global_params::flush_ids_concurrent_tx_nodes() {
     ids_concurrent_tx_nodes.erase(ids_concurrent_tx_nodes.begin(), ids_concurrent_tx_nodes.end());
 }
-// Delete all elements in ids_and_channels_concurrent_tx_nodes (no node will be transmitting)
-void Global_params::flush_ids_and_channels_concurrent_tx_nodes() {
-	ids_and_channels_concurrent_tx_nodes.erase(ids_and_channels_concurrent_tx_nodes.begin(), ids_and_channels_concurrent_tx_nodes.end());
-}
-void Global_params::flush_channel_concurrent_tx_nodes() {
-    channel_concurrent_tx_nodes.erase(channel_concurrent_tx_nodes.begin(), channel_concurrent_tx_nodes.end());
-}
-// Delete all nodes that finished transmitting for the given channel
-void Global_params::delete_ids_concurrent_tx_nodes(int cid, std::vector<int>curr_node){
-	if (curr_node[1] == cid){
-		// delete
-		ids_concurrent_tx_nodes.erase(curr_node);
-	}
+
+void Global_params::flush_ids_one_concurrent_tx_nodes(int i) {
+    ids_concurrent_tx_nodes.erase(ids_concurrent_tx_nodes.begin()+i);
 }
 // Provides begin iterator for ids_concurrent_tx_nodes
-std::vector<int>const_iterator  Global_params::ids_concurrent_tx_nodes_begin() {
+std::vector<int>::const_iterator Global_params::ids_concurrent_tx_nodes_begin() {
     return ids_concurrent_tx_nodes.begin();
 }
 
 // Provides end iterator for ids_concurrent_tx_nodes
-std::vector<int>const_iterator Global_params::ids_concurrent_tx_nodes_end() {
+std::vector<int>::const_iterator Global_params::ids_concurrent_tx_nodes_end() {
     return ids_concurrent_tx_nodes.end();
 }
 
 int Global_params::get_unique_ids_concurrent_tx_nodes() {
-    if (ids_concurrent_tx_nodes.size() == 1) {
-        return ids_concurrent_tx_nodes.front();
+    if (channel_concurrent_tx_nodes.size() == 1) {
+        return channel_concurrent_tx_nodes.front();
     }
     else {
         std::cout << "ERROR: none or multiple concurrent tx nodes still in vector, but you are asking for only one" << std::endl;
         abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
     }
+}
+
+// Get size of ids_concurrent_tx_nodes (number of nodes simultaneously transmitting)
+int Global_params::get_channel_concurrent_tx_nodes_size() {
+    return channel_concurrent_tx_nodes.size();
+}
+
+// Push new node_id into ids_concurrent_tx_nodes (new node starts transmitting)
+void Global_params::push_channel_concurrent_tx_nodes(int nid) {
+    channel_concurrent_tx_nodes.push_back(nid);
+}
+
+// Delete all elements in ids_concurrent_tx_nodes (no node will be transmitting)
+void Global_params::flush_channel_concurrent_tx_nodes() {
+    channel_concurrent_tx_nodes.erase(channel_concurrent_tx_nodes.begin(), channel_concurrent_tx_nodes.end());
+}//chek this function;
+
+std::vector<int>::const_iterator Global_params::channel_concurrent_tx_nodes_begin() {
+    return channel_concurrent_tx_nodes.begin();
+}
+
+// Provides end iterator for ids_concurrent_tx_nodes
+std::vector<int>::const_iterator Global_params::channel_concurrent_tx_nodes_end() {
+    return channel_concurrent_tx_nodes.end();
 }
 
 int Global_params::get_ncores() {

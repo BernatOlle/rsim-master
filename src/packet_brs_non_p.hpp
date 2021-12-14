@@ -25,7 +25,6 @@ public:
 	void decrease_cycles_left();
 	int get_backoff_exp();
 	int get_cnt_backoff();
-	int get_channelID();
 	void decrease_cnt_backoff(); // Decrease cnt_backoff by 1
 	void reset_backoff_exp();
 	void update_cnt_backoff(); // Increase backoff_exp and choose randomly new backoff between 1 and 2^backoff_exp
