@@ -7,6 +7,7 @@
 #include "utilities.hpp"
 #include "mac_protocols.hpp"
 #include "global_params.hpp"
+#include "channel.hpp"
 
 /*-------------------------------------------------------
 
@@ -53,7 +54,7 @@ int main(int argc, char* argv[]) {
 			Global_params::Instance()->set_npackets(stoi(parameter_value));
 		}
 		else if (parameter_name.compare("nchannels") == 0) {
-			Global_params::Instance()->set_nchannels(4);
+			Global_params::Instance()->set_nchannels(stoi(parameter_value));
 		}
 		else if (parameter_name.compare("tx_time") == 0) {
 			Global_params::Instance()->set_tx_time(stof(parameter_value));
@@ -127,7 +128,7 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
-	Global_params::Instance()->set_nchannels(4);
+	//Global_params::Instance()->set_nchannels(4);
 	// TODO: Ensure that all values were read either from parameter file or std input
 
 	// Print all the parameters, to ensure we read them properly from the INI file or the standard input
@@ -253,7 +254,7 @@ int main(int argc, char* argv[]) {
 		Global_params::Instance()->set_npackets(npackets);
 	}
 		
-		for(int cid=0;cid<Global_params::Instance()->get_ncores();i++){
+		for(int cid=0;cid<Global_params::Instance()->get_nchannels();cid++){
 				chan.push_back(new Channel(cid));
 		}
 
@@ -287,7 +288,7 @@ int main(int argc, char* argv[]) {
 
 		std::vector<int> nodes_ready; // at every cycle we initialize an empty vector that will store the IDs of the nodes with non-empty buffers
 		int number_channels = Global_params::Instance()->get_nchannels();
-		std::cout << "k="<<number_channels << std::endl;
+		
 
 		// iterates through all nodes of the chip to see which ones have a packet to transmit
 		for (std::vector<Node*>::iterator curr_node = chip.begin(); curr_node != chip.end(); ++curr_node) {
@@ -295,13 +296,13 @@ int main(int argc, char* argv[]) {
 				// when we find a node with a non-empty buffer, we store its ID
 				(*curr_node)->channel_function("none", "initialisation of channel link to node", number_channels, 1);
 				nodes_ready.push_back((*curr_node)->get_id());
-				std::cout << "++++++++++++++++++++++++++++++++++++++++++++++++"<<std::endl;
 				if (Global_params::Instance()->is_debugging_on()) {
 
 					std::cout << "Node " << (*curr_node)->get_id() << " wants to tx (" << (*curr_node)->get_in_buffer_size() << " pending packets)" << std::endl;
 				}
 			}
 		}
+		
 
 		// We call the appropriate MAC protocol to deal with the concurrent packets that are ready
 		switch(Global_params::Instance()->get_chosen_mac()) {

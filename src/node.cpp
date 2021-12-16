@@ -8,6 +8,7 @@ Node::Node(int id, float inj_rate) : nid(id), node_inj_rate(inj_rate), total_inj
                                      total_served_packets_node(0) {
     seed_fuzzy_weights = std::chrono::system_clock::now().time_since_epoch().count();
     generator_fuzzy_weights.seed(seed_fuzzy_weights);
+    channelID=-1;
     distribution_fuzzy_weights.param(std::uniform_real_distribution<double>(0.0, 1.0).param());
 }
 
@@ -42,6 +43,7 @@ void Node::channel_function(std::string protocol, std::string step, int number_c
     // TODO can we recuperate the node as so ?
     int nodeId = this->get_id();
     int channelId =this->get_channel_id();
+    int new_channelId = channelId;
     if (reason == 0) {
         if (protocol == "none") {
             //std::cout << "Information:" << step << "NodeID: " << nodeId << "ChannelID:" << channelId << "\n";
@@ -50,13 +52,19 @@ void Node::channel_function(std::string protocol, std::string step, int number_c
                   //<< channelId << "\n";
     }
     if (reason == 1) {
-        int new_channelId;
-        if (channelId == 0) {
+        if (channelId == -1) {
             new_channelId = rand() % number_channels;
             Node::set_channel_id(new_channelId);
             //std::cout << "Protocol:" << protocol << "Step:" << step << "Node: " << nodeId << "ChannelID:"
                       //<< new_channelId
                       //<< "\n";
+        }else if(protocol =="brs"){
+            while(new_channelId==channelId){
+                new_channelId = rand() % number_channels;
+
+            }
+            std::cout<<"New channel id = "<<new_channelId<<std::endl;
+            Node::set_channel_id(new_channelId);
         }
         //std::cout << "Protocol:" << protocol << "Step:" << step << "Node: " << nodeId << "ChannelID:" << channelId
                   //<< "\n";

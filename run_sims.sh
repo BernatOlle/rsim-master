@@ -106,7 +106,7 @@ do
 				for i in {1..15}
 				do
 					echo $i
-					./Project H=$h ncores=64 inj_rate=$inj_rate mac_protocol=$mac_protocol sigma=$sigma >> $LOG_DIR
+					./Project H=$h ncores=64 nchannels=4 inj_rate=$inj_rate mac_protocol=$mac_protocol sigma=$sigma >> $LOG_DIR
 				done
 			done
 		done

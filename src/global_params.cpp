@@ -53,6 +53,7 @@ Global_params::Global_params() {
         inj_rate = stof(cfg.get_value("input", "inj_rate"));
         sigma = stof(cfg.get_value("input", "sigma"));
         ncores = stoi(cfg.get_value("input", "ncores"));
+        nchannels = stoi(cfg.get_value("input", "nchannels"));
         // TODO: what happens if user doesn't enter npackets? it should give error for poisson and burst but be fine for trace
         npackets = stoi(cfg.get_value("input", "npackets"));
         if (cfg.get_value("tdma", "slot_size").compare("") != 0) {

@@ -4,7 +4,7 @@
 #include "utilities.hpp"
 
 // Specification of CSMA non-persistant
-void protocol_csma_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip) {
+void protocol_csma_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip,std::vector<Channel*>& chan,int number_channels) {
 // 	// if more than one node has packets to transmit in the current cycle
 // 	if (nodes_ready.size() > 1) {
 // 		std::vector<int> nodes_zero_backoff; // at every cycle we initialize an empty vector that will store the IDs of the nodes with backoff at zero
@@ -64,30 +64,44 @@ void protocol_csma_non_p(int curr_cycle, const std::vector<int>& nodes_ready, st
 //===============================================================
 
 // Specification of BRS-MAC non-persistent. Returns 0 if nobody transmitted, 1 if collision occurred and 2 if somebody transmitted successfully
-int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip) {
+int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip,std::vector<Channel*>& chan,int nchannels) {
 	// If the medium is idle
-	if (!Global_params::Instance()->is_medium_busy()) {
+	for (int channel_id = 0; channel_id < nchannels; channel_id++) {
+		int si = nodes_ready.size();
+		std::cout << "nodes_ready= "<< si<<std::endl;
+	if (!Global_params::Instance()->is_channel_busy(channel_id)) {
+		std::cout << "Inside channel idle = "<<channel_id<<std::endl;
 		// For each node with a non-empty buffer, regardless if its 0, 1 or 2+ nodes...
 		for (std::vector<int>::const_iterator curr_node_id = nodes_ready.begin(); curr_node_id != nodes_ready.end(); ++curr_node_id) {
 			Node* p_node = chip.at(*curr_node_id);
+			int node_channel = p_node->get_channel_id();
+			std::cout<< "Node cid = "<<node_channel<<std::endl;
+			if (node_channel == channel_id) {
 			// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
-			if (Packet_brs_non_p* p_packet = dynamic_cast<Packet_brs_non_p*>(p_node->get_in_buffer_front())) {
+				if (Packet_brs_non_p* p_packet = dynamic_cast<Packet_brs_non_p*>(p_node->get_in_buffer_front())) {
 				// If backoff is still not zero, we decrease it
-				if (p_packet->get_cnt_backoff() > 0) {
+					int backoff = p_packet->get_cnt_backoff();
+					std::cout<<"backoff = "<<backoff<<std::endl;
+					if (p_packet->get_cnt_backoff() > 0) {
 					p_packet->decrease_cnt_backoff();
-				}
+					}
 				// If backoff is zero, we transmit first cycle/preamble of packet
-				else {
-					Global_params::Instance()->set_medium_busy();
-					Global_params::Instance()->push_ids_concurrent_tx_nodes(*curr_node_id);
+					else {
+						Global_params::Instance()->set_channel_busy(channel_id);
+						Channel* p_channel = chan.at(channel_id);
+
+						p_channel->push_ids_concurrent_tx_nodes(*curr_node_id);
+						int ids = p_channel->get_ids_concurrent_tx_nodes_size();
+						std::cout<<"Courrent tx size idle = "<<ids<<std::endl;
 					// Notice we don't decrease the cycles_left of the packet, since we have to leave one extra cycle after the header to check for collisions
 				}
 		    }
 			// If the cast fails
 			else {
-				std::cout << "ERROR: Cast from Packet* to Packet_brs_non_p* failed" << std::endl;
+				std::cout << "ERROR: AACast from Packet* to Packet_brs_non_p* failed" << std::endl;
 				abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
 			}
+		}
 		} // End of for-each
 	} // End of if-medium-idle
 	// If the medium is busy do the following:
@@ -98,29 +112,39 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 	// done tx at the end of this cycle. So we empty the vector of transmitting nodes, we set the medium to idle, we take the packet out
 	// of the buffer, we increase counters of total served packets per node and per chip and if it isn't zero we don't have to do nothing because we already decreased cycles_left
 	else {
+		Channel* p_channel = chan.at(channel_id);
+		std::cout<<"Indide channel busy = "<< channel_id<<std::endl;
+		int sizeCur= p_channel->get_ids_concurrent_tx_nodes_size();
+		std::cout<<"Courrent tx size busy = "<< sizeCur<<std::endl;
 		// If multiple colliding nodes
-		if(Global_params::Instance()->get_ids_concurrent_tx_nodes_size() > 1) {
+		if(p_channel->get_ids_concurrent_tx_nodes_size() > 1) {
 			// for each ids_concurrent_tx_nodes, update_cnt_backoff, then empty vector of ids_concurrent_tx_nodes, then set medium to idle
-			for (std::vector<int>::const_iterator curr_node_id = Global_params::Instance()->ids_concurrent_tx_nodes_begin(); curr_node_id != Global_params::Instance()->ids_concurrent_tx_nodes_end(); ++curr_node_id) {
+			for (std::vector<int>::const_iterator curr_node_id = p_channel->ids_concurrent_tx_nodes_begin(); curr_node_id != p_channel->ids_concurrent_tx_nodes_end(); ++curr_node_id) {
 				Node* p_node = chip.at(*curr_node_id);
+				std::cout<<"Node before change cid = "<<p_node->get_channel_id()<<std::endl;
+				p_node->channel_function("brs", "initialisation of channel link to node", nchannels, 1);
+				std::cout<<"Node change cid = "<<p_node->get_channel_id()<<std::endl;
+
 				// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
 				if (Packet_brs_non_p* p_packet = dynamic_cast<Packet_brs_non_p*>(p_node->get_in_buffer_front())) {
 					p_packet->update_cnt_backoff();
 			    }
 				// If the cast fails
 				else {
-					std::cout << "ERROR: Cast from Packet* to Packet_brs_non_p* failed" << std::endl;
+					std::cout << "ERROR: BBCast from Packet* to Packet_brs_non_p* failed" << std::endl;
 					abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
 				}
                 Global_params::Instance()->increase_counter_collisions(); // for every colliding node we register the cycle in which the collision occurred
 			} // End of for-each
-			Global_params::Instance()->flush_ids_concurrent_tx_nodes();
-			Global_params::Instance()->set_medium_idle();
-			return 1; // return collision code
+			p_channel->flush_ids_concurrent_tx_nodes();
+			Global_params::Instance()->set_channel_idle(channel_id);
+			std::cout<<"COLISSION!!!!!!!!"<<std::endl;
+			//return 1; // return collision code
 		}
 		// If only one node is transmitting
-		else if(Global_params::Instance()->get_ids_concurrent_tx_nodes_size() == 1) {
-			Node* p_node = chip.at(Global_params::Instance()->get_unique_ids_concurrent_tx_nodes());
+		else if(p_channel->get_ids_concurrent_tx_nodes_size() == 1) {
+			int k =p_channel->get_unique_kids_concurrent_tx_nodes();
+			Node* p_node = chip.at(p_channel->get_unique_kids_concurrent_tx_nodes());
 			// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
 			if (Packet_brs_non_p* p_packet = dynamic_cast<Packet_brs_non_p*>(p_node->get_in_buffer_front())) {
 				// We decrease cycles_left for the current packet
@@ -132,14 +156,18 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 				// If at the end of this cycle we have 0 cycles left it means we successfully transmitted the packet. So do the following:
 				// Empty vector of transmitting nodes, set the medium to idle, take the packet out
 				// of the buffer, increase counters of total served packets per node and per chip
+				int cycless = p_packet->get_cycles_left();
+				std::cout<<"Cycles left = "<<cycless<<std::endl;
 				if (p_packet->get_cycles_left() == 0) {
 					p_node->pop_packet_buffer(curr_cycle);
-					Global_params::Instance()->flush_ids_concurrent_tx_nodes();
-					Global_params::Instance()->set_medium_idle();
+					p_channel->flush_ids_concurrent_tx_nodes();
+					Global_params::Instance()->set_channel_idle(channel_id);
+
+					std::cout<<"Node :"<< k<<" TRAMITED!!!!!!!!"<<std::endl;
 				}			}
 			// If the cast fails
 			else {
-				std::cout << "ERROR: Cast from Packet* to Packet_brs_non_p* failed" << std::endl;
+				std::cout << "ERROR: CCCast from Packet* to Packet_brs_non_p* failed" << std::endl;
 				abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
 			}
 		}
@@ -147,13 +175,17 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 			std::cout << "ERROR: Uncoherence detected. The size of ids_concurrent_tx_nodes is zero but the medium is set as busy" << std::endl;
 			abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
 		}
+	
 	}
+	std::cout<<"__________________________"<<std::endl;
+}
+std::cout<<"........................................"<<std::endl;
 }
 //===============================================================
 
 // Specification of TDMA for both fixed and weighted schemes
 // We assume no collisions, so we don't take care of unexpected collisions
-void protocol_tdma(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip, std::vector<float>& hotspotness_weights) {
+void protocol_tdma(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip,std::vector<Channel*>& chan, std::vector<float>& hotspotness_weights,int number_channels) {
 	if (Global_params::Instance()->is_debugging_on()) {
 		std::cout << "TDMA: Node " << Global_params::Instance()->get_tdma_current_node() << ". Cycles left: " << Global_params::Instance()->get_tdma_current_node_slot_size() << std::endl;
 	}
@@ -213,7 +245,7 @@ void protocol_tdma(int curr_cycle, const std::vector<int>& nodes_ready, std::vec
 //===============================================================
 
 // Specification of Fuzzy token
-void protocol_fuzzy_token(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip, std::vector<float>& hotspotness_weights) {
+void protocol_fuzzy_token(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip,std::vector<Channel*>& chan, std::vector<float>& hotspotness_weights,int number_channels) {
 	std::vector<int> fuzzy_nodes_ready;
 	int ncores = Global_params::Instance()->get_ncores();
 
@@ -620,7 +652,7 @@ void protocol_fuzzy_token(int curr_cycle, const std::vector<int>& nodes_ready, s
 
 // Specification of Token
 // We assume no collisions, so we don't take care of unexpected collisions
-void protocol_token(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip, std::vector<float>& hotspotness_weights) {
+void protocol_token(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip,std::vector<Channel*>& chan, std::vector<float>& hotspotness_weights,int number_channels) {
 	if (Global_params::Instance()->is_debugging_on()) {
 		std::cout << "Token: Node " << Global_params::Instance()->get_token_current_node() << std::endl;
 	}
