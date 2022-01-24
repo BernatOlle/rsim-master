@@ -56,6 +56,9 @@ int main(int argc, char* argv[]) {
 		else if (parameter_name.compare("nchannels") == 0) {
 			Global_params::Instance()->set_nchannels(stoi(parameter_value));
 		}
+		else if (parameter_name.compare("assig") == 0) {
+			Global_params::Instance()->set_chosen_assig(stoi(parameter_value));
+		}
 		else if (parameter_name.compare("tx_time") == 0) {
 			Global_params::Instance()->set_tx_time(stof(parameter_value));
 		}
@@ -253,7 +256,7 @@ int main(int argc, char* argv[]) {
 		// once we have finished reading all the injected packets from the trace, we save the total number of packets injected
 		Global_params::Instance()->set_npackets(npackets);
 	}
-		
+
 		for(int cid=0;cid<Global_params::Instance()->get_nchannels();cid++){
 				chan.push_back(new Channel(cid));
 		}
@@ -288,13 +291,18 @@ int main(int argc, char* argv[]) {
 
 		std::vector<int> nodes_ready; // at every cycle we initialize an empty vector that will store the IDs of the nodes with non-empty buffers
 		int number_channels = Global_params::Instance()->get_nchannels();
-		
+
 
 		// iterates through all nodes of the chip to see which ones have a packet to transmit
 		for (std::vector<Node*>::iterator curr_node = chip.begin(); curr_node != chip.end(); ++curr_node) {
 			if (!(*curr_node)->in_buffer_empty()) {
 				// when we find a node with a non-empty buffer, we store its ID
-				(*curr_node)->channel_function("none", "initialisation of channel link to node", number_channels, 1);
+				//std::cout<< "gre"<<std::endl;
+				int assig = Global_params::Instance()->get_chosen_assig();
+				//std::cout<< "Before channel: "<< before_funtion <<std::endl;
+				(*curr_node)->channel_function("brs", "initialisation of channel link to node", number_channels, 1, assig);
+				int before_funtion=(*curr_node)->get_channel_id();
+				//std::cout<<"Channel initial:" << before_funtion<<std::endl;
 				nodes_ready.push_back((*curr_node)->get_id());
 				if (Global_params::Instance()->is_debugging_on()) {
 
@@ -302,7 +310,7 @@ int main(int argc, char* argv[]) {
 				}
 			}
 		}
-		
+
 
 		// We call the appropriate MAC protocol to deal with the concurrent packets that are ready
 		switch(Global_params::Instance()->get_chosen_mac()) {

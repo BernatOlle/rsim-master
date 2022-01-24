@@ -13,6 +13,7 @@
 enum class Inj_distribs { poisson, burst, trace };
 enum class Mac_protocols { csma_non_p, brs_non_p, tdma_fixed, tdma_weighted, fuzzy_token, token };
 
+
 // we define the Singleton class used for the parameters of the simulator
 class Global_params {
 private:
@@ -23,6 +24,7 @@ private:
     static Global_params* s_instance;
     int ncores; // number of cores/nodes in total
     int nchannels;
+    int chosen_assig; //1= rand,  2= greenly
     int npackets; // number of packets that the application wants to transmit
     double inj_rate; // desired avg injection rate per node, when averaged among all nodes
     float H; // Hurst exponent, only for Burst injection distribution
@@ -97,7 +99,9 @@ public:
     Inj_distribs get_chosen_distrib();
     void set_chosen_distrib(Inj_distribs);
     Mac_protocols get_chosen_mac();
+    int get_chosen_assig();
     void set_chosen_mac(Mac_protocols);
+    void set_chosen_assig(int);
     int get_tx_time();
     int get_total_injected_packets_chip();
     int get_stationary_served_packets_chip();
@@ -108,7 +112,7 @@ public:
     void increase_total_served_packets_chip();
     void set_cycle_injection_stopped(int);
     void increase_total_ncycles();
-    bool is_medium_busy(); // Is medium_busy == true?    
+    bool is_medium_busy(); // Is medium_busy == true?
     void set_medium_busy(); // set medium_busy = true
     void set_medium_idle(); // set medium_busy = false
     bool is_channel_busy(int);

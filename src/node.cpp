@@ -4,12 +4,12 @@
 #include <vector>
 #include <algorithm>
 
-Node::Node(int id, float inj_rate) : nid(id), node_inj_rate(inj_rate), total_injected_packets_node(0),
+Node::Node(int id, float inj_rate) : nid(id),channelID(-1), node_inj_rate(inj_rate), total_injected_packets_node(0),
                                      total_served_packets_node(0) {
     seed_fuzzy_weights = std::chrono::system_clock::now().time_since_epoch().count();
     generator_fuzzy_weights.seed(seed_fuzzy_weights);
-    channelID=-1;
     distribution_fuzzy_weights.param(std::uniform_real_distribution<double>(0.0, 1.0).param());
+    std::cout<<channelID<<std::endl;
 }
 
 Node::Node(int id) : nid(id), total_injected_packets_node(0), total_served_packets_node(0) {
@@ -39,26 +39,21 @@ void Node::set_channel_id(int channel_id) {
 }
 
 // function to show the change of vector values and reasons
-void Node::channel_function(std::string protocol, std::string step, int number_channels, int reason) {
+void Node::channel_function(std::string protocol, std::string step, int number_channels, int reason, int assig) {
     // TODO can we recuperate the node as so ?
     int nodeId = this->get_id();
     int channelId =this->get_channel_id();
+    //std::cout<<"Channel initial:" << channelId<<std::endl;
     int new_channelId = channelId;
-    if (reason == 0) {
-        if (protocol == "none") {
-            //std::cout << "Information:" << step << "NodeID: " << nodeId << "ChannelID:" << channelId << "\n";
-        }
-        //std::cout << "Protocol:" << protocol << "Information:" << step << "NodeID: " << nodeId << "ChannelID:"
-                  //<< channelId << "\n";
-    }
-    if (reason == 1) {
+    if (protocol =="brs"){
+     if(assig == 1){
         if (channelId == -1) {
             new_channelId = rand() % number_channels;
             Node::set_channel_id(new_channelId);
             //std::cout << "Protocol:" << protocol << "Step:" << step << "Node: " << nodeId << "ChannelID:"
                       //<< new_channelId
                       //<< "\n";
-        }else if(protocol =="brs"){
+        }else if(step=="colision"){
             while(new_channelId==channelId){
                 new_channelId = rand() % number_channels;
 
@@ -66,10 +61,35 @@ void Node::channel_function(std::string protocol, std::string step, int number_c
             //std::cout<<"New channel id = "<<new_channelId<<std::endl;
             Node::set_channel_id(new_channelId);
         }
+        //std::cout<<"Channel initial:" << new_channelId<<std::endl;
         //std::cout << "Protocol:" << protocol << "Step:" << step << "Node: " << nodeId << "ChannelID:" << channelId
                   //<< "\n";
     }
+
+
+
+
+
+if(assig == 2){
+  //std::cout<<"hola"<<std::endl;
+      if (channelId == -1) {
+        new_channelId=0;
+        //std::cout << "New Channel id: "<< new_channelId<< std::endl;
+
+    }if (step=="colision"){
+        new_channelId=channelId+1;
+        if(new_channelId>=number_channels){
+          new_channelId=0;
+        }
+
+    }
+    Node::set_channel_id(new_channelId);
+
+
 }
+}
+}
+
 
 
 bool Node::in_buffer_empty() {

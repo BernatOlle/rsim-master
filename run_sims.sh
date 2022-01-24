@@ -8,6 +8,11 @@ brs_non_p
 #fuzzy_token
 )
 
+assig=(
+rando
+gre
+)
+
 sigma_values=(
 #0.5
 10

@@ -54,6 +54,8 @@ Global_params::Global_params() {
         sigma = stof(cfg.get_value("input", "sigma"));
         ncores = stoi(cfg.get_value("input", "ncores"));
         nchannels = stoi(cfg.get_value("input", "nchannels"));
+        chosen_assig = stoi(cfg.get_value("input", "assig"));
+
         // TODO: what happens if user doesn't enter npackets? it should give error for poisson and burst but be fine for trace
         npackets = stoi(cfg.get_value("input", "npackets"));
         if (cfg.get_value("tdma", "slot_size").compare("") != 0) {
@@ -68,6 +70,7 @@ Global_params::Global_params() {
         if (cfg.get_value("fuzzy_token", "thr_pure_brs").compare("") != 0) {
             thr_pure_brs = stof(cfg.get_value("fuzzy_token", "thr_pure_brs"));
         }
+
 
         if (cfg.get_value("input", "mac_protocol").compare("csma_non_p") == 0) {
             chosen_mac = Mac_protocols::csma_non_p;
@@ -307,8 +310,16 @@ Mac_protocols Global_params::get_chosen_mac() {
     return chosen_mac;
 }
 
+int Global_params::get_chosen_assig(){
+  return chosen_assig;
+}
+
 void Global_params::set_chosen_mac(Mac_protocols chosen_mac) {
     this->chosen_mac = chosen_mac;
+}
+
+void Global_params::set_chosen_assig(int chosen_assig) {
+    this->chosen_assig = chosen_assig;
 }
 
 int Global_params::get_tx_time() {
