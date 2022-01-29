@@ -281,10 +281,10 @@ float number_channels = Global_params::Instance()->get_nchannels();
 		}
 
 		int assig = Global_params::Instance()->get_chosen_assig();
-		std::cout<<"Assig"<<assig<<std::endl;
+		//std::cout<<"Assig"<<assig<<std::endl;
 		float prob_chan=1/number_channels;
 		float prob_total=prob_chan;
-		std::cout<<prob_total<<std::endl;
+		//std::cout<<prob_total<<std::endl;
 
 
 		if(assig==3){
@@ -293,7 +293,7 @@ float number_channels = Global_params::Instance()->get_nchannels();
 				for(int j = 0; j<Global_params::Instance()->get_ncores();j++){
 					if(prob<prob_total){
 						prob = prob+hotspotness_weights_normal[j];
-						std::cout<<prob<<std::endl;
+						//std::cout<<prob<<std::endl;
 
 						chip[j]->channel_function("brs", "initialisation of channel link to node", number_channels, 1, assig,k);
 
@@ -304,7 +304,7 @@ float number_channels = Global_params::Instance()->get_nchannels();
 
 		}
 		for(int j = 0; j<Global_params::Instance()->get_ncores();j++){
-			std::cout<<"Channel assos: "<<chip[j]->get_channel_id()<<std::endl;
+			//std::cout<<"Channel assos: "<<chip[j]->get_channel_id()<<std::endl;
 		}
 
 	// Every iteration of this do-while represent a cycle of the execution, analyzing what happens at each of them
