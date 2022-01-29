@@ -11,6 +11,7 @@ brs_non_p
 assig=(
 rando
 gre
+gravity
 )
 
 sigma_values=(
@@ -80,7 +81,7 @@ ncores_values=(
 #32
 # 36
 # 50
-#64
+64
 # 100
 #128
 # 150
@@ -102,7 +103,7 @@ ncores_values=(
 # 900
 # 950
 # 1000
-1024
+#1024
 )
 
 channel_values=(

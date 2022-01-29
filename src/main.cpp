@@ -35,16 +35,18 @@ A running script can be found in rsim/run_sims.sh
 
 int main(int argc, char* argv[]) {
 	// if the user introduces parameters from shell, we overwrite those from INI file
-
+//std::cout << "hola"<< std::endl;
 	for (int i=1; i < argc; i++) { // for each of the input arguments
 		std::vector<std::string> in_parameter = split(argv[i], '=');
 		std::string parameter_name = in_parameter.at(0);
 		std::string parameter_value = in_parameter.at(1);
 
 		if (parameter_name.compare("H") == 0) {
+			//std::cout << "hola"<< std::endl;
 			Global_params::Instance()->set_H(stof(parameter_value));
 		}
 		else if (parameter_name.compare("inj_rate") == 0) {
+			//std::cout << "hola"<< std::endl;
 			Global_params::Instance()->set_inj_rate(stof(parameter_value));
 		}
 		else if (parameter_name.compare("ncores") == 0) {
@@ -130,6 +132,7 @@ int main(int argc, char* argv[]) {
 	    	}
 		}
 	}
+	//std::cout << "hola"<< std::endl;
 
 	//Global_params::Instance()->set_nchannels(4);
 	// TODO: Ensure that all values were read either from parameter file or std input
@@ -147,21 +150,37 @@ int main(int argc, char* argv[]) {
 	// Set a vector of injection rates, according to a normal distribution with mean=1 and std_dev=sigma
 	// TODO: MAKE SURE THIS IS DONE PROPERLY, I'M NOT SURE I DID IT CORRECTLY ANYMORE
 	std::vector<float> hotspotness_weights;
+	std::vector<float> hotspotness_weights_normal;
 	float sum_pdf_values = 0;
 	float delta = 2.0 / (Global_params::Instance()->get_ncores() - 1);
 	float x = 0;
 	for (int id=0; id < Global_params::Instance()->get_ncores(); id++) {
 		float y = normal_pdf(x, 1, Global_params::Instance()->get_sigma());
 		hotspotness_weights.push_back(y);
+		hotspotness_weights_normal.push_back(y);
+
 		// hotspotness_weights.push_back(1.0); //WARNING: I DISABLED THE HOTSPOTNESS BY MAKING ALL WEIGHTS 1, CHANGE THIS WHEN YOU NEED THE RIGHT WEIGHTS AGAIN
 		sum_pdf_values += y;
 		x += delta;
+
+
 	}
+	//std::cout<<"total"<< sum_pdf_values<<std::endl;
+	float total=0;
+
 
 	// TODO: WHAT ARE WE DOING WITH THIS VALUE? IT NEVER GETS USED? WAS IT USED TO CHECK SOMETHING?
 	for (float& value: hotspotness_weights) {
 		value *= Global_params::Instance()->get_ncores() / sum_pdf_values;
 	}
+
+	for (float& value: hotspotness_weights_normal) {
+		value = value*(1 / sum_pdf_values);
+	}
+
+
+float number_channels = Global_params::Instance()->get_nchannels();
+
 
 	// we shuffle the hotspotness_weights so that hot nodes are not next to each other
 	std::random_shuffle ( hotspotness_weights.begin(), hotspotness_weights.end() );
@@ -261,6 +280,33 @@ int main(int argc, char* argv[]) {
 				chan.push_back(new Channel(cid));
 		}
 
+		int assig = Global_params::Instance()->get_chosen_assig();
+		std::cout<<"Assig"<<assig<<std::endl;
+		float prob_chan=1/number_channels;
+		float prob_total=prob_chan;
+		std::cout<<prob_total<<std::endl;
+
+
+		if(assig==3){
+			for(int k=0;k<number_channels;k++){
+				float prob=0;
+				for(int j = 0; j<Global_params::Instance()->get_ncores();j++){
+					if(prob<prob_total){
+						prob = prob+hotspotness_weights_normal[j];
+						std::cout<<prob<<std::endl;
+
+						chip[j]->channel_function("brs", "initialisation of channel link to node", number_channels, 1, assig,k);
+
+					}
+				}
+				prob_total=prob_total+prob_chan;
+			}
+
+		}
+		for(int j = 0; j<Global_params::Instance()->get_ncores();j++){
+			std::cout<<"Channel assos: "<<chip[j]->get_channel_id()<<std::endl;
+		}
+
 	// Every iteration of this do-while represent a cycle of the execution, analyzing what happens at each of them
 	do {
 		// regardless if we're in debugging mode or not, every 1,000,000 cycles we print a control message (so that we can identify progress)
@@ -289,8 +335,9 @@ int main(int argc, char* argv[]) {
 			flag_stop_injection = true;
 		}
 
+
 		std::vector<int> nodes_ready; // at every cycle we initialize an empty vector that will store the IDs of the nodes with non-empty buffers
-		int number_channels = Global_params::Instance()->get_nchannels();
+
 
 
 		// iterates through all nodes of the chip to see which ones have a packet to transmit
@@ -298,9 +345,9 @@ int main(int argc, char* argv[]) {
 			if (!(*curr_node)->in_buffer_empty()) {
 				// when we find a node with a non-empty buffer, we store its ID
 				//std::cout<< "gre"<<std::endl;
-				int assig = Global_params::Instance()->get_chosen_assig();
+
 				//std::cout<< "Before channel: "<< before_funtion <<std::endl;
-				(*curr_node)->channel_function("brs", "initialisation of channel link to node", number_channels, 1, assig);
+				(*curr_node)->channel_function("brs", "initialisation of channel link to node", number_channels, 1, assig, 0);
 				int before_funtion=(*curr_node)->get_channel_id();
 				//std::cout<<"Channel initial:" << before_funtion<<std::endl;
 				nodes_ready.push_back((*curr_node)->get_id());

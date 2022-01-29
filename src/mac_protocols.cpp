@@ -69,6 +69,9 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 	for (int channel_id = 0; channel_id < nchannels; channel_id++) {
 		int si = nodes_ready.size();
 		std::cout << "nodes_ready= "<< si<<std::endl;
+			for(int h=0;h<nodes_ready.size();h++){
+				std::cout<<nodes_ready[h]<<std::endl;
+			}
 	if (!Global_params::Instance()->is_channel_busy(channel_id)) {
 		std::cout << "Inside channel idle = "<<channel_id<<std::endl;
 		// For each node with a non-empty buffer, regardless if its 0, 1 or 2+ nodes...
@@ -123,7 +126,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 				Node* p_node = chip.at(*curr_node_id);
 				std::cout<<"Node before change cid = "<<p_node->get_channel_id()<<std::endl;
 				int assig = Global_params::Instance()->get_chosen_assig();
-				p_node->channel_function("brs", "colision", nchannels, 1, assig);
+				p_node->channel_function("brs", "colision", nchannels, 1, assig,0);
 				std::cout<<"Node change cid = "<<p_node->get_channel_id()<<std::endl;
 
 				// We cast the Packet* into a Packet_brs_non_p* so that we can access its own methods
