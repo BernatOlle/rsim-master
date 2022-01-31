@@ -7,7 +7,7 @@ from scipy import stats as scistats
 def first(path, word):
     data_path = path + "/results/data_" + word + "/"
 
-    output_file = path + '/results/first_spreadsheet_' + word + '.csv'
+    output_file = path + '/results/first_spreatdsheet_' + word + '.csv'
     try:
         os.remove(output_file)
     except OSError:
@@ -89,24 +89,24 @@ if __name__ == '__main__':
 
     first_Latencies = first(path, "Latencies")
     print("csv created from all the Latencies data")
-    # first_Latencies = path + "/results/first_spreadsheet_Latencies.csv"
+    first_Latencies = path + "/results/first_spreadsheet_Latencies.csv"
     first_Throughput = first(path, "Throughput")
     print("csv created from all the Throughput data")
-    # first_Throughput = path + "/results/first_spreadsheet_Throughput.csv"
+     #first_Throughput = path + "/results/first_spreadsheet_Throughput.csv"
 
     second_Latencies = second(first_Latencies, "Latencies")
     print("csv created from edited Latencies data")
-    # second_Latencies = path + "/results/second_spreadsheet_Latencies.csv"
+     #second_Latencies = path + "/results/second_spreadsheet_Latencies.csv"
     second_Throughput = second(first_Throughput, "Throughput")
     print("csv created from edited Throughput data")
-    # second_Throughput = path + "/results/second_spreadsheet_Throughput.csv"
+     #second_Throughput = path + "/results/second_spreadsheet_Throughput.csv"
 
     third(second_Latencies, "Latencies")
     print("final csv created from edited Latencies data again")
-    # third_Latencies = path + "/results/second_spreadsheet_Latencies.csv"
+     #third_Latencies = path + "/results/second_spreadsheet_Latencies.csv"
     third(second_Throughput, "Throughput")
     print("final csv created from edited Throughput data again")
-    # third_Throughput = path + "/results/second_spreadsheet_Throughput.csv"
+     #third_Throughput = path + "/results/second_spreadsheet_Throughput.csv"
 
     os.remove(first_Throughput)
     os.remove(first_Latencies)

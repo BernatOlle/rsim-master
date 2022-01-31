@@ -118,17 +118,6 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
 			std::cout << " (global inj_rate per chip " << Global_params::Instance()->get_inj_rate()*Global_params::Instance()->get_ncores() << ")\n";
 		}
 	}
-	path_results += "C" + std::to_string(Global_params::Instance()->get_nchannels()) + "/";
-	path_results2 += "C" + std::to_string(Global_params::Instance()->get_nchannels()) + "/";
-    path_results3 += "C" + std::to_string(Global_params::Instance()->get_nchannels()) + "/";
-    path_results4 += "C" + std::to_string(Global_params::Instance()->get_nchannels()) + "/";
-    path_results5 += "C" + std::to_string(Global_params::Instance()->get_nchannels()) + "/";
-
-	path_results += "C" + std::to_string(Global_params::Instance()->get_nchannels()) + "/";
-	path_results2 += "C" + std::to_string(Global_params::Instance()->get_nchannels()) + "/";
-    path_results3 += "C" + std::to_string(Global_params::Instance()->get_nchannels()) + "/";
-    path_results4 += "C" + std::to_string(Global_params::Instance()->get_nchannels()) + "/";
-    path_results5 += "C" + std::to_string(Global_params::Instance()->get_nchannels()) + "/";
 
 	path_results += "N" + std::to_string(Global_params::Instance()->get_ncores()) + "/";
 	path_results2 += "N" + std::to_string(Global_params::Instance()->get_ncores()) + "/";
