@@ -87,10 +87,10 @@ if __name__ == '__main__':
     path = os.path.dirname(os.path.realpath(__file__))
     print("PATH : ", path)
 
-    first_Latencies = first(path, "Latencies")
+    first_Latencies = first(path, "latencies")
     print("csv created from all the Latencies data")
-    first_Latencies = path + "/results/first_spreadsheet_Latencies.csv"
-    first_Throughput = first(path, "Throughput")
+    #first_Latencies = path + "/results/first_spreadsheet_Latencies.csv"
+    first_Throughput = first(path, "throughput")
     print("csv created from all the Throughput data")
      #first_Throughput = path + "/results/first_spreadsheet_Throughput.csv"
 

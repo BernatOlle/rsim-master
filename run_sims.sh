@@ -116,10 +116,10 @@ LOG_DIR=./output/log.txt
 RESULTS_DIR=./results/data_throughput/
 RESULTS_DIR2=./results/data_latencies/
 
-#rm $RESULTS_DIR -r
-#rm $RESULTS_DIR2 -r
-#rm $LOG_DIR
-#touch $LOG_DIR
+rm $RESULTS_DIR -r
+rm $RESULTS_DIR2 -r
+rm $LOG_DIR
+touch $LOG_DIR
 
 for nchannel in "${channel_values[@]}"
 do

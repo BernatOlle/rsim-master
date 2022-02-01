@@ -54,7 +54,7 @@ with open(path, "r") as csvfile:
 				row = row[2:len(row)-1]
 				latency_token = [float(elm) for elm in row]
 				print("latency_token : ",latency_token)
-plt.title(name)
+plt.title(name)			
 #plt.xlim(0,1)
 #plt.ylim(0,100)
 plt.plot(throughput_brs,latency_brs,marker='o',label='brs non p')
@@ -64,3 +64,5 @@ plt.legend()
 #plt.show()
 print("save path : ", save_path)
 plt.savefig(save_path)
+		
+
