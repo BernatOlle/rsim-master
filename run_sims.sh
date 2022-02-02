@@ -15,15 +15,16 @@ assig=(
 )
 
 sigma_values=(
-#0.5
+0.1
+1
 10
 #100
 )
 
 h_values=(
 0.5
-#0.7
-#0.85
+0.7
+0.85
 #0.9
 )
 
@@ -52,25 +53,25 @@ inj_rate_values=(
 0.004
 0.005
 0.006
-#0.007
-#0.008
-#0.009
-#0.01
-#0.02
-#0.03
-#0.04
-#0.05
-#0.06
-#0.07
-#0.08
-#0.09
-#0.1
-#0.2
-#0.3
-#0.4
-#0.5
-#0.6
-#0.7
+0.007
+0.008
+0.009
+0.01
+0.02
+0.03
+0.04
+0.05
+0.06
+0.07
+0.08
+0.09
+0.1
+0.2
+0.3
+0.4
+0.5
+0.6
+0.7
 0.8
 0.9
 )
@@ -116,10 +117,10 @@ LOG_DIR=./output/log.txt
 RESULTS_DIR=./results/data_throughput/
 RESULTS_DIR2=./results/data_latencies/
 
-rm $RESULTS_DIR -r
-rm $RESULTS_DIR2 -r
-rm $LOG_DIR
-touch $LOG_DIR
+#rm $RESULTS_DIR -r
+#rm $RESULTS_DIR2 -r
+#rm $LOG_DIR
+#touch $LOG_DIR
 
 for nchannel in "${channel_values[@]}"
 do

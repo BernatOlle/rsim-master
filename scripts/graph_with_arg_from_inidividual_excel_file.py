@@ -27,7 +27,7 @@ with open(path, "r") as csvfile:
 	next(csvfile)
 	data = csv.reader(csvfile)
 	for row in data:
-		if "Throughput" in row:
+		if "throughput" in row:
 			if "brs_non_p" in row:
 				row = row[2:len(row)-1]
 				throughput_brs = [float(elm) for elm in row]
@@ -40,7 +40,7 @@ with open(path, "r") as csvfile:
 				row = row[2:len(row)-1]
 				throughput_token = [float(elm) for elm in row]
 				print("throughput_token : ",throughput_token)
-		if "Latencies" in row:
+		if "latencies" in row:
 			print("ROW : ", row)
 			if "brs_non_p" in row:
 				row = row[2:len(row)-1]

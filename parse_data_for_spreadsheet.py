@@ -52,7 +52,7 @@ def first(path, word):
 
 
 def second(file, word):
-    output_file = path + '/results/second_spreadsheet_' + word + '.csv'
+    output_file = path + '/results/final_spreadsheet_' + word + '.csv'
 
     fo = open(file, 'r')
     fa = open(output_file, 'a')
@@ -68,7 +68,7 @@ def second(file, word):
 
 
 def third(file, word):
-    output_file = path + '/results/final_spreadsheet_' + word + '.csv'
+    output_file = path + '/results/third_spreadsheet_' + word + '.csv'
 
     fo = open(file, 'r')
     fa = open(output_file, 'a')
@@ -81,6 +81,7 @@ def third(file, word):
             fa.write("\n")
         else:
             fa.write(line)
+    return output_file
 
 
 if __name__ == '__main__':
@@ -101,14 +102,14 @@ if __name__ == '__main__':
     print("csv created from edited Throughput data")
      #second_Throughput = path + "/results/second_spreadsheet_Throughput.csv"
 
-    third(second_Latencies, "Latencies")
+    final_Latencies=third(second_Latencies, "Latencies")
     print("final csv created from edited Latencies data again")
      #third_Latencies = path + "/results/second_spreadsheet_Latencies.csv"
-    third(second_Throughput, "Throughput")
+    final_Throughput=third(second_Throughput, "Throughput")
     print("final csv created from edited Throughput data again")
      #third_Throughput = path + "/results/second_spreadsheet_Throughput.csv"
 
     os.remove(first_Throughput)
     os.remove(first_Latencies)
-    os.remove(second_Throughput)
-    os.remove(second_Latencies)
+    os.remove(final_Throughput)
+    os.remove(final_Latencies)
