@@ -67,13 +67,13 @@ inj_rate_values=(
 0.09
 0.1
 0.2
-0.3
-0.4
-0.5
-0.6
-0.7
-0.8
-0.9
+#0.3
+#0.4
+#0.5
+#0.6
+#0.7
+#0.8
+#0.9
 )
 
 ncores_values=(
@@ -138,7 +138,7 @@ do
 						for i in {1..15}
 						do
 							echo $i
-							./Project H=$h ncores=$ncore nchannels=4 inj_rate=$inj_rate mac_protocol=$mac_protocol sigma=$sigma assig=1
+							./Project H=$h ncores=$ncore nchannels=2 inj_rate=$inj_rate mac_protocol=$mac_protocol sigma=$sigma assig=3
 						done
 					done
 				done
