@@ -184,6 +184,7 @@ float number_channels = Global_params::Instance()->get_nchannels();
 
 	// we shuffle the hotspotness_weights so that hot nodes are not next to each other
 	std::random_shuffle ( hotspotness_weights.begin(), hotspotness_weights.end() );
+	std::random_shuffle ( hotspotness_weights_normal.begin(), hotspotness_weights_normal.end() );
 
 
 	// we print (if debugging mode is on) the hotspotness values to make sure they are set to what we expect
@@ -291,12 +292,19 @@ float number_channels = Global_params::Instance()->get_nchannels();
 			for(int k=0;k<number_channels;k++){
 				float prob=0;
 				for(int j = 0; j<Global_params::Instance()->get_ncores();j++){
-					if(prob<prob_total){
+					if(prob<=prob_total){
+						//std::cout<<"bebecita"<<std::endl;
 						prob = prob+hotspotness_weights_normal[j];
-						//std::cout<<prob<<std::endl;
+						//std::cout<<"Prob del node "<< j << " es "<< hotspotness_weights_normal[j]<<std::endl;
 
 						chip[j]->channel_function("brs", "initialisation of channel link to node", number_channels, 1, assig,k);
 
+					}
+					if(prob==1){
+							//std::cout<<"diablita"<<std::endl;
+					}
+					if(k==3){
+						//std::cout<<prob<<std::endl;
 					}
 				}
 				prob_total=prob_total+prob_chan;
@@ -304,7 +312,7 @@ float number_channels = Global_params::Instance()->get_nchannels();
 
 		}
 		for(int j = 0; j<Global_params::Instance()->get_ncores();j++){
-			//std::cout<<"Channel assos: "<<chip[j]->get_channel_id()<<std::endl;
+			//std::cout<<"Node: "<< j << "  Probabilitat:"<<hotspotness_weights_normal[j]<< "   Channel assignat: "<<chip[j]->get_channel_id()<<std::endl;
 		}
 
 	// Every iteration of this do-while represent a cycle of the execution, analyzing what happens at each of them
@@ -361,15 +369,15 @@ float number_channels = Global_params::Instance()->get_nchannels();
 
 		// We call the appropriate MAC protocol to deal with the concurrent packets that are ready
 		switch(Global_params::Instance()->get_chosen_mac()) {
-			case Mac_protocols::csma_non_p	: protocol_csma_non_p(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan,number_channels, assig); break;
-			case Mac_protocols::brs_non_p	: protocol_brs_non_p(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan,number_channels, assig); break;
-			case Mac_protocols::tdma_fixed	: protocol_tdma(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels, assig); break;
-			case Mac_protocols::token		: protocol_token(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels, assig); break;
-			case Mac_protocols::tdma_weighted	: protocol_tdma(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels, assig); break;
-			case Mac_protocols::fuzzy_token	: protocol_fuzzy_token(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels, assig); break;
+			case Mac_protocols::csma_non_p	: protocol_csma_non_p(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan,number_channels); break;
+			case Mac_protocols::brs_non_p	: protocol_brs_non_p(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan,number_channels); break;
+			case Mac_protocols::tdma_fixed	: protocol_tdma(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels); break;
+			case Mac_protocols::token		: protocol_token(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels); break;
+			case Mac_protocols::tdma_weighted	: protocol_tdma(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels); break;
+			case Mac_protocols::fuzzy_token	: protocol_fuzzy_token(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels); break;
 
 		}
-
+//
 		// Once we finish analyzing the current cycle we increase the global counter
 		Global_params::Instance()->increase_total_ncycles();
 

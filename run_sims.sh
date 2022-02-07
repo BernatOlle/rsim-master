@@ -122,8 +122,6 @@ RESULTS_DIR2=./results/data_latencies/
 #rm $LOG_DIR
 #touch $LOG_DIR
 
-for nchannel in "${channel_values[@]}"
-do
 	for ncore in "${ncores_values[@]}"
 	do
 		for sigma in "${sigma_values[@]}"
@@ -145,4 +143,3 @@ do
 			done
 		done
 	done
-done
