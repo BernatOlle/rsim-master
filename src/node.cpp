@@ -65,18 +65,19 @@ void Node::channel_function(std::string protocol, std::string step, int number_c
         //std::cout<<"Channel initial:" << new_channelId<<std::endl;
         //std::cout << "Protocol:" << protocol << "Step:" << step << "Node: " << nodeId << "ChannelID:" << channelId
                   //<< "\n";
-  }else if(assig == 2){
+  } if(assig == 2){
   //std::cout<<"hola"<<std::endl;
             if (channelId == -1) {
         new_channelId=0;
         Node::set_channel_id(new_channelId);
-        //std::cout << "New Channel id: "<< new_channelId<< std::endl;
+        std::cout << "New Channel id: "<< new_channelId<< std::endl;
 
     }else if (step=="colision"){
         new_channelId=channelId+1;
         if(new_channelId>=number_channels){
           new_channelId=3;
         }
+        std::cout << "New Channel id: "<< new_channelId<< std::endl;
         Node::set_channel_id(new_channelId);
 
     }
