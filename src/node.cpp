@@ -75,7 +75,7 @@ void Node::channel_function(std::string protocol, std::string step, int number_c
     }else if (step=="colision"){
         new_channelId=channelId+1;
         if(new_channelId>=number_channels){
-          new_channelId=3;
+          new_channelId=number_channels-1;
         }
         //std::cout << "New Channel id: "<< new_channelId<< std::endl;
         Node::set_channel_id(new_channelId);
