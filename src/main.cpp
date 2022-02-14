@@ -289,13 +289,13 @@ float number_channels = Global_params::Instance()->get_nchannels();
 		int k_chann;
 		//std::cout<<prob_total<<std::endl;
 
-	std::vector<float> distribution;
-  float probm=0;
-	for(int j = 0; j<Global_params::Instance()->get_ncores();j++){
-		probm = probm+hotspotness_weights_normal[j];
-		distribution.push_back(probm);
-		std::cout<<" ["<<probm<<"] ";
-	}
+//	std::vector<float> distribution;
+//  float probm=0;
+//	for(int j = 0; j<Global_params::Instance()->get_ncores();j++){
+//		probm = probm+hotspotness_weights_normal[j];
+//		distribution.push_back(probm);
+//		std::cout<<" ["<<probm<<"] ";
+//	}
 
 
 		if(assig==3){
@@ -330,18 +330,19 @@ float number_channels = Global_params::Instance()->get_nchannels();
 			}
 
 		}
+/*
 		float prob = 0;
 		for(int j = 0; j<Global_params::Instance()->get_ncores();j++){
 			prob+=hotspotness_weights_normal[j];
-			std::cout<<"Node: "<< j << "  Probabilitat:"<<hotspotness_weights_normal[j]<<"   Suma Prob:  "<< prob;
-			int size = chip[j]->get_channel_array().size();
+		std::cout<<"Node: "<< j << "  Probabilitat:"<<hotspotness_weights_normal[j]<<"   Suma Prob:  "<< prob;
+		int size = chip[j]->get_channel_array().size();
 				std::cout<<"   Channel assignat: ";
 			for(int l = 0; l<size;l++){
 				std::cout<<"  "<<chip[j]->get_channel_node(l);
 			}
 			std::cout<<std::endl;
 		}
-
+*/
 	// Every iteration of this do-while represent a cycle of the execution, analyzing what happens at each of them
 	do {
 		// regardless if we're in debugging mode or not, every 1,000,000 cycles we print a control message (so that we can identify progress)
@@ -415,7 +416,7 @@ float number_channels = Global_params::Instance()->get_nchannels();
 	// TODO: I THINK WE SHOULD MODIFY THE STOPPING CONDITION SO THAT WE ONLY GET SIMULATION STATISTICS AFTER WARM-UP AND BEFORE COOL-DOWN OF BUFFERS AND EVERYTHING
 	//			OTHERWISE IF WE STOP WHEN ALL PACKETS ARE SERVED INSTEAD OF INJECTED THE LAST PACKETS TO BE SERVED WILL HAVE LOWER CONTENTION
 	//			CHECK IF THIS AFFECTS STATISTICS
-	} while (Global_params::Instance()->get_total_served_packets_chip() < Global_params::Instance()->get_npackets()); // We keep generating cycles until all packets are served
+} while (Global_params::Instance()->get_total_served_packets_chip() < Global_params::Instance()->get_npackets() ); // We keep generating cycles until all packets are served
 
 	// Print results with function from utilities.cpp
 	print_statistics_per_node(chip);

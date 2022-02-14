@@ -67,10 +67,10 @@ void protocol_csma_non_p(int curr_cycle, const std::vector<int>& nodes_ready, st
 int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip,std::vector<Channel*>& chan,int nchannels) {
 	// If the medium is idle
 	for (int channel_id = 0; channel_id < nchannels; channel_id++) {
-		int si = nodes_ready.size();
+		//int si = nodes_ready.size();
 		//std::cout << "nodes_ready= "<< si<<std::endl;
 			//for(int h=0;h<nodes_ready.size();h++){
-				//std::cout<<nodes_ready[h]<<std::endl;
+			//std::cout<<nodes_ready[h]<<std::endl;
 			//}
 	if (!Global_params::Instance()->is_channel_busy(channel_id)) {
 		//std::cout << "Inside channel idle = "<<channel_id<<std::endl;
@@ -84,7 +84,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 				if (Packet_brs_non_p* p_packet = dynamic_cast<Packet_brs_non_p*>(p_node->get_in_buffer_front())) {
 				// If backoff is still not zero, we decrease it
 					int backoff = p_packet->get_cnt_backoff();
-					//std::cout<<"backoff = "<<backoff<<std::endl;
+				//	std::cout<<"backoff = "<<backoff<<std::endl;
 					if (p_packet->get_cnt_backoff() > 0) {
 					p_packet->decrease_cnt_backoff();
 					}
@@ -95,7 +95,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 
 						p_channel->push_ids_concurrent_tx_nodes(*curr_node_id);
 						int ids = p_channel->get_ids_concurrent_tx_nodes_size();
-						//std::cout<<"Courrent tx size idle = "<<ids<<std::endl;
+					//	std::cout<<"Courrent tx size idle = "<<ids<<std::endl;
 					// Notice we don't decrease the cycles_left of the packet, since we have to leave one extra cycle after the header to check for collisions
 				}
 		    }
@@ -124,7 +124,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 			// for each ids_concurrent_tx_nodes, update_cnt_backoff, then empty vector of ids_concurrent_tx_nodes, then set medium to idle
 			for (std::vector<int>::const_iterator curr_node_id = p_channel->ids_concurrent_tx_nodes_begin(); curr_node_id != p_channel->ids_concurrent_tx_nodes_end(); ++curr_node_id) {
 				Node* p_node = chip.at(*curr_node_id);
-				//std::cout<<"Node before change cid = "<<p_node->get_channel_id()<<std::endl;
+			//	std::cout<<"Node before change cid = "<<p_node->get_channel_id()<<std::endl;
 				int assig = Global_params::Instance()->get_chosen_assig();
 				p_node->channel_function("brs", "colision", nchannels, 1, assig,0);
 				//std::cout<<"Node change cid = "<<p_node->get_channel_id()<<std::endl;
@@ -162,16 +162,16 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 				// Empty vector of transmitting nodes, set the medium to idle, take the packet out
 				// of the buffer, increase counters of total served packets per node and per chip
 				int cycless = p_packet->get_cycles_left();
-				//std::cout<<"Cycles left = "<<cycless<<std::endl;
+			//std::cout<<"Cycles left = "<<cycless<<std::endl;
 				if (p_packet->get_cycles_left() == 0) {
 					p_node->pop_packet_buffer(curr_cycle);
 					p_channel->flush_ids_concurrent_tx_nodes();
 					Global_params::Instance()->set_channel_idle(channel_id);
 					int assig = Global_params::Instance()->get_chosen_assig();
-					if(assig == 1 || assig == 2){
+
 					p_node->set_channel_id(-1);
-				}
-					//std::cout<<"Node :"<< k<<" TRAMITED!!!!!!!!"<<std::endl;
+
+				//	std::cout<<"Node :"<< k<<" TRAMITED!!!!!!!!"<<std::endl;
 				}			}
 			// If the cast fails
 			else {
