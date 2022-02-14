@@ -99,13 +99,15 @@ void Node::channel_function(std::string protocol, std::string step, int number_c
 
 }else if(assig == 3){
 
-  int size = Node::channel_array.size();
-  int ind=rand()%size-1;
+  int size = this->get_channel_array().size();
+  int ind=rand()%size;
+  //std::cout<<"AAAAAAAAAA  "<< this->get_channel_node(ind)<<std::endl;
+  //std::cout<<"IND  "<<ind<<std::endl;
 if (channelId == -1) {
-  Node::set_channel_id(Node::channel_array[ind]);
+  Node::set_channel_id(this->get_channel_node(ind));
 
-//}else if (step=="colision"){
-  //Node::set_channel_id(Node::channel_array[ind]);
+}else if (step=="colision"){
+  Node::set_channel_id(this->get_channel_node(ind));
 }
 
 

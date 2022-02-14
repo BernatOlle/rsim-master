@@ -313,18 +313,26 @@ float number_channels = Global_params::Instance()->get_nchannels();
 						prob_assig=prob_total;
 						k_chann=k;
 
+					if(k_chann!=3){
 						while(prob>prob_assig){
 							 k_chann++;
+							 if(k_chann>=3){
+								chip[j]->set_channel_array(3);
+								prob_assig=prob_assig+prob_chan;
+
+							}else{
 								chip[j]->set_channel_array(k_chann);
 								prob_assig=prob_assig+prob_chan;
 
+							}
 						}
 					}
 					}
-
-					if(k==3){
-						//std::cout<<prob<<std::endl;
 					}
+					if(k_chann==3 && chip[j]->get_channel_array().size( )== 0){
+						chip[j]->set_channel_array(3);
+					}
+
 				}
 				prob_total=prob_total+prob_chan;
 			}
@@ -341,8 +349,8 @@ float number_channels = Global_params::Instance()->get_nchannels();
 				std::cout<<"  "<<chip[j]->get_channel_node(l);
 			}
 			std::cout<<std::endl;
-		}
-*/
+		}*/
+
 	// Every iteration of this do-while represent a cycle of the execution, analyzing what happens at each of them
 	do {
 		// regardless if we're in debugging mode or not, every 1,000,000 cycles we print a control message (so that we can identify progress)
