@@ -285,7 +285,17 @@ float number_channels = Global_params::Instance()->get_nchannels();
 		//std::cout<<"Assig"<<assig<<std::endl;
 		float prob_chan=1/number_channels;
 		float prob_total=prob_chan;
+		float prob_assig;
+		int k_chann;
 		//std::cout<<prob_total<<std::endl;
+
+	std::vector<float> distribution;
+  float probm=0;
+	for(int j = 0; j<Global_params::Instance()->get_ncores();j++){
+		probm = probm+hotspotness_weights_normal[j];
+		distribution.push_back(probm);
+		std::cout<<" ["<<probm<<"] ";
+	}
 
 
 		if(assig==3){
@@ -297,12 +307,21 @@ float number_channels = Global_params::Instance()->get_nchannels();
 						prob = prob+hotspotness_weights_normal[j];
 						//std::cout<<"Prob del node "<< j << " es "<< hotspotness_weights_normal[j]<<std::endl;
 
-						chip[j]->channel_function("brs", "initialisation of channel link to node", number_channels, 1, assig,k);
+						if(chip[j]->get_channel_array().size()==0){
+							chip[j]->set_channel_array(k);
 
+						prob_assig=prob_total;
+						k_chann=k;
+
+						while(prob>prob_assig){
+							 k_chann++;
+								chip[j]->set_channel_array(k_chann);
+								prob_assig=prob_assig+prob_chan;
+
+						}
 					}
-					if(prob==1){
-							//std::cout<<"diablita"<<std::endl;
 					}
+
 					if(k==3){
 						//std::cout<<prob<<std::endl;
 					}
@@ -311,8 +330,16 @@ float number_channels = Global_params::Instance()->get_nchannels();
 			}
 
 		}
+		float prob = 0;
 		for(int j = 0; j<Global_params::Instance()->get_ncores();j++){
-			//std::cout<<"Node: "<< j << "  Probabilitat:"<<hotspotness_weights_normal[j]<< "   Channel assignat: "<<chip[j]->get_channel_id()<<std::endl;
+			prob+=hotspotness_weights_normal[j];
+			std::cout<<"Node: "<< j << "  Probabilitat:"<<hotspotness_weights_normal[j]<<"   Suma Prob:  "<< prob;
+			int size = chip[j]->get_channel_array().size();
+				std::cout<<"   Channel assignat: ";
+			for(int l = 0; l<size;l++){
+				std::cout<<"  "<<chip[j]->get_channel_node(l);
+			}
+			std::cout<<std::endl;
 		}
 
 	// Every iteration of this do-while represent a cycle of the execution, analyzing what happens at each of them

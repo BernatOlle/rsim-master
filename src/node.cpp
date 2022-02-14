@@ -38,6 +38,19 @@ void Node::set_channel_id(int channel_id) {
     Node::channelID = channel_id;
 }
 
+std::vector<int> Node::get_channel_array(){
+  return channel_array;
+
+}
+
+void Node::set_channel_array(int x){
+
+  Node::channel_array.push_back(x);
+}
+
+int Node::get_channel_node(int x){
+  return Node::channel_array[x];
+}
 // function to show the change of vector values and reasons
 void Node::channel_function(std::string protocol, std::string step, int number_channels, int reason, int assig, int channel_id_gravity) {
     // TODO can we recuperate the node as so ?
@@ -85,10 +98,18 @@ void Node::channel_function(std::string protocol, std::string step, int number_c
 
 
 }else if(assig == 3){
-  if (channelId == -1) {
+
+  int size = Node::channel_array.size();
+  int ind=rand()%size;
+
+  Node::set_channel_id(Node::channel_array[ind]);
+
+
+
+  //if (channelId == -1) {
     //std::cout<<"new channel"<<channel_id_gravity<<"Node id: "<<nodeId<<std::endl;
-  Node::set_channel_id(channel_id_gravity);
-}
+  //Node::set_channel_id(channel_id_gravity);
+//}
 
 }// assig 3
 }//brs
