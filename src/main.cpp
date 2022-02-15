@@ -303,6 +303,8 @@ float number_channels = Global_params::Instance()->get_nchannels();
 				float prob=0;
 				for(int j = 0; j<Global_params::Instance()->get_ncores();j++){
 					if(prob<=prob_total){
+
+
 						//std::cout<<"bebecita"<<std::endl;
 						prob = prob+hotspotness_weights_normal[j];
 						//std::cout<<"Prob del node "<< j << " es "<< hotspotness_weights_normal[j]<<std::endl;
@@ -316,18 +318,39 @@ float number_channels = Global_params::Instance()->get_nchannels();
 						prob_assig=prob_total;
 						k_chann=k;
 
-					if(k_chann!=nchannels-1){
+					if(k_chann!=number_channels-1){
 						while(prob>prob_assig){
 							 k_chann++;
 							 if(k_chann>=3){
-								chip[j]->set_channel_array(nchannels-1);
+								chip[j]->set_channel_array(number_channels-1);
 								prob_assig=prob_assig+prob_chan;
-
 							}else{
 								chip[j]->set_channel_array(k_chann);
 								prob_assig=prob_assig+prob_chan;
+							}
+
+							float prob_line=prob_total;
+							float suma=prob-prob_total;
+							int l=0;
+							float dif=0;
+							float sumatori=0;
+							while(l>=0){
+								dif=hotspotness_weights_normal[j]-sumatori-suma;
+								sumatori=sumatori+dif;
+								if(suma<0){
+									chip[j]->set_prob_channel_array(hotspotness_weights_normal[j]-(sumatori-dif));
+									l=-2;
+								}else{
+									chip[j]->set_prob_channel_array(dif);
+								}
+
+								prob_line=prob_line+prob_chan;
+								suma=prob-prob_line;
+
+								l++;
 
 							}
+
 						}
 					}
 					}
@@ -341,7 +364,7 @@ float number_channels = Global_params::Instance()->get_nchannels();
 			}
 
 		}
-/*
+
 		float prob = 0;
 		for(int j = 0; j<Global_params::Instance()->get_ncores();j++){
 			prob+=hotspotness_weights_normal[j];
@@ -351,8 +374,14 @@ float number_channels = Global_params::Instance()->get_nchannels();
 			for(int l = 0; l<size;l++){
 				std::cout<<"  "<<chip[j]->get_channel_node(l);
 			}
+			int size2= chip[j]->get_prob_channel_array().size();
+
+			std::cout<<"   Prob_Channel assignat: ";
+			for(int l=0; l<size2; l++){
+				std::cout<<" "<<chip[j]->get_prob_channel_node(l);
+			}
 			std::cout<<std::endl;
-		}*/
+		}
 
 	// Every iteration of this do-while represent a cycle of the execution, analyzing what happens at each of them
 	do {

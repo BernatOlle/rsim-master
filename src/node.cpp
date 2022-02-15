@@ -51,6 +51,18 @@ void Node::set_channel_array(int x){
 int Node::get_channel_node(int x){
   return Node::channel_array[x];
 }
+
+void Node::set_prob_channel_array(float x){
+  Node::prob_channel_array.push_back(x);
+}
+
+ std::vector<float> Node::get_prob_channel_array(){
+  return prob_channel_array;
+}
+
+float Node::get_prob_channel_node(int x){
+  return prob_channel_array[x];
+}
 // function to show the change of vector values and reasons
 void Node::channel_function(std::string protocol, std::string step, int number_channels, int reason, int assig, int channel_id_gravity) {
     // TODO can we recuperate the node as so ?
