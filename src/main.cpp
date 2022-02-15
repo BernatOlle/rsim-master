@@ -308,16 +308,19 @@ float number_channels = Global_params::Instance()->get_nchannels();
 						//std::cout<<"Prob del node "<< j << " es "<< hotspotness_weights_normal[j]<<std::endl;
 
 						if(chip[j]->get_channel_array().size()==0){
+
+
 							chip[j]->set_channel_array(k);
+
 
 						prob_assig=prob_total;
 						k_chann=k;
 
-					if(k_chann!=3){
+					if(k_chann!=nchannels-1){
 						while(prob>prob_assig){
 							 k_chann++;
 							 if(k_chann>=3){
-								chip[j]->set_channel_array(3);
+								chip[j]->set_channel_array(nchannels-1);
 								prob_assig=prob_assig+prob_chan;
 
 							}else{
