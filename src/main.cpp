@@ -329,27 +329,27 @@ float number_channels = Global_params::Instance()->get_nchannels();
 								prob_assig=prob_assig+prob_chan;
 							}
 
-							float prob_line=prob_total;
-							float suma=prob-prob_total;
-							int l=0;
-							float dif=0;
-							float sumatori=0;
-							while(l>=0){
-								dif=hotspotness_weights_normal[j]-sumatori-suma;
-								sumatori=sumatori+dif;
-								if(suma<0){
-									chip[j]->set_prob_channel_array(hotspotness_weights_normal[j]-(sumatori-dif));
-									l=-2;
-								}else{
-									chip[j]->set_prob_channel_array(dif);
-								}
 
-								prob_line=prob_line+prob_chan;
-								suma=prob-prob_line;
-
-								l++;
-
+						}
+						float prob_line=prob_total;
+						float suma=prob-prob_total;
+						int l=0;
+						float dif=0;
+						float sumatori=0;
+						while(l>=0){
+							dif=hotspotness_weights_normal[j]-sumatori-suma;
+							sumatori=sumatori+dif;
+							if(suma<0){
+								chip[j]->set_prob_channel_array(hotspotness_weights_normal[j]-(sumatori-dif));
+								l=-2;
+							}else{
+								chip[j]->set_prob_channel_array(dif);
 							}
+
+							prob_line=prob_line+prob_chan;
+							suma=prob-prob_line;
+
+							l++;
 
 						}
 					}
