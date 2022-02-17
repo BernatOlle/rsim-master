@@ -25,7 +25,7 @@ protected:
 	int total_served_packets_node; // counter of how many packets each node has served (correctly transmitted) so far
 	int seed_fuzzy_weights;
 	std::vector<int> channel_array;
-	std::vector<float> prob_channel_array;
+	std::vector<long double> prob_channel_array;
 	std::default_random_engine generator_fuzzy_weights;
 	std::uniform_real_distribution<double> distribution_fuzzy_weights; // we prepare a uniform distribution of real numbers between 0 and 1
 public:
@@ -39,9 +39,9 @@ public:
  	std::vector<int> 	get_channel_array();
 	int get_channel_node(int);
 	void set_channel_array(int);
-	void set_prob_channel_array(float);
-	std::vector<float> get_prob_channel_array();
-	float get_prob_channel_node(int);
+	void set_prob_channel_array(long double);
+	std::vector<long double> get_prob_channel_array();
+	long double get_prob_channel_node(int);
 	void channel_function(std::string protocol, std::string step,int nchannels, int reason, int assig, int channel_id_gravity);
 	int get_in_buffer_size();
 	bool in_buffer_empty();

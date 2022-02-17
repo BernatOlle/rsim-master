@@ -283,9 +283,9 @@ float number_channels = Global_params::Instance()->get_nchannels();
 
 		int assig = Global_params::Instance()->get_chosen_assig();
 		//std::cout<<"Assig"<<assig<<std::endl;
-		float prob_chan=1/number_channels;
-		float prob_total=prob_chan;
-		float prob_assig;
+		long double prob_chan=1/number_channels;
+		long double prob_total=prob_chan;
+		long double prob_assig;
 		int k_chann;
 		//std::cout<<prob_total<<std::endl;
 
@@ -300,7 +300,7 @@ float number_channels = Global_params::Instance()->get_nchannels();
 
 		if(assig==3){
 			for(int k=0;k<number_channels;k++){
-				float prob=0;
+				long double prob=0;
 				for(int j = 0; j<Global_params::Instance()->get_ncores();j++){
 					if(prob<=prob_total){
 
@@ -331,31 +331,32 @@ float number_channels = Global_params::Instance()->get_nchannels();
 
 
 						}
-						float prob_line=prob_total;
-						float suma=prob-prob_total;
-						int l=0;
-						float dif=0;
-						float sumatori=0;
-						while(l>=0){
-							dif=hotspotness_weights_normal[j]-sumatori-suma;
-							sumatori=sumatori+dif;
-							if(suma<0){
-								chip[j]->set_prob_channel_array(hotspotness_weights_normal[j]-(sumatori-dif));
-								l=-2;
-							}else{
-								chip[j]->set_prob_channel_array(dif);
-							}
 
-							prob_line=prob_line+prob_chan;
-							suma=prob-prob_line;
-
-							l++;
-
+					}
+					long double prob_line=prob_total;
+					long double suma=prob-prob_total;
+					int l=0;
+					long double dif=0;
+					long double sumatori=0;
+					while(l>=0){
+						dif=hotspotness_weights_normal[j]-sumatori-suma;
+						sumatori=sumatori+dif;
+						if(suma<0){
+							chip[j]->set_prob_channel_array(hotspotness_weights_normal[j]-(sumatori-dif));
+							l=-number_channels;
+						}else{
+							chip[j]->set_prob_channel_array(dif);
 						}
+
+						prob_line=prob_line+prob_chan;
+						suma=prob-prob_line;
+
+						l++;
+
 					}
 					}
 					}
-					if(k_chann==3 && chip[j]->get_channel_array().size( )== 0){
+					if(k==3 && chip[j]->get_channel_array().size( )== 0){
 						chip[j]->set_channel_array(3);
 					}
 
@@ -365,7 +366,7 @@ float number_channels = Global_params::Instance()->get_nchannels();
 
 		}
 
-		float prob = 0;
+		long double prob = 0;
 		for(int j = 0; j<Global_params::Instance()->get_ncores();j++){
 			prob+=hotspotness_weights_normal[j];
 		std::cout<<"Node: "<< j << "  Probabilitat:"<<hotspotness_weights_normal[j]<<"   Suma Prob:  "<< prob;
@@ -421,11 +422,11 @@ float number_channels = Global_params::Instance()->get_nchannels();
 			if (!(*curr_node)->in_buffer_empty()) {
 				// when we find a node with a non-empty buffer, we store its ID
 				//std::cout<< "gre"<<std::endl;
-
+				int before_funtion=(*curr_node)->get_channel_id();
+				//Sstd::cout<<"Channel initial:" << before_funtion<<std::endl;
 				//std::cout<< "Before channel: "<< before_funtion <<std::endl;
 				(*curr_node)->channel_function("brs", "initialisation of channel link to node", number_channels, 1, assig, 0);
-				int before_funtion=(*curr_node)->get_channel_id();
-				//std::cout<<"Channel initial:" << before_funtion<<std::endl;
+
 				nodes_ready.push_back((*curr_node)->get_id());
 				if (Global_params::Instance()->is_debugging_on()) {
 
