@@ -125,7 +125,10 @@ void Node::channel_function(std::string protocol, std::string step, int number_c
     std::cout << " "<< this->get_prob_channel_array()[h];
   }
 std::cout<<"\n";
-
+if(suma == 0){
+  i=0;
+  
+}else{
   float suma_tot=0;
   for(int h=0;h<v.size();h++){
     suma_tot = suma_tot + (v[h]/(suma))*100;
@@ -148,6 +151,7 @@ std::cout<<"\n";
   }
   std::cout<<"IND  "<<std::endl;
 std::cout <<"Node ID: "<<nodeId<<"  Channel assignment: "<< this->get_channel_node(i) << '\n';
+}
 //std::cout << "´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´" << '\n';
 if (channelId == -1) {
  std::cout <<"AAA " << '\n';
