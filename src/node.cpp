@@ -119,15 +119,15 @@ void Node::channel_function(std::string protocol, std::string step, int number_c
   std::vector<long double> v= this->get_prob_channel_array();
   std::vector<long double> v_real;
   float suma =0;
-  std::cout << "Size: " << v.size()<<'\n';
+  //std::cout << "Size: " << v.size()<<'\n';
   for(int h=0;h<v.size();h++){
     suma= suma + v[h];
-    std::cout << " "<< this->get_prob_channel_array()[h];
+    //std::cout << " "<< this->get_prob_channel_array()[h];
   }
-std::cout<<"\n";
+//std::cout<<"\n";
 if(suma == 0){
   i=0;
-  
+
 }else{
   float suma_tot=0;
   for(int h=0;h<v.size();h++){
@@ -141,20 +141,20 @@ if(suma == 0){
 //std::cout<<"\n";
   int ind = rand()%101;
   int o=v_real[0];
-  std::cout <<"Node ID: "<<nodeId;
-  std::cout << " V_real: " << o<<'\n';
+  //std::cout <<"Node ID: "<<nodeId;
+  //std::cout << " V_real: " << o<<'\n';
   while(ind>o){
     i++;
     //std::cout << "+++++++++++++++++++++++++++++++++++++++++++++O: "<<v_real[i-1] << '\n';
     o=v_real[i];
 
   }
-  std::cout<<"IND  "<<std::endl;
-std::cout <<"Node ID: "<<nodeId<<"  Channel assignment: "<< this->get_channel_node(i) << '\n';
+  //std::cout<<"IND  "<<std::endl;
+//std::cout <<"Node ID: "<<nodeId<<"  Channel assignment: "<< this->get_channel_node(i) << '\n';
 }
 //std::cout << "´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´" << '\n';
 if (channelId == -1) {
- std::cout <<"AAA " << '\n';
+ //std::cout <<"AAA " << '\n';
 
 Node::set_channel_id(this->get_channel_node(i));
 

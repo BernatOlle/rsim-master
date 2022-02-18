@@ -365,7 +365,7 @@ float number_channels = Global_params::Instance()->get_nchannels();
 			}
 
 		}
-
+/*
 		long double prob = 0;
 		for(int j = 0; j<Global_params::Instance()->get_ncores();j++){
 			prob+=hotspotness_weights_normal[j];
@@ -382,7 +382,7 @@ float number_channels = Global_params::Instance()->get_nchannels();
 				std::cout<<" "<<chip[j]->get_prob_channel_node(l);
 			}
 			std::cout<<std::endl;
-		}
+		}*/
 
 	// Every iteration of this do-while represent a cycle of the execution, analyzing what happens at each of them
 	do {
