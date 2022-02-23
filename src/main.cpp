@@ -382,8 +382,8 @@ float number_channels = Global_params::Instance()->get_nchannels();
 				std::cout<<" "<<chip[j]->get_prob_channel_node(l);
 			}
 			std::cout<<std::endl;
-		}*/
-
+		}
+*/
 	// Every iteration of this do-while represent a cycle of the execution, analyzing what happens at each of them
 	do {
 		// regardless if we're in debugging mode or not, every 1,000,000 cycles we print a control message (so that we can identify progress)
@@ -420,9 +420,9 @@ float number_channels = Global_params::Instance()->get_nchannels();
 		// iterates through all nodes of the chip to see which ones have a packet to transmit
 		for (std::vector<Node*>::iterator curr_node = chip.begin(); curr_node != chip.end(); ++curr_node) {
 			if (!(*curr_node)->in_buffer_empty()) {
-				// when we find a node with a non-empty buffer, we store its ID
-				//std::cout<< "gre"<<std::endl;
-				int before_funtion=(*curr_node)->get_channel_id();
+				int buffer=(*curr_node)->get_in_buffer_size()	;			// when we find a node with a non-empty buffer, we store its ID
+				int before_funtion=(*curr_node)->get_id();
+				//std::cout<< "Buffer of Node: "<<before_funtion<<" is "<<buffer<<std::endl;
 				//Sstd::cout<<"Channel initial:" << before_funtion<<std::endl;
 				//std::cout<< "Before channel: "<< before_funtion <<std::endl;
 				(*curr_node)->channel_function("brs", "initialisation of channel link to node", number_channels, 1, assig, 0);
