@@ -234,10 +234,11 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
 		int node_stationary_packets = (*curr_node)->get_total_stationary_packets_node();
 		total_weighted_sum_stationary_latencies_chip += node_stationary_packets * ((*curr_node)->get_mean_stationary_pckt_latencies_node());
 		total_sum_stationary_packets_chip += node_stationary_packets;
+		//std::cout <<"Totalç-sum: "<<node_stationary_packets << '\n';
 	}
+//s//td::cout <<"Totalç-sum: "<<total_sum_stationary_packets_chip << '\n';
 
-
-	// Data: save throughput
+	// Data: save t	hroughput
 	outdata << 1.0*Global_params::Instance()->get_throughput_tx_cycles() / Global_params::Instance()->get_throughput_base_cycles() << std::endl;
 	outdata.close();
 

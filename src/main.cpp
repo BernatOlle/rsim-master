@@ -36,6 +36,7 @@ A running script can be found in rsim/run_sims.sh
 int main(int argc, char* argv[]) {
 	// if the user introduces parameters from shell, we overwrite those from INI file
 //std::cout << "hola"<< std::endl;
+
 	for (int i=1; i < argc; i++) { // for each of the input arguments
 		std::vector<std::string> in_parameter = split(argv[i], '=');
 		std::string parameter_name = in_parameter.at(0);
@@ -132,7 +133,7 @@ int main(int argc, char* argv[]) {
 	    	}
 		}
 	}
-	//std::cout << "hola"<< std::endl;
+
 
 	//Global_params::Instance()->set_nchannels(4);
 	// TODO: Ensure that all values were read either from parameter file or std input
@@ -150,14 +151,13 @@ int main(int argc, char* argv[]) {
 	// Set a vector of injection rates, according to a normal distribution with mean=1 and std_dev=sigma
 	// TODO: MAKE SURE THIS IS DONE PROPERLY, I'M NOT SURE I DID IT CORRECTLY ANYMORE
 	std::vector<float> hotspotness_weights;
-	std::vector<float> hotspotness_weights_normal;
+
 	float sum_pdf_values = 0;
 	float delta = 2.0 / (Global_params::Instance()->get_ncores() - 1);
 	float x = 0;
 	for (int id=0; id < Global_params::Instance()->get_ncores(); id++) {
 		float y = normal_pdf(x, 1, Global_params::Instance()->get_sigma());
 		hotspotness_weights.push_back(y);
-		hotspotness_weights_normal.push_back(y);
 
 		// hotspotness_weights.push_back(1.0); //WARNING: I DISABLED THE HOTSPOTNESS BY MAKING ALL WEIGHTS 1, CHANGE THIS WHEN YOU NEED THE RIGHT WEIGHTS AGAIN
 		sum_pdf_values += y;
@@ -174,17 +174,18 @@ int main(int argc, char* argv[]) {
 		value *= Global_params::Instance()->get_ncores() / sum_pdf_values;
 	}
 
-	for (float& value: hotspotness_weights_normal) {
-		value = value*(1 / sum_pdf_values);
-	}
 
 
 float number_channels = Global_params::Instance()->get_nchannels();
 
-
+	std::vector<float> hotspotness_weights_normal;
 	// we shuffle the hotspotness_weights so that hot nodes are not next to each other
 	std::random_shuffle ( hotspotness_weights.begin(), hotspotness_weights.end() );
-	std::random_shuffle ( hotspotness_weights_normal.begin(), hotspotness_weights_normal.end() );
+	std::cout << "hola"<< std::endl;
+for(int j=0;j<Global_params::Instance()->get_ncores();j++){
+	hotspotness_weights_normal.push_back(hotspotness_weights[j]/Global_params::Instance()->get_ncores());
+}
+
 
 
 	// we print (if debugging mode is on) the hotspotness values to make sure they are set to what we expect
@@ -382,8 +383,8 @@ float number_channels = Global_params::Instance()->get_nchannels();
 				std::cout<<" "<<chip[j]->get_prob_channel_node(l);
 			}
 			std::cout<<std::endl;
-		}
-*/
+		}*/
+
 	// Every iteration of this do-while represent a cycle of the execution, analyzing what happens at each of them
 	do {
 		// regardless if we're in debugging mode or not, every 1,000,000 cycles we print a control message (so that we can identify progress)
