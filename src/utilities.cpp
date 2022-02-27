@@ -118,6 +118,17 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
 			std::cout << " (global inj_rate per chip " << Global_params::Instance()->get_inj_rate()*Global_params::Instance()->get_ncores() << ")\n";
 		}
 	}
+	path_results += "C" + std::to_string(Global_params::Instance()->get_nchannels()) + "/";
+	path_results2 += "C" + std::to_string(Global_params::Instance()->get_nchannels()) + "/";
+		path_results3 += "C" + std::to_string(Global_params::Instance()->get_nchannels()) + "/";
+		path_results4 += "C" + std::to_string(Global_params::Instance()->get_nchannels()) + "/";
+		path_results5 += "C" + std::to_string(Global_params::Instance()->get_nchannels()) + "/";
+
+		path_results += "AS" + std::to_string(Global_params::Instance()->get_chosen_assig()) + "/";
+		path_results2 += "AS" + std::to_string(Global_params::Instance()->get_chosen_assig()) + "/";
+			path_results3 += "AS" + std::to_string(Global_params::Instance()->get_chosen_assig()) + "/";
+			path_results4 += "AS" + std::to_string(Global_params::Instance()->get_chosen_assig()) + "/";
+			path_results5 += "AS" + std::to_string(Global_params::Instance()->get_chosen_assig()) + "/";
 
 	path_results += "N" + std::to_string(Global_params::Instance()->get_ncores()) + "/";
 	path_results2 += "N" + std::to_string(Global_params::Instance()->get_ncores()) + "/";
@@ -489,7 +500,6 @@ void print_input_parameters() {
 	print_max_buffer_size();
 	print_slot_size();
 }
-
 // print the total number of nodes/cores
 void print_ncores() {
 	if (Global_params::Instance()->get_ncores() == 0) {

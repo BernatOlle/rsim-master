@@ -181,7 +181,7 @@ float number_channels = Global_params::Instance()->get_nchannels();
 	std::vector<float> hotspotness_weights_normal;
 	// we shuffle the hotspotness_weights so that hot nodes are not next to each other
 	std::random_shuffle ( hotspotness_weights.begin(), hotspotness_weights.end() );
-	std::cout << "hola"<< std::endl;
+	//std::cout << "hola"<< std::endl;
 for(int j=0;j<Global_params::Instance()->get_ncores();j++){
 	hotspotness_weights_normal.push_back(hotspotness_weights[j]/Global_params::Instance()->get_ncores());
 }

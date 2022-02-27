@@ -9,9 +9,9 @@ brs_non_p
 )
 
 assig=(
-1
-2
 3
+2
+1
 )
 
 sigma_values=(
@@ -108,6 +108,8 @@ ncores_values=(
 )
 
 channel_values=(
+2
+
 4
 
 )
@@ -121,25 +123,30 @@ RESULTS_DIR2=./results/data_latencies/
 #rm $RESULTS_DIR2 -r
 #rm $LOG_DIR
 #touch $LOG_DIR
-
-	for ncore in "${ncores_values[@]}"
+for nchannel in "${channel_values[@]}"
+do
+	for assigm in "${assig[@]}"
 	do
-		for sigma in "${sigma_values[@]}"
-		do
-			for h in "${h_values[@]}"
-			do
-				for mac_protocol in "${mac_protocols[@]}"
-				do
-					echo $mac_protocol
-					for inj_rate in "${inj_rate_values[@]}"
-					do
-						for i in {1..15}
-						do
-							echo $i
-							./Project H=$h ncores=$ncore nchannels=4 inj_rate=$inj_rate mac_protocol=$mac_protocol sigma=$sigma assig=3
-						done
-					done
-				done
-			done
-		done
+	  for ncore in "${ncores_values[@]}"
+	  do
+	    for sigma in "${sigma_values[@]}"
+		  do
+		    for h in "${h_values[@]}"
+		    do
+				  for mac_protocol in "${mac_protocols[@]}"
+				  do
+					  echo $mac_protocol
+					  for inj_rate in "${inj_rate_values[@]}"
+					  do
+						  for i in {1..15}
+						  do
+							  echo $i
+							  ./Project H=$h ncores=$ncore nchannels=$nchannel inj_rate=$inj_rate mac_protocol=$mac_protocol sigma=$sigma assig=$assigm
+						  done
+					  done
+			   	done
+			  done
+		  done
+	  done
 	done
+done
