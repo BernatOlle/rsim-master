@@ -9,9 +9,9 @@ brs_non_p
 )
 
 assig=(
-3
-2
 1
+2
+3
 )
 
 sigma_values=(
@@ -58,9 +58,9 @@ inj_rate_values=(
 0.009
 0.01
 0.02
-0.03
-0.04
-0.05
+#0.03
+#0.04
+#0.05
 #0.06
 #0.07
 #0.08
@@ -109,7 +109,7 @@ ncores_values=(
 
 channel_values=(
 2
-
+3
 4
 
 )
@@ -125,19 +125,24 @@ RESULTS_DIR2=./results/data_latencies/
 #touch $LOG_DIR
 for nchannel in "${channel_values[@]}"
 do
+	echo "C:" $nchannel
 	for assigm in "${assig[@]}"
 	do
+		echo "As:" $assigm
 	  for ncore in "${ncores_values[@]}"
 	  do
 	    for sigma in "${sigma_values[@]}"
 		  do
+				echo "Sig:" $sigma
 		    for h in "${h_values[@]}"
 		    do
+					echo "H:" $h
 				  for mac_protocol in "${mac_protocols[@]}"
 				  do
-					  echo $mac_protocol
+					  echo "Mac:" $mac_protocol
 					  for inj_rate in "${inj_rate_values[@]}"
 					  do
+							echo "Inj:" $inj_rate
 						  for i in {1..15}
 						  do
 							  echo $i

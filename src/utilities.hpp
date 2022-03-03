@@ -49,6 +49,10 @@ void print_thr_pure_brs();
 // print threshold of fuzzy area to switch to pure Token mode
 void print_thr_pure_token();
 
+void print_chan();
+
+void print_assig();
+
 // print all input parameters
 void print_input_parameters();
 

@@ -67,6 +67,7 @@ long double Node::get_prob_channel_node(int x){
 // function to show the change of vector values and reasons
 void Node::channel_function(std::string protocol, std::string step, int number_channels, int reason, int assig, int channel_id_gravity) {
     // TODO can we recuperate the node as so ?
+
     int nodeId = this->get_id();
     int channelId =this->get_channel_id();
     //std::cout<<"Channel initial:" << channelId<<std::endl;
@@ -139,11 +140,11 @@ if(suma == 0){
   }
 
 //std::cout<<"\n";
-  int ind = rand()%101;
-  int o=v_real[0];
-  //std::cout <<"Node ID: "<<nodeId;
+  float ind = rand()%100;
+  float o=v_real[0];
+  //std::cout <<"Ind: "<<ind;
   //std::cout << " V_real: " << o<<'\n';
-  while(ind>o){
+  while(ind>=o){
     i++;
     //std::cout << "+++++++++++++++++++++++++++++++++++++++++++++O: "<<v_real[i-1] << '\n';
     o=v_real[i];
@@ -154,7 +155,7 @@ if(suma == 0){
 }
 //std::cout << "´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´" << '\n';
 if (channelId == -1) {
- //std::cout <<"AAA " << '\n';
+//std::cout <<"AAA " << '\n';
 
 Node::set_channel_id(this->get_channel_node(i));
 

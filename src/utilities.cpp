@@ -17,7 +17,7 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
 	double total_weighted_sum_stationary_latencies_chip = 0;
 	int total_sum_stationary_packets_chip = 0;
 
-	std::cout << "--------------------------------------------------" << std::endl;
+	//std::cout << "--------------------------------------------------" << std::endl;
 	for (std::vector<Node*>::const_iterator curr_node = chip.begin(); curr_node != chip.end(); ++curr_node) {
 		total_injected_packets_node = (*curr_node)->get_total_injected_packets_node();
 		total_injected_packets_chip += total_injected_packets_node;
@@ -37,7 +37,7 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
 		if ((total_injected_packets_node - (*curr_node)->get_total_served_packets_node()) > 0) {
 			std::cout << "!!!!!!!!! We finished the program and we still had packets to serve";
 		}
-
+		/*
 		std::cout << (*curr_node)->get_id() << ":";
 		std::cout << " Inj_pckts(all): " << total_injected_packets_node; // total number of injected packets including warm up and cool down
 		std::cout << "\t Avg_latency_pckt(stationary): " << avg_pckt_latency_node << " cycles. "; // avg latency per packet OF ONLY WARM UP AND COOL DOWN
@@ -47,7 +47,7 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
 		else {
 			std::cout << " Theoretical Avg_inj_rate: " << theoretical_node_avg_inj_rate << " pckts/cycle ";
 		}
-		std::cout << " Real Avg_inj_rate: "	<< real_node_avg_inj_rate << " pckts/cycle" << std::endl;
+		std::cout << " Real Avg_inj_rate: "	<< real_node_avg_inj_rate << " pckts/cycle" << std::endl;*/
 		//(*curr_node)->plot_pckt_latencies_node(); // this shows the distribution of latencies for this node
 	} // End of for-each node
 
@@ -61,7 +61,7 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
 	std::string path_results, path_results2, path_results3, path_results4, path_results5;
 
 	// if we received the results folder path from command line, we use that one
-	std::cout << "--------------------------------------------------" << std::endl;
+	//std::cout << "--------------------------------------------------" << std::endl;
 	if (Global_params::Instance()->get_save_results_path().compare("") != 0) {
 		std::cout << "Saving results in " << Global_params::Instance()->get_save_results_path() << std::endl;
 		path_results = Global_params::Instance()->get_save_results_path() + "/data_throughput/";
@@ -73,7 +73,7 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
 	}
 	// otherwise we use the default path
 	else {
-		std::cout << "Saving results in default folder ./results" << Global_params::Instance()->get_save_results_path() << std::endl;
+		//std::cout << "Saving results in defaultAA folder ./results" << Global_params::Instance()->get_save_results_path() << std::endl;
 		path_results = "./results/data_throughput/";
 		path_results2 = "./results/data_latencies/";
         path_results3 = "./results/data_energy/";
@@ -269,7 +269,7 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
     // Data 5:
 	save_pckt_latencies_evolution_chip(outdata5);
 	outdata5.close();
-
+/*
 	std::cout << "--------------------------------------------------" << std::endl;
 	std::cout << "Total packets per chip: " << total_injected_packets_chip << "(injected), " << Global_params::Instance()->get_total_served_packets_chip() << " (served)" << std::endl;
 	if (Global_params::Instance()->get_chosen_distrib() == Inj_distribs::trace) {
@@ -291,8 +291,8 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
     std::cout << "Total number of served packets (in stationary period): " << Global_params::Instance()->get_stationary_served_packets_chip() << std::endl;
     std::cout << "Average number of retries per successful served packet (in stationary period): " << 1.0*Global_params::Instance()->get_stationary_collisions_chip() / Global_params::Instance()->get_stationary_served_packets_chip() << std::endl;
     std::cout << "Average energy per bit (in stationary period): " << get_energy_bit() << " picoJoules" << std::endl;
-    std::cout << "Total execution time: " << Global_params::Instance()->get_total_ncycles() << " cycles" << std::endl;
-	plot_pckt_latencies_chip(chip);
+    std::cout << "Total execution time: " << Global_params::Instance()->get_total_ncycles() << " cycles" << std::endl;*/
+	//plot_pckt_latencies_chip(chip);
 }
 
 float get_energy_bit() {
@@ -487,6 +487,7 @@ void print_mac_protocol() {
 
 // print all input parameters
 void print_input_parameters() {
+	/*
 	print_ncores();
 	print_distribution();
 	print_mac_protocol();
@@ -494,11 +495,13 @@ void print_input_parameters() {
 	print_thr_pure_brs();
 	print_thr_pure_token();
 	print_sigma();
+	print_assig();
+	print_chan();
 	print_tx_time();
 	print_hurst_exponent();
 	print_npackets();
 	print_max_buffer_size();
-	print_slot_size();
+	print_slot_size();*/
 }
 // print the total number of nodes/cores
 void print_ncores() {
@@ -552,6 +555,16 @@ void print_slot_size() {
 void print_thr_pure_token() {
 	std::cout << "Threshold fuzzy size for pure token = " << Global_params::Instance()->get_thr_pure_token() << std::endl;
 }
+
+void print_assig() {
+	std::cout << "Assig = " << Global_params::Instance()->get_chosen_assig() << std::endl;
+}
+
+void print_chan() {
+	std::cout << "Channels= " << Global_params::Instance()->get_nchannels() << std::endl;
+}
+
+
 
 // print all input parameters
 void print_thr_pure_brs() {

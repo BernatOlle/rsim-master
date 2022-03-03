@@ -10,27 +10,21 @@
 #include "channel.hpp"
 
 /*-------------------------------------------------------
-
 Main file of RSim. From here we read the input parameters either from INI
 or from shell, we initialize the chip vector, we run the loop that iterates
 over all cycles, checking if new packets have to be injected for every core,
 and for those nodes with non-empty buffers, to be send as an argument to the
 corresponding MAC protocol function call.
-
 To compile:
 	cd to main folder of simulator
 	make clean
 	make
-
 To run:
 	./Project [H=value] [ncores=value] [mac_protocol=value] [inj_rate=value]
 			[sigma=value] [npackets=value] [tx_time=value] [debugging=true/false]
-
 Results are saved in a csv file in rsim/results/, separated by commas, and the debugging output is saved
 in rsim/output/log.txt
-
 A running script can be found in rsim/run_sims.sh
-
 ---------------------------------------------------------*/
 
 int main(int argc, char* argv[]) {
@@ -319,10 +313,10 @@ for(int j=0;j<Global_params::Instance()->get_ncores();j++){
 						prob_assig=prob_total;
 						k_chann=k;
 
-					if(k_chann!=number_channels-1){
+
 						while(prob>prob_assig){
 							 k_chann++;
-							 if(k_chann>=3){
+							 if(k_chann>=number_channels-1){
 								chip[j]->set_channel_array(number_channels-1);
 								prob_assig=prob_assig+prob_chan;
 							}else{
@@ -331,7 +325,7 @@ for(int j=0;j<Global_params::Instance()->get_ncores();j++){
 							}
 
 
-						}
+
 
 					}
 					long double prob_line=prob_total;
@@ -357,8 +351,8 @@ for(int j=0;j<Global_params::Instance()->get_ncores();j++){
 					}
 					}
 					}
-					if(k==3 && chip[j]->get_channel_array().size( )== 0){
-						chip[j]->set_channel_array(3);
+					if(k==number_channels-1 && chip[j]->get_channel_array().size( )== 0){
+						chip[j]->set_channel_array(number_channels-1);
 					}
 
 				}
@@ -377,7 +371,6 @@ for(int j=0;j<Global_params::Instance()->get_ncores();j++){
 				std::cout<<"  "<<chip[j]->get_channel_node(l);
 			}
 			int size2= chip[j]->get_prob_channel_array().size();
-
 			std::cout<<"   Prob_Channel assignat: ";
 			for(int l=0; l<size2; l++){
 				std::cout<<" "<<chip[j]->get_prob_channel_node(l);

@@ -67,7 +67,7 @@ void protocol_csma_non_p(int curr_cycle, const std::vector<int>& nodes_ready, st
 int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip,std::vector<Channel*>& chan,int nchannels) {
 	// If the medium is idle
 	for (int channel_id = 0; channel_id < nchannels; channel_id++) {
-		int si = nodes_ready.size();
+		//int si = nodes_ready.size();
 		//std::cout << "nodes_ready= "<< si<<std::endl;
 			//for(int h=0;h<nodes_ready.size();h++){
 			//std::cout<<nodes_ready[h]<<std::endl;
@@ -162,7 +162,7 @@ int protocol_brs_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std:
 				// Empty vector of transmitting nodes, set the medium to idle, take the packet out
 				// of the buffer, increase counters of total served packets per node and per chip
 				int cycless = p_packet->get_cycles_left();
-			//std::cout<<"Cycles left = "<<cycless<<std::endl;
+			 //std::cout<<"Cycles left = "<<cycless<<std::endl;
 				if (p_packet->get_cycles_left() == 0) {
 					p_node->pop_packet_buffer(curr_cycle);
 					p_channel->flush_ids_concurrent_tx_nodes();
