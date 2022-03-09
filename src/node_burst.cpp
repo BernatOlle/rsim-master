@@ -12,11 +12,16 @@ Node_burst::Node_burst(int nid, float node_inj_rate) : Node(nid, node_inj_rate) 
 }
 
 void Node_burst::update_cnt_on() {
+//	std::cout<<distribution(generator)<<"\n";
+
 	cnt_on = ceil(bon/(pow(1-distribution(generator),1.0/a)));
+//	std::cout<<"cnt_on: "<<get_cnt_on()<<"\n";
+
 }
 
 void Node_burst::update_cnt_off() {
 	cnt_off = ceil(boff/(pow(1-distribution(generator),1.0/a)));
+ //7std::cout<<"cnt_off: "<<get_cnt_off()<<"  "<<node_inj_rate<<"\n";
 }
 
 int Node_burst::get_cnt_on() {
@@ -37,9 +42,11 @@ void Node_burst::decrease_cnt_off() {
 
 void Node_burst::check_if_injection() {
 	// TODO: CHECK HOW WE DID IT WITH POISSON TO MAKE SURE THAT TWO PACKETS CAN'T BE INJECTED IN SAME CYCLE, BUT CAN BE BACK TO BACK
-
+//std::cout<<"+++++++++++++++++++++++++++++++cnt_on: "<<get_cnt_on()<<"\n";
 	// If we are on the ON state of the burst of a node, we inject a new packet to its buffer and decrease the ON time counter
 	if (get_cnt_on() > 0) {
+			//std::cout<<"Holaaaaaaaaaaaaaaaaaaa :  "<< this->get_id()<<"\n";
+
 		// But first we make sure that we haven't reached the total number of packets to be transmitted
 		if (Global_params::Instance()->get_total_injected_packets_chip() < Global_params::Instance()->get_npackets()) {
 			// if the node buffer is not full
@@ -69,7 +76,9 @@ void Node_burst::check_if_injection() {
 				std::cout << "!!!!!!!!!! A packet has just been lost due to full buffer in node " << get_id() << std::endl;
 			}
 			// regardless if we lost the packet (because of full buffer) or not, we keep injecting, because the application must keep on going
+
 			decrease_cnt_on();
+
 		}
 	}
 	// otherwise if we still have some OFF cycles left, we simply decrease the number of OFF cycles until next ON state
@@ -82,6 +91,7 @@ void Node_burst::check_if_injection() {
 		}
 	}
 	else {
-		std::cout << "ERROR DURING INJECTION: no condition was satisfied" << std::endl;
+		std::cout << "ERROR DURING INJECTION: no condition was satisfied  "<< this->get_id() << std::endl;
+
 	}
 }
