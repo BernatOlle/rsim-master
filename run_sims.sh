@@ -1,30 +1,30 @@
 #!/bin/bash
 
 mac_protocols=(
-brs_non_p
+#brs_non_p
 #tdma_fixed
 #tdma_weighted
-#token
+token
 #fuzzy_token
 )
 
 assig=(
 1
-2
-3
+#2
+#3
 )
 
 sigma_values=(
-0.5
-1
+#0.5
+#1
 10
 #100
 )
 
 h_values=(
 0.5
-0.7
-0.85
+#0.7
+#0.85
 #0.9
 )
 
@@ -108,8 +108,8 @@ ncores_values=(
 )
 
 channel_values=(
-2
-3
+#2
+#3
 4
 
 )

@@ -63,7 +63,7 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
 	// if we received the results folder path from command line, we use that one
 	//std::cout << "--------------------------------------------------" << std::endl;
 	if (Global_params::Instance()->get_save_results_path().compare("") != 0) {
-		//std::cout << "Saving results in " << Global_params::Instance()->get_save_results_path() << std::endl;
+		std::cout << "Saving results in " << Global_params::Instance()->get_save_results_path() << std::endl;
 		path_results = Global_params::Instance()->get_save_results_path() + "/data_throughput/";
 		path_results2 = Global_params::Instance()->get_save_results_path() + "/data_latencies/";
         path_results3 = Global_params::Instance()->get_save_results_path() + "/data_energy/";
@@ -391,7 +391,6 @@ void plot_pckt_latencies_chip(const std::vector<Node*>& chip) {
 
         std::cout << std::string(p[i]*nstars/npackets,'*') << std::endl;
     }
-
 
 
 	// double max_latency = 0; // we start with the minimum possible max latency value

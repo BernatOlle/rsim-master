@@ -4,13 +4,15 @@
 #include <vector>
 #include <algorithm>
 
-Node::Node(int id, float inj_rate) : nid(id),channelID(-1), node_inj_rate(inj_rate), total_injected_packets_node(0), total_served_packets_node(0) {
+Node::Node(int id, float inj_rate) : nid(id),channelID(-1), node_inj_rate(inj_rate), total_injected_packets_node(0),
+                                     total_served_packets_node(0) {
     seed_fuzzy_weights = std::chrono::system_clock::now().time_since_epoch().count();
     generator_fuzzy_weights.seed(seed_fuzzy_weights);
-	distribution_fuzzy_weights.param(std::uniform_real_distribution<double>(0.0,1.0).param());
+    distribution_fuzzy_weights.param(std::uniform_real_distribution<double>(0.0, 1.0).param());
+    //std::cout<<channelID<<std::endl;
 }
 
-Node::Node(int id) : nid(id), channelID(-1), total_injected_packets_node(0), total_served_packets_node(0) {
+Node::Node(int id) : nid(id), total_injected_packets_node(0), total_served_packets_node(0) {
     seed_fuzzy_weights = std::chrono::system_clock::now().time_since_epoch().count();
     generator_fuzzy_weights.seed(seed_fuzzy_weights);
     distribution_fuzzy_weights.param(std::uniform_real_distribution<double>(0.0, 1.0).param());
@@ -63,7 +65,7 @@ long double Node::get_prob_channel_node(int x){
 }
 
 // function to show the change of vector values and reasons
-void Node::channel_function(std::string protocol, std::string step, int number_channels, int reason, int assig, int channel_id_gravity) {
+void Node::channel_function(std::string protocol, std::string step, int number_channels, int reason, int assig, int num_chan) {
     // TODO can we recuperate the node as so ?
 
     int nodeId = this->get_id();
@@ -71,7 +73,7 @@ void Node::channel_function(std::string protocol, std::string step, int number_c
     //std::cout<<"Channel initial:" << channelId<<std::endl;
     int new_channelId = channelId;
     //std::cout<<"Assig :: "<<assig<<std::endl;
-    if (protocol =="brs"){
+    if (protocol =="brs_non_p"){
      if(assig == 1){
         if (channelId == -1) {
             new_channelId = rand() % number_channels;
@@ -169,6 +171,13 @@ Node::set_channel_id(this->get_channel_node(i));
 
 }// assig 3
 }//brs
+
+if (protocol =="token"){
+  if(channelID==-1){
+      Node::set_channel_id(num_chan);
+
+}
+}
 }
 
 
@@ -221,13 +230,25 @@ int Node::get_total_stationary_packets_node() {
 }
 
 void Node::push_new_packet(int curr_cycle, int nid) {
-    switch(Global_params::Instance()->get_chosen_mac()) {
-        case Mac_protocols::csma_non_p      : in_buffer.push(new Packet_csma_non_p(curr_cycle, nid)); break;
-        case Mac_protocols::brs_non_p       : in_buffer.push(new Packet_brs_non_p(curr_cycle, nid)); break;
-        case Mac_protocols::tdma_fixed      : in_buffer.push(new Packet_tdma(curr_cycle, nid)); break;
-        case Mac_protocols::tdma_weighted   : in_buffer.push(new Packet_tdma(curr_cycle, nid)); break;
-        case Mac_protocols::fuzzy_token     : in_buffer.push(new Packet_brs_non_p(curr_cycle, nid)); break;
-        case Mac_protocols::token           : in_buffer.push(new Packet_tdma(curr_cycle, nid)); break;
+    switch (Global_params::Instance()->get_chosen_mac()) {
+        case Mac_protocols::csma_non_p      :
+            in_buffer.push(new Packet_csma_non_p(curr_cycle, nid));
+            break;
+        case Mac_protocols::brs_non_p       :
+            in_buffer.push(new Packet_brs_non_p(curr_cycle, nid));
+            break;
+        case Mac_protocols::tdma_fixed      :
+            in_buffer.push(new Packet_tdma(curr_cycle, nid));
+            break;
+        case Mac_protocols::tdma_weighted   :
+            in_buffer.push(new Packet_tdma(curr_cycle, nid));
+            break;
+        case Mac_protocols::fuzzy_token     :
+            in_buffer.push(new Packet_brs_non_p(curr_cycle, nid));
+            break;
+        case Mac_protocols::token           :
+            in_buffer.push(new Packet_tdma(curr_cycle, nid));
+            break;
     }
 
     if (Global_params::Instance()->is_debugging_on()) {
@@ -236,8 +257,10 @@ void Node::push_new_packet(int curr_cycle, int nid) {
 }
 
 void Node::pop_packet_buffer(int curr_cycle) { // when a packet has been successfully transmitted, update the statistics
-    Global_params::Instance()->pckt_latencies_chip.push_back(curr_cycle - get_in_buffer_front()->get_inj_time() + 1); // we save the latency for every tx packet into the chip vector
-    pckt_latencies_node.push_back(curr_cycle - get_in_buffer_front()->get_inj_time() + 1); // we save the latency for every tx packet into this particular node vector
+    Global_params::Instance()->pckt_latencies_chip.push_back(curr_cycle - get_in_buffer_front()->get_inj_time() +
+                                                             1); // we save the latency for every tx packet into the chip vector
+    pckt_latencies_node.push_back(curr_cycle - get_in_buffer_front()->get_inj_time() +
+                                  1); // we save the latency for every tx packet into this particular node vector
     total_served_packets_node++;
     Global_params::Instance()->increase_total_served_packets_chip();
     in_buffer.pop();

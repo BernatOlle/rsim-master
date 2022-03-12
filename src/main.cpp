@@ -37,6 +37,7 @@ int main(int argc, char* argv[]) {
 		std::string parameter_value = in_parameter.at(1);
 
 		if (parameter_name.compare("H") == 0) {
+			//std::cout << "hola"<< std::endl;
 			Global_params::Instance()->set_H(stof(parameter_value));
 		}
 		else if (parameter_name.compare("inj_rate") == 0) {
@@ -128,6 +129,18 @@ int main(int argc, char* argv[]) {
 	}
 
 
+std::string mac_protocol_string;
+
+
+switch (Global_params::Instance()->get_chosen_mac()) {
+	case  Mac_protocols::brs_non_p:{ mac_protocol_string="brs_non_p";
+									break;}
+	case Mac_protocols::token:{ mac_protocol_string="token";
+								break;}
+	default :{mac_protocol_string="res";
+break;}
+}
+
 	//Global_params::Instance()->set_nchannels(4);
 	// TODO: Ensure that all values were read either from parameter file or std input
 
@@ -144,6 +157,7 @@ int main(int argc, char* argv[]) {
 	// Set a vector of injection rates, according to a normal distribution with mean=1 and std_dev=sigma
 	// TODO: MAKE SURE THIS IS DONE PROPERLY, I'M NOT SURE I DID IT CORRECTLY ANYMORE
 	std::vector<float> hotspotness_weights;
+
 	float sum_pdf_values = 0;
 	float delta = 2.0 / (Global_params::Instance()->get_ncores() - 1);
 	float x = 0;
@@ -289,8 +303,30 @@ for(int j=0;j<Global_params::Instance()->get_ncores();j++){
 //		distribution.push_back(probm);
 //		std::cout<<" ["<<probm<<"] ";
 //	}
+if(mac_protocol_string=="token"){
+	int nodes_token = Global_params::Instance()->get_ncores();
+  int NxC = ceil(nodes_token/number_channels);
+	for(int o = 0; o<number_channels;o++){
+		chan[o]->set_token_lenght(NxC);
+
+	}
+
+ int n=0;//n_channels
+ int t=0;// fins a NxC
+    for(int k=0;k<nodes_token;k++){
+      if(t==NxC){
+        n++;
+        t=0;
+      }
+			//std::cout<<"N: "<<n<<std::endl;
+      chip[k]->channel_function(mac_protocol_string, "initialisation of channel link to node", number_channels, 1, assig, n);
+      t++;
 
 
+    }
+}
+
+if(mac_protocol_string=="brs_non_p"){
 		if(assig==3){
 			for(int k=0;k<number_channels;k++){
 				long double prob=0;
@@ -358,6 +394,7 @@ for(int j=0;j<Global_params::Instance()->get_ncores();j++){
 			}
 
 		}
+	}
 /*
 		long double prob = 0;
 		for(int j = 0; j<Global_params::Instance()->get_ncores();j++){
@@ -381,8 +418,8 @@ for(int j=0;j<Global_params::Instance()->get_ncores();j++){
 		// regardless if we're in debugging mode or not, every 1,000,000 cycles we print a control message (so that we can identify progress)
 		if ((Global_params::Instance()->get_total_ncycles() % 1000000) == 0) {
 			std::chrono::time_point<std::chrono::system_clock> now;
-			    now = std::chrono::system_clock::now();
-			    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+		    now = std::chrono::system_clock::now();
+		    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
 			std::cout << "Cycle: " << Global_params::Instance()->get_total_ncycles() << " reached at " << std::ctime(&now_time);
 		}
 
@@ -392,11 +429,11 @@ for(int j=0;j<Global_params::Instance()->get_ncores();j++){
 
 		// if we still have packets to inject
 		if (Global_params::Instance()->get_total_injected_packets_chip() < Global_params::Instance()->get_npackets()) {
-		// iterates through all nodes of the chip to see which ones require injection of new packet in current cycle
-		for (std::vector<Node*>::iterator curr_node = chip.begin(); curr_node != chip.end(); ++curr_node) {
-			(*curr_node)->check_if_injection();
+			// iterates through all nodes of the chip to see which ones require injection of new packet in current cycle
+			for (std::vector<Node*>::iterator curr_node = chip.begin(); curr_node != chip.end(); ++curr_node) {
+				(*curr_node)->check_if_injection();
+			}
 		}
-	}
 
 		// here we only enter the first time that we realize we stopped injecting
 		if (Global_params::Instance()->get_total_injected_packets_chip() >= Global_params::Instance()->get_npackets() && !flag_stop_injection) {
@@ -413,11 +450,11 @@ for(int j=0;j<Global_params::Instance()->get_ncores();j++){
 		for (std::vector<Node*>::iterator curr_node = chip.begin(); curr_node != chip.end(); ++curr_node) {
 			if (!(*curr_node)->in_buffer_empty()) {
 				int buffer=(*curr_node)->get_in_buffer_size()	;			// when we find a node with a non-empty buffer, we store its ID
-				//int before_funtion=(*curr_node)->get_id();
+				int before_funtion=(*curr_node)->get_id();
 				//std::cout<< "Buffer of Node: "<<before_funtion<<" is "<<buffer<<std::endl;
 				//Sstd::cout<<"Channel initial:" << before_funtion<<std::endl;
 				//std::cout<< "Before channel: "<< before_funtion <<std::endl;
-				(*curr_node)->channel_function("brs", "initialisation of channel link to node", number_channels, 1, assig, 0);
+				(*curr_node)->channel_function(mac_protocol_string, "initialisation of channel link to node", number_channels, 1, assig, 0);
 
 				nodes_ready.push_back((*curr_node)->get_id());
 				if (Global_params::Instance()->is_debugging_on()) {
@@ -430,12 +467,12 @@ for(int j=0;j<Global_params::Instance()->get_ncores();j++){
 
 		// We call the appropriate MAC protocol to deal with the concurrent packets that are ready
 		switch(Global_params::Instance()->get_chosen_mac()) {
-			case Mac_protocols::csma_non_p	: protocol_csma_non_p(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan,number_channels); break;
-			case Mac_protocols::brs_non_p	: protocol_brs_non_p(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan,number_channels); break;
-			case Mac_protocols::tdma_fixed	: protocol_tdma(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels); break;
-			case Mac_protocols::token		: protocol_token(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels); break;
-			case Mac_protocols::tdma_weighted	: protocol_tdma(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels); break;
-			case Mac_protocols::fuzzy_token	: protocol_fuzzy_token(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels); break;
+			case Mac_protocols::csma_non_p	: protocol_csma_non_p(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan,number_channels,mac_protocol_string); break;
+			case Mac_protocols::brs_non_p	: protocol_brs_non_p(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan,number_channels,mac_protocol_string); break;
+			case Mac_protocols::tdma_fixed	: protocol_tdma(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels,mac_protocol_string); break;
+			case Mac_protocols::token		: protocol_token(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels,mac_protocol_string); break;
+			case Mac_protocols::tdma_weighted	: protocol_tdma(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels,mac_protocol_string); break;
+			case Mac_protocols::fuzzy_token	: protocol_fuzzy_token(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels,mac_protocol_string); break;
 
 		}
 //
