@@ -175,7 +175,6 @@ Node::set_channel_id(this->get_channel_node(i));
 if (protocol =="token"){
   if(channelID==-1){
       Node::set_channel_id(num_chan);
-
 }
 }
 }

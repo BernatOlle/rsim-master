@@ -33,7 +33,7 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
 
 		avg_pckt_latency_node = (*curr_node)->get_mean_stationary_pckt_latencies_node(); // mean of all stationary latencies of a node
 		pckt_latencies_chip.push_back(avg_pckt_latency_node); // we store the avg packet latency for the current node
-
+/*
 		if ((total_injected_packets_node - (*curr_node)->get_total_served_packets_node()) > 0) {
 			std::cout << "!!!!!!!!! We finished the program and we still had packets to serve";
 		}
@@ -47,7 +47,7 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
 		else {
 			std::cout << " Theoretical Avg_inj_rate: " << theoretical_node_avg_inj_rate << " pckts/cycle ";
 		}
-		std::cout << " Real Avg_inj_rate: "	<< real_node_avg_inj_rate << " pckts/cycle" << std::endl;
+		std::cout << " Real Avg_inj_rate: "	<< real_node_avg_inj_rate << " pckts/cycle" << std::endl;*/
 		//(*curr_node)->plot_pckt_latencies_node(); // this shows the distribution of latencies for this node
 	} // End of for-each node
 
@@ -269,7 +269,7 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
     // Data 5:
 	save_pckt_latencies_evolution_chip(outdata5);
 	outdata5.close();
-
+/*
 	std::cout << "--------------------------------------------------" << std::endl;
 	std::cout << "Total packets per chip: " << total_injected_packets_chip << "(injected), " << Global_params::Instance()->get_total_served_packets_chip() << " (served)" << std::endl;
 	if (Global_params::Instance()->get_chosen_distrib() == Inj_distribs::trace) {
@@ -291,7 +291,7 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
     std::cout << "Total number of served packets (in stationary period): " << Global_params::Instance()->get_stationary_served_packets_chip() << std::endl;
     std::cout << "Average number of retries per successful served packet (in stationary period): " << 1.0*Global_params::Instance()->get_stationary_collisions_chip() / Global_params::Instance()->get_stationary_served_packets_chip() << std::endl;
     std::cout << "Average energy per bit (in stationary period): " << get_energy_bit() << " picoJoules" << std::endl;
-    std::cout << "Total execution time: " << Global_params::Instance()->get_total_ncycles() << " cycles" << std::endl;
+    std::cout << "Total execution time: " << Global_params::Instance()->get_total_ncycles() << " cycles" << std::endl;*/
 	//plot_pckt_latencies_chip(chip);
 }
 
