@@ -10,8 +10,8 @@ token
 
 assig=(
 1
-#2
-#3
+2
+3
 )
 
 sigma_values=(
@@ -109,7 +109,7 @@ ncores_values=(
 
 channel_values=(
 2
-#3
+3
 4
 
 )
