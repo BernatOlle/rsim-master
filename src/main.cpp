@@ -308,6 +308,7 @@ if(mac_protocol_string=="token"){
   int NxC = ceil(nodes_token/number_channels);
 	for(int o = 0; o<number_channels;o++){
 		chan[o]->set_token_lenght(NxC);
+		chan[o]->set_token_current_node();
 
 	}
 
@@ -318,7 +319,7 @@ if(mac_protocol_string=="token"){
         n++;
         t=0;
       }
-			//std::cout<<"N: "<<n<<std::endl;
+			std::cout<<"N: "<<n<<std::endl;
       chip[k]->channel_function(mac_protocol_string, "initialisation of channel link to node", number_channels, 1, assig, n);
       t++;
 

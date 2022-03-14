@@ -37,7 +37,7 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
 		if ((total_injected_packets_node - (*curr_node)->get_total_served_packets_node()) > 0) {
 			std::cout << "!!!!!!!!! We finished the program and we still had packets to serve";
 		}
-		/*
+
 		std::cout << (*curr_node)->get_id() << ":";
 		std::cout << " Inj_pckts(all): " << total_injected_packets_node; // total number of injected packets including warm up and cool down
 		std::cout << "\t Avg_latency_pckt(stationary): " << avg_pckt_latency_node << " cycles. "; // avg latency per packet OF ONLY WARM UP AND COOL DOWN
@@ -47,7 +47,7 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
 		else {
 			std::cout << " Theoretical Avg_inj_rate: " << theoretical_node_avg_inj_rate << " pckts/cycle ";
 		}
-		std::cout << " Real Avg_inj_rate: "	<< real_node_avg_inj_rate << " pckts/cycle" << std::endl;*/
+		std::cout << " Real Avg_inj_rate: "	<< real_node_avg_inj_rate << " pckts/cycle" << std::endl;
 		//(*curr_node)->plot_pckt_latencies_node(); // this shows the distribution of latencies for this node
 	} // End of for-each node
 
@@ -269,7 +269,7 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
     // Data 5:
 	save_pckt_latencies_evolution_chip(outdata5);
 	outdata5.close();
-/*
+
 	std::cout << "--------------------------------------------------" << std::endl;
 	std::cout << "Total packets per chip: " << total_injected_packets_chip << "(injected), " << Global_params::Instance()->get_total_served_packets_chip() << " (served)" << std::endl;
 	if (Global_params::Instance()->get_chosen_distrib() == Inj_distribs::trace) {
@@ -291,7 +291,7 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
     std::cout << "Total number of served packets (in stationary period): " << Global_params::Instance()->get_stationary_served_packets_chip() << std::endl;
     std::cout << "Average number of retries per successful served packet (in stationary period): " << 1.0*Global_params::Instance()->get_stationary_collisions_chip() / Global_params::Instance()->get_stationary_served_packets_chip() << std::endl;
     std::cout << "Average energy per bit (in stationary period): " << get_energy_bit() << " picoJoules" << std::endl;
-    std::cout << "Total execution time: " << Global_params::Instance()->get_total_ncycles() << " cycles" << std::endl;*/
+    std::cout << "Total execution time: " << Global_params::Instance()->get_total_ncycles() << " cycles" << std::endl;
 	//plot_pckt_latencies_chip(chip);
 }
 
@@ -487,7 +487,7 @@ void print_mac_protocol() {
 
 // print all input parameters
 void print_input_parameters() {
-	/*
+
 	print_ncores();
 	print_distribution();
 	print_mac_protocol();
@@ -501,7 +501,7 @@ void print_input_parameters() {
 	print_hurst_exponent();
 	print_npackets();
 	print_max_buffer_size();
-	print_slot_size();*/
+	print_slot_size();
 }
 // print the total number of nodes/cores
 void print_ncores() {
