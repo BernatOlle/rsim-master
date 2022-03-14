@@ -458,6 +458,7 @@ if(mac_protocol_string=="brs_non_p"){
 				(*curr_node)->channel_function(mac_protocol_string, "initialisation of channel link to node", number_channels, 1, assig, 0);
 
 				nodes_ready.push_back((*curr_node)->get_id());
+				std::cout<<"Hola"<<std::endl;
 				if (Global_params::Instance()->is_debugging_on()) {
 
 					std::cout << "Node " << (*curr_node)->get_id() << " wants to tx (" << (*curr_node)->get_in_buffer_size() << " pending packets)" << std::endl;
