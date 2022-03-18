@@ -225,7 +225,7 @@ void protocol_tdma(int curr_cycle, const std::vector<int>& nodes_ready, std::vec
 		}
 		// If the cast fails
 		else {
-			std::cout << "ERROR: Cast from Packet* to Packet_tdma* failed" << std::endl;
+			std::cout << "ERRORC: Cast from Packet* to Packet_tdma* failed" << std::endl;
 			abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
 		}
 	}
@@ -662,13 +662,14 @@ void protocol_fuzzy_token(int curr_cycle, const std::vector<int>& nodes_ready, s
 // We assume no collisions, so we don't take care of unexpected collisions
 void protocol_token(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<Node*>& chip,std::vector<Channel*>& chan, std::vector<float>& hotspotness_weights,int number_channels,std::string mac_protocol_string) {
 for (int channel_id = 0; channel_id < number_channels; channel_id++) {
+	int assig = Global_params::Instance()->get_chosen_assig();
 	Channel* p_channel = chan.at(channel_id);
 	int si = nodes_ready.size();
 	//	std::cout << "nodes_ready= "<< si<<std::endl;
-		//	for(int h=0;h<nodes_ready.size();h++){
-	//			Node* act = chip.at(nodes_ready[h]);
+			for(int h=0;h<nodes_ready.size();h++){
+			Node* act = chip.at(nodes_ready[h]);
 	//	std::cout<<nodes_ready[h]<<" chan: "<<act->get_channel_id()<<std::endl;
-			//}
+			}
 
 	if (Global_params::Instance()->is_debugging_on()) {
 		std::cout << "Token: Node " << Global_params::Instance()->get_token_current_node() << std::endl;
@@ -679,13 +680,13 @@ for (int channel_id = 0; channel_id < number_channels; channel_id++) {
 	//	std::cout<<"Inside channel busy: "<<channel_id<<std::endl;
 		Node* p_node = chip.at(p_channel->get_unique_kids_concurrent_tx_nodes());
 			int node_channel = p_node->get_channel_id();
-		//	std::cout<< "Node cid = "<<node_channel<<std::endl;
+//			std::cout<< "Node cid = "<<node_channel<<std::endl;
 		if(p_node->get_channel_id()==channel_id){
 		// We cast the Packet* into a Packet_tdma* so that we can access its own methods
 		if (Packet_tdma* p_packet = dynamic_cast<Packet_tdma*>(p_node->get_in_buffer_front())) {
 			// We decrease cycles_left for the current packet
 			p_packet->decrease_cycles_left();
-		//	std::cout<<"Cycles left = "<<p_packet->get_cycles_left() <<std::endl;
+	//		std::cout<<"Cycles left = "<<p_packet->get_cycles_left() <<std::endl;
 			if (Global_params::Instance()->is_debugging_on()) {
 				std::cout << "Node " << p_node->get_id() << " txed for a cycle. Cycles left of current packet: " << p_packet->get_cycles_left() << std::endl;
 			}
@@ -704,32 +705,35 @@ for (int channel_id = 0; channel_id < number_channels; channel_id++) {
 				}
 				p_channel->flush_ids_concurrent_tx_nodes();
 				Global_params::Instance()->set_channel_idle(channel_id);
-				p_channel->update_token_current_node();
-			//	std::cout<<"Token updated: "<<p_channel->get_token_current_node()<<std::endl;
-			//	std::cout << "TOKEN PASSED" << std::endl;
+					p_channel->update_token_current_node(assig);
+					p_node->set_channel_id(99);
+		//	std::cout<<"Token updated: "<<p_channel->get_token_current_node()<<std::endl;
+
+				//std::cout << "TOKEN PASSED" << std::endl;
 
 			}
 		}
 
 		// If the cast fails
 		else {
-			std::cout << "ERROR: Cast from Packet* to Packet_tdma* failed" << std::endl;
+			std::cout << "ERRORA: Cast from Packet* to Packet_tdma* failed" << std::endl;
 			abort(); // TODO: THIS IS NOT THE RIGHT WAY TO EXIT A PROGRAM. USE EXCEPTIONS OR JUST ERROR CODES
 		}
 	}
 	}
 	// Otherwise (medium is idle), we check if the token holder has packets to tx
 	else {
-	//	std::cout<<"Indide channel idel = "<< channel_id<<std::endl;
+//	std::cout<<"Indide channel idel = "<< channel_id<<std::endl;
 		std::vector<int>::const_iterator found_node = std::find(nodes_ready.begin(), nodes_ready.end(), p_channel->get_token_current_node());
 
 		// if we find the token holder in the list of nodes that are ready to send (token holder has a packet to send), the token holder starts tx
 		if (found_node != nodes_ready.end()) {
 			Node* p_node = chip.at(*found_node);
+			p_node->channel_function(mac_protocol_string, "error", number_channels, 1, assig,channel_id);
 			if(p_node->get_channel_id()==channel_id){
 			p_channel->push_ids_concurrent_tx_nodes(*found_node);
 
-			//	std::cout<<"Id Node token = "<< p_node->get_id()<<" chan id: "<<p_node->get_channel_id()<<std::endl;
+			//std::cout<<"Id Node token = "<< p_node->get_id()<<" chan id: "<<p_node->get_channel_id()<<std::endl;
 
 					Global_params::Instance()->set_channel_busy(channel_id);
 			// We cast the Packet* into a Packet_tdma* so that we can access its own methods
@@ -757,9 +761,12 @@ for (int channel_id = 0; channel_id < number_channels; channel_id++) {
 						if (p_channel->get_unique_kids_concurrent_tx_nodes() == *found_node) {
 							p_channel->flush_ids_concurrent_tx_nodes();
 							Global_params::Instance()->set_channel_idle(channel_id);
-							p_channel->update_token_current_node();
-						//	std::cout<<"Token updated: "<<p_channel->get_token_current_node()<<std::endl;
-							//	std::cout << "TOKEN PASSED 2" << std::endl;
+
+								p_channel->update_token_current_node(assig);
+								p_node->set_channel_id(-1);
+				//			std::cout<<"Token updated: "<<p_channel->get_token_current_node()<<std::endl;
+					//		std::cout << "TOKEN PASSED 2" << std::endl;
+
 
 						}
 						else {
@@ -775,22 +782,44 @@ for (int channel_id = 0; channel_id < number_channels; channel_id++) {
 			}
 			// If the cast fails
 			else {
-				std::cout << "ERROR: Cast from Packet* to Packet_tdma* failed" << std::endl;
+				std::cout << "ERRORB: Cast from Packet* to Packet_tdma* failed" << std::endl;
 			}
 		}
-	}
-		//otherwise if token holder has nothing to tx, we pass the token right away
 		else {
-		//	std::cout<<"Token updated: "<<p_channel->get_token_current_node()<<std::endl;
-			p_channel->update_token_current_node();
+		//	std::cout<<"Token up3dated: "<<p_channel->get_token_current_node()<<std::endl;
+			p_channel->update_token_current_node(assig);
+			int k = p_node->get_id();
+				while(chip[k]->get_channel_id()!=-1){
+					p_channel->update_token_current_node(assig);
+		//			std::cout<<"Tus muertos: "<<chip[k]->get_channel_id()<<std::endl;
+						k=(k+1)%Global_params::Instance()->get_ncores();
+
+				}
+		//		std::cout<<"Chan next: "<<chip[k]->get_channel_id()<<std::endl;
+
+
+//std::cout<<"Next token up3dated: "<<p_channel->get_token_current_node()<<std::endl;
 			if (Global_params::Instance()->is_debugging_on()) {
-				//std::cout << "Token holder has nothing to tx" << std::endl;
-				//std::cout << "TOKEN PASSED" << std::endl;
+				std::cout << "Token holder has nothing to tx" << std::endl;
+				std::cout << "TOKEN PASSED" << std::endl;
 			}
 
 	}
 	}
-	//std::cout<<"***************************************"<<std::endl;
+		//otherwise if token holder has nothing to tx, we pass the token right away
+		else {
+		//	std::cout<<"Token up5dated: "<<p_channel->get_token_current_node()<<std::endl;
+
+				p_channel->update_token_current_node(assig);
+
+			if (Global_params::Instance()->is_debugging_on()) {
+				std::cout << "Token holder has nothing to tx" << std::endl;
+		//	std::cout << "TOKEN PASSED" << std::endl;
+			}
+
+	}
+	}
+//	std::cout<<"***************************************"<<std::endl;
 }//for channels
 //std::cout<<"\n\n------------------------------------"<<std::endl;
 }

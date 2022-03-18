@@ -303,12 +303,14 @@ for(int j=0;j<Global_params::Instance()->get_ncores();j++){
 //		distribution.push_back(probm);
 //		std::cout<<" ["<<probm<<"] ";
 //	}
+
 if(mac_protocol_string=="token"){
+	if(assig==1){
 	int nodes_token = Global_params::Instance()->get_ncores();
   int NxC = ceil(nodes_token/number_channels);
 	for(int o = 0; o<number_channels;o++){
 		chan[o]->set_token_lenght(NxC);
-		chan[o]->set_token_current_node();
+		chan[o]->set_token_current_node(assig);
 
 	}
 
@@ -319,12 +321,19 @@ if(mac_protocol_string=="token"){
         n++;
         t=0;
       }
-			//std::cout<<"N: "<<n<<std::endl;
+		//	std::cout<<"N: "<<chip[k]->get_id() <<" C: "<<n<<std::endl;
       chip[k]->channel_function(mac_protocol_string, "initialisation of channel link to node", number_channels, 1, assig, n);
       t++;
 
 
     }
+  }
+	if(assig==2 || assig == 3){
+		for(int o = 0; o<number_channels;o++){
+			chan[o]->set_token_lenght(Global_params::Instance()->get_ncores());
+			chan[o]->set_token_current_node(assig);
+		}
+	}
 }
 
 if(mac_protocol_string=="brs_non_p"){
@@ -449,13 +458,14 @@ if(mac_protocol_string=="brs_non_p"){
 
 		// iterates through all nodes of the chip to see which ones have a packet to transmit
 		for (std::vector<Node*>::iterator curr_node = chip.begin(); curr_node != chip.end(); ++curr_node) {
+			(*curr_node)->channel_function(mac_protocol_string, "chan99", number_channels, 1, assig, -1);
 			if (!(*curr_node)->in_buffer_empty()) {
 				int buffer=(*curr_node)->get_in_buffer_size()	;			// when we find a node with a non-empty buffer, we store its ID
 				int before_funtion=(*curr_node)->get_id();
 				//std::cout<< "Buffer of Node: "<<before_funtion<<" is "<<buffer<<std::endl;
 				//Sstd::cout<<"Channel initial:" << before_funtion<<std::endl;
 				//std::cout<< "Before channel: "<< before_funtion <<std::endl;
-				(*curr_node)->channel_function(mac_protocol_string, "initialisation of channel link to node", number_channels, 1, assig, 0);
+				(*curr_node)->channel_function(mac_protocol_string, "initialisation of channel link to node", number_channels, 1, assig, -1);
 
 				nodes_ready.push_back((*curr_node)->get_id());
 				//std::cout<<"Hola"<<std::endl;

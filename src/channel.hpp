@@ -22,8 +22,8 @@ public:
 	void set_token_lenght(int);
 
 	int get_token_current_node();
-	void update_token_current_node();
-	void set_token_current_node();
+	void update_token_current_node(int);
+	void set_token_current_node(int);
 
 	int get_ids_concurrent_tx_nodes_size();
 	void push_ids_concurrent_tx_nodes(int);

@@ -154,6 +154,7 @@ public:
     void set_txing_token_on();
     void set_txing_token_off();
 
+
     // Only for BRS and fuzzy token
     void increase_counter_collisions();
     long int get_stationary_collisions_chip();

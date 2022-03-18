@@ -9,12 +9,25 @@ Channel::Channel(int id): cid(id){
 	std::vector<int> ids_concurrent_tx_nodes;
 }
 
-void Channel::update_token_current_node() {
+void Channel::update_token_current_node(int assig) {
+	if(assig == 1){
     token_current_node=(token_lenght*cid)+(token_current_node+1)%token_lenght;
+	}
+	if(assig == 2||assig == 3){
+		token_current_node=	(token_current_node+1)%token_lenght;
+	}
 }
 
-void Channel::set_token_current_node() { // Initialize the position of the first token
+void Channel::set_token_current_node(int assig) { // Initialize the position of the first token
+	if(assig == 1){
     token_current_node = token_lenght*cid;
+		}
+		if(assig == 2||assig == 3){
+			int nodes_token = Global_params::Instance()->get_ncores();
+			int number_channels=Global_params::Instance()->get_nchannels();
+			int NxC = ceil(nodes_token/number_channels);
+			token_current_node=cid*NxC;
+		}
 }
 
 int Channel::get_token_current_node() {
