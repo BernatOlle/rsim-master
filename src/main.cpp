@@ -321,7 +321,7 @@ if(mac_protocol_string=="token"){
         n++;
         t=0;
       }
-		//	std::cout<<"N: "<<chip[k]->get_id() <<" C: "<<n<<std::endl;
+			//std::cout<<"N: "<<chip[k]->get_id() <<" C: "<<n<<std::endl;
       chip[k]->channel_function(mac_protocol_string, "initialisation of channel link to node", number_channels, 1, assig, n);
       t++;
 
