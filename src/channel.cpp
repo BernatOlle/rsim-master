@@ -26,7 +26,7 @@ void Channel::set_token_current_node(int assig) { // Initialize the position of 
 			int nodes_token = Global_params::Instance()->get_ncores();
 			int number_channels=Global_params::Instance()->get_nchannels();
 			int NxC = ceil(nodes_token/number_channels);
-			token_current_node=cid;
+			token_current_node=cid*NxC;
 		}
 }
 
