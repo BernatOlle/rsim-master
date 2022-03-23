@@ -453,7 +453,7 @@ if(mac_protocol_string=="brs_non_p"){
 
 
 		std::vector<int> nodes_ready; // at every cycle we initialize an empty vector that will store the IDs of the nodes with non-empty buffers
-
+    std::vector<bool> channel_avaible(4);
 
 
 		// iterates through all nodes of the chip to see which ones have a packet to transmit
@@ -479,12 +479,12 @@ if(mac_protocol_string=="brs_non_p"){
 
 		// We call the appropriate MAC protocol to deal with the concurrent packets that are ready
 		switch(Global_params::Instance()->get_chosen_mac()) {
-			case Mac_protocols::csma_non_p	: protocol_csma_non_p(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan,number_channels,mac_protocol_string); break;
-			case Mac_protocols::brs_non_p	: protocol_brs_non_p(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan,number_channels,mac_protocol_string); break;
-			case Mac_protocols::tdma_fixed	: protocol_tdma(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels,mac_protocol_string); break;
-			case Mac_protocols::token		: protocol_token(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels,mac_protocol_string); break;
-			case Mac_protocols::tdma_weighted	: protocol_tdma(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels,mac_protocol_string); break;
-			case Mac_protocols::fuzzy_token	: protocol_fuzzy_token(Global_params::Instance()->get_total_ncycles(), nodes_ready, chip,chan, hotspotness_weights,number_channels,mac_protocol_string); break;
+			case Mac_protocols::csma_non_p	: protocol_csma_non_p(Global_params::Instance()->get_total_ncycles(), nodes_ready, channel_avaible,chip,chan,number_channels,mac_protocol_string); break;
+			case Mac_protocols::brs_non_p	: protocol_brs_non_p(Global_params::Instance()->get_total_ncycles(), nodes_ready, channel_avaible,chip,chan,number_channels,mac_protocol_string); break;
+			case Mac_protocols::tdma_fixed	: protocol_tdma(Global_params::Instance()->get_total_ncycles(), nodes_ready, channel_avaible,chip,chan, hotspotness_weights,number_channels,mac_protocol_string); break;
+			case Mac_protocols::token		: protocol_token(Global_params::Instance()->get_total_ncycles(), nodes_ready, channel_avaible,chip,chan, hotspotness_weights,number_channels,mac_protocol_string); break;
+			case Mac_protocols::tdma_weighted	: protocol_tdma(Global_params::Instance()->get_total_ncycles(), nodes_ready, channel_avaible,chip,chan, hotspotness_weights,number_channels,mac_protocol_string); break;
+			case Mac_protocols::fuzzy_token	: protocol_fuzzy_token(Global_params::Instance()->get_total_ncycles(), nodes_ready, channel_avaible,chip,chan, hotspotness_weights,number_channels,mac_protocol_string); break;
 
 		}
 //

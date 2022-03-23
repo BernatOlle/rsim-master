@@ -12,9 +12,11 @@ Channel::Channel(int id): cid(id){
 void Channel::update_token_current_node(int assig) {
 	if(assig == 1){
     token_current_node=(token_lenght*cid)+(token_current_node+1)%token_lenght;
+
 	}
 	if(assig == 2||assig == 3){
 		token_current_node=	(token_current_node+1)%token_lenght;
+	
 	}
 }
 

@@ -102,6 +102,7 @@ public:
     int get_chosen_assig();
     void set_chosen_mac(Mac_protocols);
     void set_chosen_assig(int);
+
     int get_tx_time();
     int get_total_injected_packets_chip();
     int get_stationary_served_packets_chip();
