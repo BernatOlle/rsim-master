@@ -310,7 +310,7 @@ if(mac_protocol_string=="token"){
   int NxC = ceil(nodes_token/number_channels);
 	for(int o = 0; o<number_channels;o++){
 		chan[o]->set_token_lenght(NxC);
-		chan[o]->set_token_current_node(assig);
+		chan[o]->set_token_current_node(assig,0);
 
 	}
 
@@ -328,15 +328,15 @@ if(mac_protocol_string=="token"){
 
     }
   }
-	if(assig==2 || assig == 3){
+	if(assig==2){
 		for(int o = 0; o<number_channels;o++){
 			chan[o]->set_token_lenght(Global_params::Instance()->get_ncores());
-			chan[o]->set_token_current_node(assig);
+			chan[o]->set_token_current_node(assig,0);
 		}
 	}
 }
 
-if(mac_protocol_string=="brs_non_p"){
+
 		if(assig==3){
 			for(int k=0;k<number_channels;k++){
 				long double prob=0;
@@ -403,9 +403,66 @@ if(mac_protocol_string=="brs_non_p"){
 				prob_total=prob_total+prob_chan;
 			}
 
+
+		std::vector<int> nodes_channels;
+		std::vector<int> channel_lenght;
+		int h=0;
+		int n = 0;
+		int f = 0;
+		while(h<Global_params::Instance()->get_ncores()){
+			std::vector<int> v_chan = chip[h]->get_channel_array();
+			if(v_chan.size()>1){
+				std::vector<long double> v_prob= chip[h]->get_prob_channel_array();
+				long double max= 0;
+				int nod=0;
+				for(int i = 0 ; i<v_prob.size();i++){
+	        if(v_prob[i]>max){
+	          max=v_prob[i];
+	          nod=i;
+	        }
+
+				}
+				nodes_channels.push_back(v_chan[nod]);
+				n= v_chan[nod];
+
+			}else{
+				nodes_channels.push_back(v_chan[0]);
+				n= v_chan[0];
+
+			}
+				if(f!=n){
+					f=n;
+					channel_lenght.push_back(h);
+				}
+
+			h++;
+		}
+
+
+		channel_lenght.push_back(Global_params::Instance()->get_ncores());
+
+		for(int o = 0; o<number_channels;o++){
+			if(o==0){
+				chan[o]->set_pos(0);
+				chan[o]->set_token_lenght(channel_lenght[o]);
+				chan[o]->set_token_current_node(assig,0);
+			}else{
+				chan[o]->set_pos(channel_lenght[o-1]);
+			chan[o]->set_token_lenght(channel_lenght[o]-channel_lenght[o-1]);
+			chan[o]->set_token_current_node(assig,channel_lenght[o-1]);
+				//std::cout<<o<<"PPPPPP "<<chan[o]->get_pos()<<"\n ";
 		}
 	}
 /*
+		for(int j = 0; j<Global_params::Instance()->get_ncores();j++){
+			chip[j]->set_channel_id(nodes_channels[j]);
+			//std::cout<<j<<" "<<nodes_channels[j]<<"\n ";
+		}
+
+for(int j = 0; j<Global_params::Instance()->get_nchannels();j++){
+//	std::cout<<channel_lenght[j]<<" ";
+}
+std::cout<<"\n";
 		long double prob = 0;
 		for(int j = 0; j<Global_params::Instance()->get_ncores();j++){
 			prob+=hotspotness_weights_normal[j];
@@ -422,6 +479,7 @@ if(mac_protocol_string=="brs_non_p"){
 			}
 			std::cout<<std::endl;
 		}*/
+	}
 
 	// Every iteration of this do-while represent a cycle of the execution, analyzing what happens at each of them
 	do {

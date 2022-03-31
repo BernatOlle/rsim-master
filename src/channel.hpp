@@ -12,6 +12,7 @@
 class Channel {
 protected:
 	int cid;
+	int pos;
 	int token_lenght;
 	int token_current_node;
 	std::vector<int> ids_concurrent_tx_nodes;
@@ -23,7 +24,10 @@ public:
 
 	int get_token_current_node();
 	void update_token_current_node(int);
-	void set_token_current_node(int);
+	void set_token_current_node(int,int);
+
+	int get_pos();
+	void set_pos(int);
 
 	int get_ids_concurrent_tx_nodes_size();
 	void push_ids_concurrent_tx_nodes(int);

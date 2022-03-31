@@ -173,12 +173,14 @@ Node::set_channel_id(this->get_channel_node(i));
 }//brs
 
 if (protocol =="token"){
+
+
+
   if(channelID==-1){
       Node::set_channel_id(num_chan);
 }
-if(channelID==99 && step == "chan99"){
-    Node::set_channel_id(num_chan);
-}
+
+
 
 }
 }

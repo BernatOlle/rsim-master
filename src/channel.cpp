@@ -14,21 +14,27 @@ void Channel::update_token_current_node(int assig) {
     token_current_node=(token_lenght*cid)+(token_current_node+1)%token_lenght;
 
 	}
-	if(assig == 2||assig == 3){
+	if(assig == 2){
 		token_current_node=	(token_current_node+1)%token_lenght;
-	
+
+	}
+	if(assig == 3){
+		token_current_node= pos + (token_current_node-pos+1)%(token_lenght);
 	}
 }
 
-void Channel::set_token_current_node(int assig) { // Initialize the position of the first token
+void Channel::set_token_current_node(int assig, int pos) { // Initialize the position of the first token
 	if(assig == 1){
     token_current_node = token_lenght*cid;
 		}
-		if(assig == 2||assig == 3){
+		if(assig == 2){
 			int nodes_token = Global_params::Instance()->get_ncores();
 			int number_channels=Global_params::Instance()->get_nchannels();
 			int NxC = ceil(nodes_token/number_channels);
 			token_current_node=cid*NxC;
+		}
+		if(assig==3){
+			token_current_node=pos;
 		}
 }
 
@@ -38,6 +44,13 @@ int Channel::get_token_current_node() {
 
 int Channel::get_channel_id(){
 	return cid;
+}
+
+int Channel::get_pos(){
+	return pos;
+}
+void Channel::set_pos(int inici){
+	pos = inici;
 }
 
 void Channel::set_token_lenght(int NxC){
