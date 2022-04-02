@@ -7,6 +7,7 @@
 
 Channel::Channel(int id): cid(id){
 	std::vector<int> ids_concurrent_tx_nodes;
+	std::vector<int> ids_nodes_vector;
 }
 
 void Channel::update_token_current_node(int assig) {
@@ -23,7 +24,7 @@ void Channel::update_token_current_node(int assig) {
 	}
 }
 
-void Channel::set_token_current_node(int assig, int pos) { // Initialize the position of the first token
+void Channel::set_token_current_node(int assig) { // Initialize the position of the first token
 	if(assig == 1){
     token_current_node = token_lenght*cid;
 		}
@@ -85,4 +86,14 @@ std::vector<int>::const_iterator Channel::ids_concurrent_tx_nodes_begin() {
 
 std::vector<int>::const_iterator Channel::ids_concurrent_tx_nodes_end() {
     return ids_concurrent_tx_nodes.end();
+}
+
+int Channel::get_nodes_vector_size(){
+	return ids_nodes_vector.size();
+}
+void Channel::push_nodes_vector(int n_id){
+	ids_nodes_vector.push_back(n_id);
+}
+std::vector<int> Channel::get_nodes_vector(){
+	return ids_nodes_vector;
 }
