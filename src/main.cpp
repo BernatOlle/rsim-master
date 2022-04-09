@@ -439,7 +439,7 @@ if(mac_protocol_string=="token"){
 			h++;
 		}
 
-		std::cout<<"\n";
+		/*std::cout<<"\n";
 				long double prob = 0;
 				for(int j = 0; j<Global_params::Instance()->get_ncores();j++){
 					prob+=hotspotness_weights_normal[j];
@@ -455,7 +455,7 @@ if(mac_protocol_string=="token"){
 						std::cout<<" "<<chip[j]->get_prob_channel_node(l);
 					}
 					std::cout<<std::endl;
-				}
+				}*/
 
 			int i=0;
 				for(int j=0;j<Global_params::Instance()->get_ncores();j++){
@@ -463,22 +463,22 @@ if(mac_protocol_string=="token"){
 						if(chip[j]->get_channel_array()[0]!=chip[j]->get_channel_array()[1]){
 							chan[i]->push_nodes_vector(j);
 							i++;
-							std::cout<<"Punt Crític "<<j<<". Amb Valor: "<<i<<std::endl;
+							//std::cout<<"Punt Crític "<<j<<". Amb Valor: "<<i<<std::endl;
 							chan[i]->push_nodes_vector(j);
 						}
 
 					}else{
 						chan[i]->push_nodes_vector(j);
-						std::cout<<j<<std::endl;
+					//	std::cout<<j<<std::endl;
 					}
 				}
 
 
 
 				for(int i=0; i<number_channels;i++){
-					std::cout<<"chan "<<i<<std::endl;
+				//	std::cout<<"chan "<<i<<std::endl;
 					for(int j=0;j<chan[i]->get_nodes_vector_size();j++){
-							std::cout<<"node "<<i<<std::endl;
+						//	std::cout<<"node "<<i<<std::endl;
 					}
 				}
 

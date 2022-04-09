@@ -111,7 +111,21 @@ void Node::channel_function(std::string protocol, std::string step, int number_c
 
 
 
-}else if(assig == 3){
+}
+}//brs
+
+if (protocol =="token"){
+
+
+
+  if(channelID==-1){
+      Node::set_channel_id(num_chan);
+}
+
+
+
+}
+if(assig == 3){
 
   //std::cout<<"AAAAAAAAAA  "<< this->get_channel_node(ind)<<std::endl;
   //
@@ -170,19 +184,6 @@ Node::set_channel_id(this->get_channel_node(i));
 //}
 
 }// assig 3
-}//brs
-
-if (protocol =="token"){
-
-
-
-  if(channelID==-1){
-      Node::set_channel_id(num_chan);
-}
-
-
-
-}
 }
 
 

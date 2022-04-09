@@ -760,7 +760,7 @@ void protocol_token(int curr_cycle, const std::vector<int>& nodes_ready, std::ve
 			Global_params::Instance()->update_token_current_node();
 			if (Global_params::Instance()->is_debugging_on()) {
 				std::cout << "Token holder has nothing to tx" << std::endl;
-				std::cout << "TOKEN PASSED" << std::endl;
+				std::cout << "TOKEN PASSEEEEEEEEEEEEEEEEEEEEEEEEEEeeD" << std::endl;
 			}
 		}
 	}

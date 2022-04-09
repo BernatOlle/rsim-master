@@ -666,10 +666,10 @@ for (int channel_id = 0; channel_id < number_channels; channel_id++) {
 
 	Channel* p_channel = chan.at(channel_id);
 	int si = nodes_ready.size();
-		std::cout << "nodes_ready= "<< si<<std::endl;
+	//	std::cout << "nodes_ready= "<< si<<std::endl;
 			for(int h=0;h<nodes_ready.size();h++){
 			Node* act = chip.at(nodes_ready[h]);
-		std::cout<<nodes_ready[h]<<" chan: "<<act->get_channel_id()<<std::endl;
+	//	std::cout<<nodes_ready[h]<<" chan: "<<act->get_channel_id()<<std::endl;
 			}
 
 	if (Global_params::Instance()->is_debugging_on()) {
@@ -678,18 +678,18 @@ for (int channel_id = 0; channel_id < number_channels; channel_id++) {
 
 	// We check if we're already in the middle of a transmission, if so we decrease cycles_left and check if transmission is finished
 	if (Global_params::Instance()->is_channel_busy(channel_id)) {
-	std::cout<<"Inside channel busy: "<<channel_id<<std::endl;
+	//std::cout<<"Inside channel busy: "<<channel_id<<std::endl;
 		Node* p_node = chip.at(p_channel->get_unique_kids_concurrent_tx_nodes());
 			int node_channel = p_node->get_channel_id();
-			std::cout<< "Node cid = "<<node_channel<<std::endl;
+		//	std::cout<< "Node cid = "<<node_channel<<std::endl;
 		if(p_node->get_channel_id()==channel_id){
 		// We cast the Packet* into a Packet_tdma* so that we can access its own methods
 		if (Packet_tdma* p_packet = dynamic_cast<Packet_tdma*>(p_node->get_in_buffer_front())) {
 			// We decrease cycles_left for the current packet
 			p_packet->decrease_cycles_left();
-		std::cout<<"Cycles left = "<<p_packet->get_cycles_left() <<std::endl;
+	//	std::cout<<"Cycles left = "<<p_packet->get_cycles_left() <<std::endl;
 			if (Global_params::Instance()->is_debugging_on()) {
-				std::cout << "Node " << p_node->get_id() << " txed for a cycle. Cycles left of current packet: " << p_packet->get_cycles_left() << std::endl;
+		//		std::cout << "Node " << p_node->get_id() << " txed for a cycle. Cycles left of current packet: " << p_packet->get_cycles_left() << std::endl;
 			}
 			if (Global_params::Instance()->get_total_served_packets_chip() >= 0.1*Global_params::Instance()->get_npackets() && Global_params::Instance()->get_total_served_packets_chip() < 0.8*Global_params::Instance()->get_npackets()) {
 				Global_params::Instance()->increase_throughput_tx_cycles();
@@ -702,7 +702,7 @@ for (int channel_id = 0; channel_id < number_channels; channel_id++) {
 				int lat = curr_cycle - p_node->get_in_buffer_front()->get_inj_time() + 1;
 				p_node->pop_packet_buffer(curr_cycle); // this pops the packet out and also updates statistics (total served packets per node and per chip)
 				if (Global_params::Instance()->is_debugging_on()) {
-					std::cout << "Packet by " << p_node->get_id() << " has been successfully tx (latency " << lat << ")" << std::endl;
+		//			std::cout << "Packet by " << p_node->get_id() << " has been successfully tx (latency " << lat << ")" << std::endl;
 				}
 				p_channel->flush_ids_concurrent_tx_nodes();
 				Global_params::Instance()->set_channel_idle(channel_id);
@@ -712,7 +712,7 @@ for (int channel_id = 0; channel_id < number_channels; channel_id++) {
 					if(assig == 2|| assig == 3){
 					p_node->set_channel_id(-1);
 				}
-		std::cout<<"Token updated: "<<p_channel->get_token_current_node()<<std::endl;
+	//	std::cout<<"Token updated: "<<p_channel->get_token_current_node()<<std::endl;
 
 			//	std::cout << "TOKEN PASSED" << std::endl;
 
@@ -728,7 +728,7 @@ for (int channel_id = 0; channel_id < number_channels; channel_id++) {
 	}
 	// Otherwise (medium is idle), we check if the token holder has packets to tx
 	else {
-	std::cout<<"Indide channel idel = "<< channel_id<<std::endl;
+//	std::cout<<"Indide channel idel = "<< channel_id<<std::endl;
 		std::vector<int>::const_iterator found_node = std::find(nodes_ready.begin(), nodes_ready.end(), p_channel->get_token_current_node());
 
 		// if we find the token holder in the list of nodes that are ready to send (token holder has a packet to send), the token holder starts tx
@@ -738,16 +738,16 @@ for (int channel_id = 0; channel_id < number_channels; channel_id++) {
 			if(p_node->get_channel_id()==channel_id){
 			p_channel->push_ids_concurrent_tx_nodes(*found_node);
 
-			std::cout<<"Id Node token = "<< p_node->get_id()<<" chan id: "<<p_node->get_channel_id()<<std::endl;
+		//	std::cout<<"Id Node token = "<< p_node->get_id()<<" chan id: "<<p_node->get_channel_id()<<std::endl;
 
 					Global_params::Instance()->set_channel_busy(channel_id);
 			// We cast the Packet* into a Packet_tdma* so that we can access its own methods
 			if (Packet_tdma* p_packet = dynamic_cast<Packet_tdma*>(p_node->get_in_buffer_front())) {
 				// We decrease cycles_left for the current packet
 				p_packet->decrease_cycles_left();
-				std::cout<<"Cycles left = "<<p_packet->get_cycles_left()<<std::endl;
+			//	std::cout<<"Cycles left = "<<p_packet->get_cycles_left()<<std::endl;
 				if (Global_params::Instance()->is_debugging_on()) {
-					std::cout << "Node " << p_node->get_id() << " txed for a cycle. Cycles left of current packet: " << p_packet->get_cycles_left() << std::endl;
+			//		std::cout << "Node " << p_node->get_id() << " txed for a cycle. Cycles left of current packet: " << p_packet->get_cycles_left() << std::endl;
 				}
 				if (Global_params::Instance()->get_total_served_packets_chip() >= 0.1*Global_params::Instance()->get_npackets() && Global_params::Instance()->get_total_served_packets_chip() < 0.8*Global_params::Instance()->get_npackets()) {
 					Global_params::Instance()->increase_throughput_tx_cycles();
@@ -760,7 +760,7 @@ for (int channel_id = 0; channel_id < number_channels; channel_id++) {
 					int lat = curr_cycle - p_node->get_in_buffer_front()->get_inj_time() + 1;
 					p_node->pop_packet_buffer(curr_cycle); // this pops the packet out and also updates statistics (total served packets per node and per chip)
 					if (Global_params::Instance()->is_debugging_on()) {
-						std::cout << "Packet by " << p_node->get_id() << " has been successfully tx (latency " << lat << ")" << std::endl;
+				//		std::cout << "Packet by " << p_node->get_id() << " has been successfully tx (latency " << lat << ")" << std::endl;
 					}
 					if(p_channel->get_ids_concurrent_tx_nodes_size() == 1) {
 						if (p_channel->get_unique_kids_concurrent_tx_nodes() == *found_node) {
@@ -771,8 +771,8 @@ for (int channel_id = 0; channel_id < number_channels; channel_id++) {
 								if(assig == 2 || assig == 3){
 								p_node->set_channel_id(-1);
 							}
-						std::cout<<"Token updated: "<<p_channel->get_token_current_node()<<std::endl;
-							std::cout << "TOKEN PASSED 2" << std::endl;
+					//	std::cout<<"Token updated: "<<p_channel->get_token_current_node()<<std::endl;
+					//		std::cout << "TOKEN PASSED 2" << std::endl;
 
 
 						}
@@ -793,25 +793,18 @@ for (int channel_id = 0; channel_id < number_channels; channel_id++) {
 			}
 		}
 		else {
-			if(assig==2){
-			std::cout<<"Token updated: "<<p_channel->get_token_current_node()<<std::endl;
+			if(assig==2 || assig==3){
+		//	std::cout<<"Token updated: "<<p_channel->get_token_current_node()<<std::endl;
 			//p_channel->update_token_current_node(assig);
 			int k = p_node->get_id();
 			channel_avaible[channel_id] = true;
-				while(chip[k]->get_channel_id()!=-1){
-				//	p_channel->update_token_current_node(assig);
-				//	std::cout<<"Tus muertos: "<<chip[k]->get_channel_id()<<std::endl;
-						k=(k+1)%Global_params::Instance()->get_ncores();
-
-				}
-
-			std::cout<<"Chan next: "<<chip[k]->get_channel_id()<<std::endl;
 
 
-std::cout<<"Next token up3dated: "<<p_channel->get_token_current_node()<<std::endl;
+
+//std::cout<<"Next token up3dated: "<<p_channel->get_token_current_node()<<std::endl;
 			if (Global_params::Instance()->is_debugging_on()) {
-				std::cout << "Token holder has nothing to tx" << std::endl;
-				std::cout << "TOKEN PASSED" << std::endl;
+			////	std::cout << "Token holder has nothing to tx" << std::endl;
+			//	std::cout << "TOKEN PASSED" << std::endl;
 			}
 
 	}
@@ -819,38 +812,38 @@ std::cout<<"Next token up3dated: "<<p_channel->get_token_current_node()<<std::en
 	}
 		//otherwise if token holder has nothing to tx, we pass the token right away
 		else {
-			std::cout<<"Token up5dated: "<<p_channel->get_token_current_node()<<std::endl;
+		//	std::cout<<"Token up5dated: "<<p_channel->get_token_current_node()<<std::endl;
 
 				//p_channel->update_token_current_node(assig);
 				channel_avaible[channel_id] = true;
 
 			if (Global_params::Instance()->is_debugging_on()) {
-				std::cout << "Token holder has nothing to tx" << std::endl;
-			std::cout << "TOKEN PASSED" << std::endl;
+			//	std::cout << "Token holder has nothing to tx" << std::endl;
+			//std::cout << "TOKEN PASSED" << std::endl;
 			}
 
 	}
 	}
-	std::cout<<"***************************************"<<std::endl;
+	//std::cout<<"***************************************"<<std::endl;
 }//for channels
 std::vector<int> chan_token(number_channels);
 int k = 0;
-std::cout<<"Vector chan= ";
+//std::cout<<"Vector chan= ";
 for(int o = 0; o<number_channels;o++){
-	std::cout<<channel_avaible[o]<<" ";
+	//std::cout<<channel_avaible[o]<<" ";
 	Channel* p_channel = chan.at(o);
 	if(channel_avaible[o] == true){
 			p_channel->update_token_current_node(assig);
 	}
 		chan_token[o]=p_channel->get_token_current_node();
 }
-std::cout<<"\n";
-std::cout<<"Vector token= ";
+//std::cout<<"\n";
+//std::cout<<"Vector token= ";
 for(int j = 0; j<number_channels; j++){
-		std::cout<<chan_token[j]<<" ";
+		//std::cout<<chan_token[j]<<" ";
 	for(int i=0; i<number_channels-1;i++){
 		if(chan_token[j]==chan_token[(j+i+1)%number_channels]){
-			std::cout<<"puja ' "<<chan_token[j]<<"'";
+			//std::cout<<"puja ' "<<chan_token[j]<<"'";
 			if(channel_avaible[j]==true){
 				Channel* p_channel = chan.at(j);
 				p_channel->update_token_current_node(assig);
@@ -865,14 +858,14 @@ for(int j = 0; j<number_channels; j++){
 	}
 }
 
-std::cout<<"\n";
+//std::cout<<"\n";
 
-std::cout<<"Vector token final= ";
+//std::cout<<"Vector token final= ";
 for(int o = 0; o<number_channels;o++){
-	std::cout<<chan_token[o]<<" ";
+	//std::cout<<chan_token[o]<<" ";
 }
-std::cout<<"\n";
+//std::cout<<"\n";
 
-std::cout<<"\n\n------------------------------------"<<std::endl;
+//std::cout<<"\n\n-------------------------------------"<<std::endl;
 }
 //===============================================================
