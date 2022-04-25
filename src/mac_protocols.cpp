@@ -666,10 +666,10 @@ for (int channel_id = 0; channel_id < number_channels; channel_id++) {
 
 	Channel* p_channel = chan.at(channel_id);
 	int si = nodes_ready.size();
-	//	std::cout << "nodes_ready= "<< si<<std::endl;
+	//std::cout << "nodes_ready= "<< si<<std::endl;
 			for(int h=0;h<nodes_ready.size();h++){
 			Node* act = chip.at(nodes_ready[h]);
-	//	std::cout<<nodes_ready[h]<<" chan: "<<act->get_channel_id()<<std::endl;
+	//std::cout<<nodes_ready[h]<<" chan: "<<act->get_channel_id()<<std::endl;
 			}
 
 	if (Global_params::Instance()->is_debugging_on()) {
@@ -687,9 +687,9 @@ for (int channel_id = 0; channel_id < number_channels; channel_id++) {
 		if (Packet_tdma* p_packet = dynamic_cast<Packet_tdma*>(p_node->get_in_buffer_front())) {
 			// We decrease cycles_left for the current packet
 			p_packet->decrease_cycles_left();
-	//	std::cout<<"Cycles left = "<<p_packet->get_cycles_left() <<std::endl;
+//	std::cout<<"Cycles left = "<<p_packet->get_cycles_left() <<std::endl;
 			if (Global_params::Instance()->is_debugging_on()) {
-		//		std::cout << "Node " << p_node->get_id() << " txed for a cycle. Cycles left of current packet: " << p_packet->get_cycles_left() << std::endl;
+		//	std::cout << "Node " << p_node->get_id() << " txed for a cycle. Cycles left of current packet: " << p_packet->get_cycles_left() << std::endl;
 			}
 			if (Global_params::Instance()->get_total_served_packets_chip() >= 0.1*Global_params::Instance()->get_npackets() && Global_params::Instance()->get_total_served_packets_chip() < 0.8*Global_params::Instance()->get_npackets()) {
 				Global_params::Instance()->increase_throughput_tx_cycles();
@@ -702,7 +702,7 @@ for (int channel_id = 0; channel_id < number_channels; channel_id++) {
 				int lat = curr_cycle - p_node->get_in_buffer_front()->get_inj_time() + 1;
 				p_node->pop_packet_buffer(curr_cycle); // this pops the packet out and also updates statistics (total served packets per node and per chip)
 				if (Global_params::Instance()->is_debugging_on()) {
-		//			std::cout << "Packet by " << p_node->get_id() << " has been successfully tx (latency " << lat << ")" << std::endl;
+				std::cout << "Packet by " << p_node->get_id() << " has been successfully tx (latency " << lat << ")" << std::endl;
 				}
 				p_channel->flush_ids_concurrent_tx_nodes();
 				Global_params::Instance()->set_channel_idle(channel_id);
@@ -714,7 +714,7 @@ for (int channel_id = 0; channel_id < number_channels; channel_id++) {
 				}
 	//	std::cout<<"Token updated: "<<p_channel->get_token_current_node()<<std::endl;
 
-			//	std::cout << "TOKEN PASSED" << std::endl;
+	//			std::cout << "TOKEN PASSED" << std::endl;
 
 			}
 		}
@@ -747,7 +747,7 @@ for (int channel_id = 0; channel_id < number_channels; channel_id++) {
 				p_packet->decrease_cycles_left();
 			//	std::cout<<"Cycles left = "<<p_packet->get_cycles_left()<<std::endl;
 				if (Global_params::Instance()->is_debugging_on()) {
-			//		std::cout << "Node " << p_node->get_id() << " txed for a cycle. Cycles left of current packet: " << p_packet->get_cycles_left() << std::endl;
+		//		std::cout << "Node " << p_node->get_id() << " txed for a cycle. Cycles left of current packet: " << p_packet->get_cycles_left() << std::endl;
 				}
 				if (Global_params::Instance()->get_total_served_packets_chip() >= 0.1*Global_params::Instance()->get_npackets() && Global_params::Instance()->get_total_served_packets_chip() < 0.8*Global_params::Instance()->get_npackets()) {
 					Global_params::Instance()->increase_throughput_tx_cycles();
@@ -760,7 +760,7 @@ for (int channel_id = 0; channel_id < number_channels; channel_id++) {
 					int lat = curr_cycle - p_node->get_in_buffer_front()->get_inj_time() + 1;
 					p_node->pop_packet_buffer(curr_cycle); // this pops the packet out and also updates statistics (total served packets per node and per chip)
 					if (Global_params::Instance()->is_debugging_on()) {
-				//		std::cout << "Packet by " << p_node->get_id() << " has been successfully tx (latency " << lat << ")" << std::endl;
+				//	std::cout << "Packet by " << p_node->get_id() << " has been successfully tx (latency " << lat << ")" << std::endl;
 					}
 					if(p_channel->get_ids_concurrent_tx_nodes_size() == 1) {
 						if (p_channel->get_unique_kids_concurrent_tx_nodes() == *found_node) {
@@ -772,7 +772,7 @@ for (int channel_id = 0; channel_id < number_channels; channel_id++) {
 								p_node->set_channel_id(-1);
 							}
 					//	std::cout<<"Token updated: "<<p_channel->get_token_current_node()<<std::endl;
-					//		std::cout << "TOKEN PASSED 2" << std::endl;
+				//		std::cout << "TOKEN PASSED 2" << std::endl;
 
 
 						}
@@ -812,7 +812,7 @@ for (int channel_id = 0; channel_id < number_channels; channel_id++) {
 	}
 		//otherwise if token holder has nothing to tx, we pass the token right away
 		else {
-		//	std::cout<<"Token up5dated: "<<p_channel->get_token_current_node()<<std::endl;
+			//std::cout<<"Token up5dated: "<<p_channel->get_token_current_node()<<std::endl;
 
 				//p_channel->update_token_current_node(assig);
 				channel_avaible[channel_id] = true;
@@ -843,7 +843,7 @@ for(int j = 0; j<number_channels; j++){
 		//std::cout<<chan_token[j]<<" ";
 	for(int i=0; i<number_channels-1;i++){
 		if(chan_token[j]==chan_token[(j+i+1)%number_channels]){
-			//std::cout<<"puja ' "<<chan_token[j]<<"'";
+		//	std::cout<<"puja ' "<<chan_token[j]<<"'";
 			if(channel_avaible[j]==true){
 				Channel* p_channel = chan.at(j);
 				p_channel->update_token_current_node(assig);
@@ -862,7 +862,7 @@ for(int j = 0; j<number_channels; j++){
 
 //std::cout<<"Vector token final= ";
 for(int o = 0; o<number_channels;o++){
-	//std::cout<<chan_token[o]<<" ";
+//	std::cout<<chan_token[o]<<" ";
 }
 //std::cout<<"\n";
 
