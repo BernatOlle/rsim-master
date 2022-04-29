@@ -269,8 +269,8 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
     // Data 5:
 	save_pckt_latencies_evolution_chip(outdata5);
 	outdata5.close();
-/*
-	std::cout << "--------------------------------------------------" << std::endl;
+
+	/*std::cout << "--------------------------------------------------" << std::endl;
 	std::cout << "Total packets per chip: " << total_injected_packets_chip << "(injected), " << Global_params::Instance()->get_total_served_packets_chip() << " (served)" << std::endl;
 	if (Global_params::Instance()->get_chosen_distrib() == Inj_distribs::trace) {
 		std::cout << "Total theoretical avg inj rate per chip: N/A" << std::endl;

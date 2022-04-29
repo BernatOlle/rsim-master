@@ -321,7 +321,7 @@ if(mac_protocol_string=="token"){
         n++;
         t=0;
       }
-			//std::cout<<"N: "<<chip[k]->get_id() <<" C: "<<n<<std::endl;
+		//	std::cout<<"N: "<<chip[k]->get_id() <<" C: "<<n<<std::endl;
       chip[k]->channel_function(mac_protocol_string, "initialisation of channel link to node", number_channels, 1, assig, n);
       t++;
 
@@ -334,6 +334,7 @@ if(mac_protocol_string=="token"){
 			chan[o]->set_token_current_node(assig);
 		}
 	}
+	
 }
 
 
@@ -341,6 +342,7 @@ if(mac_protocol_string=="token"){
 			for(int k=0;k<number_channels;k++){
 				long double prob=0;
 				for(int j = 0; j<Global_params::Instance()->get_ncores();j++){
+					
 					if(prob<=prob_total){
 
 
@@ -391,6 +393,7 @@ if(mac_protocol_string=="token"){
 						suma=prob-prob_line;
 
 						l++;
+						
 
 					}
 					}
@@ -399,7 +402,7 @@ if(mac_protocol_string=="token"){
 						chip[j]->set_prob_channel_array(0);
 						chip[j]->set_channel_array(number_channels-1);
 					}
-
+				
 				}
 				prob_total=prob_total+prob_chan;
 			}
