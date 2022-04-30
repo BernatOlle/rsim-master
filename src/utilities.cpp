@@ -33,12 +33,12 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
 
 		avg_pckt_latency_node = (*curr_node)->get_mean_stationary_pckt_latencies_node(); // mean of all stationary latencies of a node
 		pckt_latencies_chip.push_back(avg_pckt_latency_node); // we store the avg packet latency for the current node
-/*
+
 		if ((total_injected_packets_node - (*curr_node)->get_total_served_packets_node()) > 0) {
 			std::cout << "!!!!!!!!! We finished the program and we still had packets to serve";
 		}
 
-		std::cout << (*curr_node)->get_id() << ":";
+		/*std::cout << (*curr_node)->get_id() << ":";
 		std::cout << " Inj_pckts(all): " << total_injected_packets_node; // total number of injected packets including warm up and cool down
 		std::cout << "\t Avg_latency_pckt(stationary): " << avg_pckt_latency_node << " cycles. "; // avg latency per packet OF ONLY WARM UP AND COOL DOWN
 		if (Global_params::Instance()->get_chosen_distrib() == Inj_distribs::trace) {
@@ -47,8 +47,8 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
 		else {
 			std::cout << " Theoretical Avg_inj_rate: " << theoretical_node_avg_inj_rate << " pckts/cycle ";
 		}
-		std::cout << " Real Avg_inj_rate: "	<< real_node_avg_inj_rate << " pckts/cycle" << std::endl;*/
-		//(*curr_node)->plot_pckt_latencies_node(); // this shows the distribution of latencies for this node
+		std::cout << " Real Avg_inj_rate: "	<< real_node_avg_inj_rate << " pckts/cycle" << std::endl;
+		//(*curr_node)->plot_pckt_latencies_node(); // this shows the distribution of latencies for this node*/
 	} // End of for-each node
 
 	std::ofstream outdata;
@@ -269,8 +269,8 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
     // Data 5:
 	save_pckt_latencies_evolution_chip(outdata5);
 	outdata5.close();
-
-	/*std::cout << "--------------------------------------------------" << std::endl;
+/*
+	std::cout << "--------------------------------------------------" << std::endl;
 	std::cout << "Total packets per chip: " << total_injected_packets_chip << "(injected), " << Global_params::Instance()->get_total_served_packets_chip() << " (served)" << std::endl;
 	if (Global_params::Instance()->get_chosen_distrib() == Inj_distribs::trace) {
 		std::cout << "Total theoretical avg inj rate per chip: N/A" << std::endl;
@@ -291,8 +291,8 @@ void print_statistics_per_node(const std::vector<Node*>& chip) {
     std::cout << "Total number of served packets (in stationary period): " << Global_params::Instance()->get_stationary_served_packets_chip() << std::endl;
     std::cout << "Average number of retries per successful served packet (in stationary period): " << 1.0*Global_params::Instance()->get_stationary_collisions_chip() / Global_params::Instance()->get_stationary_served_packets_chip() << std::endl;
     std::cout << "Average energy per bit (in stationary period): " << get_energy_bit() << " picoJoules" << std::endl;
-    std::cout << "Total execution time: " << Global_params::Instance()->get_total_ncycles() << " cycles" << std::endl;*/
-	//plot_pckt_latencies_chip(chip);
+    std::cout << "Total execution time: " << Global_params::Instance()->get_total_ncycles() << " cycles" << std::endl;
+	plot_pckt_latencies_chip(chip);*/
 }
 
 float get_energy_bit() {
@@ -393,36 +393,36 @@ void plot_pckt_latencies_chip(const std::vector<Node*>& chip) {
     }
 
 
-	// double max_latency = 0; // we start with the minimum possible max latency value
-    // double min_latency = std::numeric_limits<double>::max(); // we start with the maximum possible min latency value
-	//
-	// for (std::vector<Node*>::const_iterator curr_node = chip.begin(); curr_node != chip.end(); ++curr_node) {
-	// 	double max_latency_node = *(std::max_element((*curr_node)->pckt_latencies_node.begin(), (*curr_node)->pckt_latencies_node.end()));
-	//     double min_latency_node = *(std::min_element((*curr_node)->pckt_latencies_node.begin(), (*curr_node)->pckt_latencies_node.end()));
-	//
-	// 	max_latency = std::max(max_latency_node, max_latency);
-	// 	min_latency = std::min(min_latency_node, min_latency);
-	// }
-	//
-    // double interval_size = (max_latency - min_latency)/(double)nintervals;
-	//
-    // for (const double & element : pckt_latencies_node) {
-    //     if (element >= min_latency && element < min_latency+interval_size) ++p[0];
-    //     else if (element >= min_latency+interval_size && element < min_latency+2*interval_size) ++p[1];
-    //     else if (element >= min_latency+2*interval_size && element < min_latency+3*interval_size) ++p[2];
-    //     else if (element >= min_latency+3*interval_size && element < min_latency+4*interval_size) ++p[3];
-    //     else if (element >= min_latency+4*interval_size && element < min_latency+5*interval_size) ++p[4];
-    //     else if (element >= min_latency+5*interval_size && element < min_latency+6*interval_size) ++p[5];
-    //     else if (element >= min_latency+6*interval_size && element < min_latency+7*interval_size) ++p[6];
-    //     else if (element >= min_latency+7*interval_size && element < min_latency+8*interval_size) ++p[7];
-    //     else if (element >= min_latency+8*interval_size && element < min_latency+9*interval_size) ++p[8];
-    //     else if (element >= min_latency+9*interval_size && element <= max_latency) ++p[9];
-    // }
-	//
-    // for (int i=0; i<nintervals; ++i) {
-    //     std::cout << min_latency+i*interval_size << "-" << min_latency+(i+1)*interval_size << ": ";
-    //     std::cout << std::string(p[i]*nstars/pckt_latencies_node.size(),'*') << std::endl;
-    // }
+	/* double max_latency = 0; // we start with the minimum possible max latency value
+     double min_latency = std::numeric_limits<double>::max(); // we start with the maximum possible min latency value
+	
+	 for (std::vector<Node*>::const_iterator curr_node = chip.begin(); curr_node != chip.end(); ++curr_node) {
+	 	double max_latency_node = *(std::max_element((*curr_node)->pckt_latencies_node.begin(), (*curr_node)->pckt_latencies_node.end()));
+	     double min_latency_node = *(std::min_element((*curr_node)->pckt_latencies_node.begin(), (*curr_node)->pckt_latencies_node.end()));
+	
+	 	max_latency = std::max(max_latency_node, max_latency);
+	 	min_latency = std::min(min_latency_node, min_latency);
+	 }
+	
+     double interval_size = (max_latency - min_latency)/(double)nintervals;
+
+     for (const double & element : pckt_latencies_node) {
+         if (element >= min_latency && element < min_latency+interval_size) ++p[0];
+         else if (element >= min_latency+interval_size && element < min_latency+2*interval_size) ++p[1];
+        else if (element >= min_latency+2*interval_size && element < min_latency+3*interval_size) ++p[2];
+         else if (element >= min_latency+3*interval_size && element < min_latency+4*interval_size) ++p[3];
+        else if (element >= min_latency+4*interval_size && element < min_latency+5*interval_size) ++p[4];
+        else if (element >= min_latency+5*interval_size && element < min_latency+6*interval_size) ++p[5];
+        else if (element >= min_latency+6*interval_size && element < min_latency+7*interval_size) ++p[6];
+         else if (element >= min_latency+7*interval_size && element < min_latency+8*interval_size) ++p[7];
+         else if (element >= min_latency+8*interval_size && element < min_latency+9*interval_size) ++p[8];
+         else if (element >= min_latency+9*interval_size && element <= max_latency) ++p[9];
+     }
+	
+    for (int i=0; i<nintervals; ++i) {
+         std::cout << min_latency+i*interval_size << "-" << min_latency+(i+1)*interval_size << ": ";
+         std::cout << std::string(p[i]*nstars/pckt_latencies_node.size(),'*') << std::endl;
+     }*/
 }
 
 // normal distribution PDF

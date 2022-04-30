@@ -1,10 +1,10 @@
 #!/bin/bash
 
 mac_protocols=(
-#brs_non_p
+brs_non_p
 #tdma_fixed
 #tdma_weighted
-token
+#token
 #fuzzy_token
 )
 
