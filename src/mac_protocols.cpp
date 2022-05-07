@@ -665,12 +665,12 @@ int assig = Global_params::Instance()->get_chosen_assig();
 for (int channel_id = 0; channel_id < number_channels; channel_id++) {
 
 	Channel* p_channel = chan.at(channel_id);
-	int si = nodes_ready.size();
+	//int si = nodes_ready.size();
 	//std::cout << "nodes_ready= "<< si<<std::endl;
-			for(int h=0;h<nodes_ready.size();h++){
-			Node* act = chip.at(nodes_ready[h]);
+	//		for(int h=0;h<nodes_ready.size();h++){
+	//		Node* act = chip.at(nodes_ready[h]);
 	//std::cout<<nodes_ready[h]<<" chan: "<<act->get_channel_id()<<std::endl;
-			}
+	//		}
 
 	if (Global_params::Instance()->is_debugging_on()) {
 		std::cout << "Token: Node " << Global_params::Instance()->get_token_current_node() << std::endl;
@@ -839,7 +839,11 @@ for(int o = 0; o<number_channels;o++){
 }
 //std::cout<<"\n";
 //std::cout<<"Vector token= ";
-int num =rand() %2;
+
+int num =0;
+if(assig ==3){
+	num = rand() %2;
+}
 for(int j = 0; j<number_channels; j++){
 		//std::cout<<chan_token[j]<<" ";
 	for(int i=0; i<number_channels-1;i++){
