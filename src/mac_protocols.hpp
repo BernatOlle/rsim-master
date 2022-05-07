@@ -14,6 +14,7 @@
 #include "node.hpp"
 #include "channel.hpp"
 //=================================
+
 // Specification of CSMA non-persistantC
 void protocol_csma_non_p(int curr_cycle, const std::vector<int>& nodes_ready, std::vector<bool>& channel_avaible, std::vector<Node*>& chip,std::vector<Channel*>& chan,int number_channels,std::string mac_protocol_string);
 
