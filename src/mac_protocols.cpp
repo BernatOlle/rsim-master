@@ -884,9 +884,9 @@ for(int j = 0; j<number_channels; j++){
 //std::cout<<"\n";
 
 //std::cout<<"Vector token final= ";
-for(int o = 0; o<number_channels;o++){
+//for(int o = 0; o<number_channels;o++){
 //	std::cout<<chan_token[o]<<" ";
-}
+//}
 //std::cout<<"\n";
 
 //std::cout<<"\n\n-------------------------------------"<<std::endl;

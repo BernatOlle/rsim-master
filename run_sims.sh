@@ -15,7 +15,7 @@ assig=(
 )
 
 sigma_values=(
-0.05
+0.5
 1
 10
 #100
