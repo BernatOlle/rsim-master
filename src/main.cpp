@@ -441,7 +441,7 @@ if(mac_protocol_string=="token"){
 
 			h++;
 		}
-
+/*
 		std::cout<<"\n";
 				long double prob = 0;
 				for(int j = 0; j<Global_params::Instance()->get_ncores();j++){
@@ -458,7 +458,7 @@ if(mac_protocol_string=="token"){
 						std::cout<<" "<<chip[j]->get_prob_channel_node(l);
 					}
 					std::cout<<std::endl;
-				}
+				}*/
 
 			int i=0;
 				for(int j=0;j<Global_params::Instance()->get_ncores();j++){
