@@ -17,8 +17,8 @@ assig=(
 sigma_values=(
 0.5
 1
-10
-#100
+#10
+100
 )
 
 h_values=(
@@ -109,7 +109,7 @@ ncores_values=(
 
 channel_values=(
 2
-3
+#3
 4
 
 )
