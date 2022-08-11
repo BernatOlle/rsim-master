@@ -109,7 +109,7 @@ ncores_values=(
 
 channel_values=(
 2
-#3
+3
 4
 
 )
